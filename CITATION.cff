@@ -1,5 +1,5 @@
 #
-# This source file is part of the Stanford CardinalKit Template Application project
+# This source file is part of the CS342 2023 PAWS Team Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
@@ -18,6 +18,5 @@ authors:
 - family-names: "Aalami"
   given-names: "Oliver"
   orcid: "https://orcid.org/0000-0002-7799-2429"
-title: "CardinalKit Template Application"
-doi: doi.org/10.5281/zenodo.7600783
-url: "https://github.com/StanfordBDHG/CardinalKitTemplateApplication"
+title: "CS342 2023 PAWS Team Application"
+url: "https://github.com/CS342/2023-PAWS"

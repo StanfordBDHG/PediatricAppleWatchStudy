@@ -1,5 +1,5 @@
 #
-# This source file is part of the Stanford CardinalKit Template Application project
+# This source file is part of the CS342 2023 PAWS Team Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
@@ -12,14 +12,14 @@
 # In general, you can use the options available
 # fastlane gym --help
 
-scheme("TemplateApplication")
+scheme("PAWS")
 
-project("TemplateApplication.xcodeproj")
+project("PAWS.xcodeproj")
 
 export_options(
   {
     provisioningProfiles: { 
-      "edu.stanford.cardinalkittemplateapplication" => "CardinalKit Template Application"
+      "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS Team Application"
     }
   }
 )

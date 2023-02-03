@@ -1,5 +1,5 @@
 #
-# This source file is part of the Stanford CardinalKit Template Application project
+# This source file is part of the CS342 2023 PAWS Team Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
@@ -43,7 +43,7 @@ platform :ios do
     signin
     increment_build_number({
       build_number: latest_testflight_build_number + 1,
-      xcodeproj: "TemplateApplication.xcodeproj"
+      xcodeproj: "PAWS.xcodeproj"
     })
     build
     upload_to_testflight
