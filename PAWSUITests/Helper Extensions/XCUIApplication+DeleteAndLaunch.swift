@@ -24,11 +24,11 @@ extension XCUIApplication {
             XCTAssertTrue(springboard.icons[appName].isHittable)
             springboard.icons[appName].press(forDuration: 1.5)
             
-            XCTAssertTrue(springboard.collectionViews.buttons["Remove App"].waitForExistence(timeout: 0.5))
+            XCTAssertTrue(springboard.collectionViews.buttons["Remove App"].waitForExistence(timeout: 5.0))
             springboard.collectionViews.buttons["Remove App"].tap()
-            XCTAssertTrue(springboard.alerts["Remove “\(appName)”?"].scrollViews.otherElements.buttons["Delete App"].waitForExistence(timeout: 0.5))
+            XCTAssertTrue(springboard.alerts["Remove “\(appName)”?"].scrollViews.otherElements.buttons["Delete App"].waitForExistence(timeout: 5.0))
             springboard.alerts["Remove “\(appName)”?"].scrollViews.otherElements.buttons["Delete App"].tap()
-            XCTAssertTrue(springboard.alerts["Delete “\(appName)”?"].scrollViews.otherElements.buttons["Delete"].waitForExistence(timeout: 0.5))
+            XCTAssertTrue(springboard.alerts["Delete “\(appName)”?"].scrollViews.otherElements.buttons["Delete"].waitForExistence(timeout: 5.0))
             springboard.alerts["Delete “\(appName)”?"].scrollViews.otherElements.buttons["Delete"].tap()
         }
         
