@@ -26,6 +26,14 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
                     CollectSample(
                         HKQuantityType(.stepCount),
                         deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    );
+                    CollectSample(
+                        HKQuantityType(.heartRate),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    );
+                    CollectSample(
+                        HKQuantityType.electrocardiogramType(),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
                     )
                 } adapter: {
                     HealthKitToFHIRAdapter()
