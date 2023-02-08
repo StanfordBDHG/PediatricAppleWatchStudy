@@ -29,6 +29,8 @@
 		2F5E32BD297E05EA003432F8 /* PAWSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
+		3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3637947D2992F3B000B3C006 /* PAWSLandingScreen */; };
+		36379481299308AA00B3C006 /* PAWSNotificationScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 36379480299308AA00B3C006 /* PAWSNotificationScreen */; };
 		653A2551283387FE005D4D48 /* PAWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A2550283387FE005D4D48 /* PAWS.swift */; };
 		653A255528338800005D4D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 653A255428338800005D4D48 /* Assets.xcassets */; };
 		653A256228338800005D4D48 /* PAWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A256128338800005D4D48 /* PAWSTests.swift */; };
@@ -79,9 +81,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36379481299308AA00B3C006 /* PAWSNotificationScreen in Frameworks */,
 				2F59B941298C628800C5107F /* PAWSOnboardingFlow in Frameworks */,
 				2F49B7822980419C00BCB272 /* Questionnaires in Frameworks */,
 				2F49B77E2980407C00BCB272 /* Scheduler in Frameworks */,
+				3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */,
 				2F59B93F298C628800C5107F /* PAWSMockDataStorageProvider in Frameworks */,
 				2F49B77A2980407C00BCB272 /* HealthKitDataSource in Frameworks */,
 				2F59B945298C628800C5107F /* PAWSSharedContext in Frameworks */,
@@ -224,6 +228,8 @@
 				2F59B940298C628800C5107F /* PAWSOnboardingFlow */,
 				2F59B942298C628800C5107F /* PAWSSchedule */,
 				2F59B944298C628800C5107F /* PAWSSharedContext */,
+				3637947D2992F3B000B3C006 /* PAWSLandingScreen */,
+				36379480299308AA00B3C006 /* PAWSNotificationScreen */,
 			);
 			productName = TemplateApplication;
 			productReference = 653A254D283387FE005D4D48 /* PAWS.app */;
@@ -519,8 +525,8 @@
 				INFOPLIST_FILE = "PAWS/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = PAWS;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This message should never appear. Please adjust this when you start using camera information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "The CS342 2023 PAWS Team Application uses the step count to demonstrate CardinalKit's integration with HealthKit.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "The CS342 2023 PAWS Team Application uses the step count to demonstrate CardinalKit's integration with HealthKit.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "The PAWS Application uses the heart rate information to extract ECG data and provide it to the researchers. ";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "The PAWS Application uses the heart rate information to extract ECG data and provide it to the researchers. ";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This message should never appear. Please adjust this when you start using location information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This message should never appear. Please adjust this when you start using location information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This message should never appear. Please adjust this when you start using microphone information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
@@ -566,8 +572,8 @@
 				INFOPLIST_FILE = "PAWS/Supporting Files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = PAWS;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This message should never appear. Please adjust this when you start using camera information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "The CS342 2023 PAWS Team Application uses the step count to demonstrate CardinalKit's integration with HealthKit.";
-				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "The CS342 2023 PAWS Team Application uses the step count to demonstrate CardinalKit's integration with HealthKit.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "The PAWS Application uses the heart rate information to extract ECG data and provide it to the researchers. ";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "The PAWS Application uses the heart rate information to extract ECG data and provide it to the researchers. ";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This message should never appear. Please adjust this when you start using location information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This message should never appear. Please adjust this when you start using location information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This message should never appear. Please adjust this when you start using microphone information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.";
@@ -800,6 +806,14 @@
 		2F59B944298C628800C5107F /* PAWSSharedContext */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PAWSSharedContext;
+		};
+		3637947D2992F3B000B3C006 /* PAWSLandingScreen */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PAWSLandingScreen;
+		};
+		36379480299308AA00B3C006 /* PAWSNotificationScreen */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PAWSNotificationScreen;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

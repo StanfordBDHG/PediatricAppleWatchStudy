@@ -30,11 +30,8 @@ struct InterestingModules: View {
                 .init(
                     title: "INTERESTING_MODULES_AREA3_TITLE".moduleLocalized,
                     description: "INTERESTING_MODULES_AREA3_DESCRIPTION".moduleLocalized
-                ),
-                .init(
-                    title: "INTERESTING_MODULES_AREA4_TITLE".moduleLocalized,
-                    description: "INTERESTING_MODULES_AREA4_DESCRIPTION".moduleLocalized
                 )
+                
             ],
             actionText: "INTERESTING_MODULES_BUTTON".moduleLocalized,
             action: {

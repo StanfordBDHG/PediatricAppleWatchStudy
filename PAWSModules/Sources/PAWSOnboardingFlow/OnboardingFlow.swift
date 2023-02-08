@@ -23,20 +23,20 @@ public struct OnboardingFlow: View {
     
     
     public var body: some View {
-        NavigationStack(path: $onboardingSteps) {
-            Welcome(onboardingSteps: $onboardingSteps)
-                .navigationDestination(for: Step.self) { onboardingStep in
-                    switch onboardingStep {
-                    case .interestingModules:
-                        InterestingModules(onboardingSteps: $onboardingSteps)
-                    case .consent:
-                        Consent(onboardingSteps: $onboardingSteps)
-                    case .healthKitPermissions:
-                        HealthKitPermissions()
+            NavigationStack(path: $onboardingSteps) {
+                Welcome(onboardingSteps: $onboardingSteps)
+                    .navigationDestination(for: Step.self) { onboardingStep in
+                        switch onboardingStep {
+                        case .interestingModules:
+                            InterestingModules(onboardingSteps: $onboardingSteps)
+                        case .consent:
+                            Consent(onboardingSteps: $onboardingSteps)
+                        case .healthKitPermissions:
+                            HealthKitPermissions()
+                        }
                     }
-                }
-                .navigationBarTitleDisplayMode(.inline)
-        }
+                    .navigationBarTitleDisplayMode(.inline)
+            }
     }
     
     

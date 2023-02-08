@@ -24,7 +24,23 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(
-                        HKQuantityType(.stepCount),
+                        HKQuantityType(.heartRate),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType(.heartRateVariabilitySDNN),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType(.restingHeartRate),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType(.walkingHeartRateAverage),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType(.heartRateRecoveryOneMinute),
                         deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
                     )
                 } adapter: {

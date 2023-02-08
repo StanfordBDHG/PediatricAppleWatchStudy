@@ -22,7 +22,11 @@ let package = Package(
         .library(name: "PAWSMockDataStorageProvider", targets: ["PAWSMockDataStorageProvider"]),
         .library(name: "PAWSOnboardingFlow", targets: ["PAWSOnboardingFlow"]),
         .library(name: "PAWSSchedule", targets: ["PAWSSchedule"]),
-        .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"])
+        .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"]),
+        .library(name: "PAWSLandingScreen", targets: ["PAWSLandingScreen"]),
+        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"]),
+
+
     ],
     dependencies: [
         .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.2.1"))
@@ -73,6 +77,20 @@ let package = Package(
         .target(
             name: "PAWSSharedContext",
             dependencies: []
+        ),
+        .target(
+            name: "PAWSLandingScreen",
+            dependencies: [],
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
+            name: "PAWSNotificationScreen",
+            dependencies: [],
+            resources: [
+                .process("Resources")
+            ]
         )
     ]
 )

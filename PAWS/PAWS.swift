@@ -16,16 +16,22 @@ import SwiftUI
 struct PAWS: App {
     @UIApplicationDelegateAdaptor(PAWSAppDelegate.self) var appDelegate
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
+//    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
+
     
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .sheet(isPresented: !$completedOnboardingFlow) {
-                    OnboardingFlow()
-                }
-                .testingSetup()
+//            if  completedAccountSetup {
+                HomeView()
+                    .sheet(isPresented: !$completedOnboardingFlow) {
+                        OnboardingFlow()
+                    }
+                    .testingSetup()
                 .cardinalKit(appDelegate)
+//            } else {
+//                /*@START_MENU_TOKEN@*/EmptyView()/*@END_MENU_TOKEN@*/
+//            }
         }
     }
 }
