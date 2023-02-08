@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import HealthKitOnFHIR
 
 struct LazyText: View {
     private let text: String
@@ -35,3 +35,13 @@ struct LazyText: View {
         self.text = text
     }
 }
+
+struct LazyText_Previews: PreviewProvider {
+    
+    static var previews: some View {
+  //      let mapping = Bundle.main.ecgTracing(withName: "ECGSample")
+        let mapping = "Pizza party"
+        LazyText(text: String(describing: mapping))
+    }
+}
+

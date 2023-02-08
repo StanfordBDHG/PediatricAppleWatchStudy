@@ -29,6 +29,7 @@
 		2F5E32BD297E05EA003432F8 /* PAWSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
+		545E150E2993445A001AEDAB /* ECGSample.json in Resources */ = {isa = PBXBuildFile; fileRef = 545E150C2993445A001AEDAB /* ECGSample.json */; };
 		653A2551283387FE005D4D48 /* PAWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A2550283387FE005D4D48 /* PAWS.swift */; };
 		653A255528338800005D4D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 653A255428338800005D4D48 /* Assets.xcassets */; };
 		653A256228338800005D4D48 /* PAWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A256128338800005D4D48 /* PAWSTests.swift */; };
@@ -64,6 +65,7 @@
 		2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PAWS.xctestplan; sourceTree = "<group>"; };
 		2FC9759E2978E39600BA99FE /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		2FC975A72978F11A00BA99FE /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		545E150D2993445A001AEDAB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = en; path = PAWSModules/Sources/PAWSMockDataStorageProvider/Resources/en.lproj/ECGSample.json; sourceTree = "<group>"; };
 		653A254D283387FE005D4D48 /* PAWS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PAWS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		653A2550283387FE005D4D48 /* PAWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWS.swift; sourceTree = "<group>"; };
 		653A255428338800005D4D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 		653A2544283387FE005D4D48 = {
 			isa = PBXGroup;
 			children = (
+				545E150C2993445A001AEDAB /* ECGSample.json */,
 				2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */,
 				2F49B77329803E8F00BCB272 /* PAWSModules */,
 				653A254F283387FE005D4D48 /* PAWS */,
@@ -322,6 +325,7 @@
 			files = (
 				653A255528338800005D4D48 /* Assets.xcassets in Resources */,
 				2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */,
+				545E150E2993445A001AEDAB /* ECGSample.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +391,17 @@
 			targetProxy = 653A256828338800005D4D48 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		545E150C2993445A001AEDAB /* ECGSample.json */ = {
+			isa = PBXVariantGroup;
+			children = (
+				545E150D2993445A001AEDAB /* en */,
+			);
+			name = ECGSample.json;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		653A256F28338800005D4D48 /* Debug */ = {

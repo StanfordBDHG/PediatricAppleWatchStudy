@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import HealthKitOnFHIR
 
 
 struct MockUploadDetailView: View {
@@ -26,3 +27,4 @@ struct MockUploadDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
     }
 }
+
