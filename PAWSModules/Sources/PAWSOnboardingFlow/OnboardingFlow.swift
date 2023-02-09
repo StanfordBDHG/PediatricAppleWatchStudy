@@ -15,6 +15,7 @@ public struct OnboardingFlow: View {
     enum Step: String, Codable {
         case interestingModules
         case consent
+//        case register
         case healthKitPermissions
     }
     
@@ -23,7 +24,14 @@ public struct OnboardingFlow: View {
     
     
     public var body: some View {
+        VStack {
             NavigationStack(path: $onboardingSteps) {
+                Image(systemName: "pawprint.circle.fill")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(.red)
+                    .offset(y: 20)
                 Welcome(onboardingSteps: $onboardingSteps)
                     .navigationDestination(for: Step.self) { onboardingStep in
                         switch onboardingStep {
@@ -31,12 +39,15 @@ public struct OnboardingFlow: View {
                             InterestingModules(onboardingSteps: $onboardingSteps)
                         case .consent:
                             Consent(onboardingSteps: $onboardingSteps)
+                            //                        case .register:
+                            //                            Register(onboardingSteps: $onboardingSteps)
                         case .healthKitPermissions:
                             HealthKitPermissions()
                         }
                     }
                     .navigationBarTitleDisplayMode(.inline)
             }
+        }
     }
     
     

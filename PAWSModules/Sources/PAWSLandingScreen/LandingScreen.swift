@@ -8,16 +8,18 @@
 
 import SwiftUI
 
-struct LandingScreen: View {
-//    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
+let backgroundGradient =  LinearGradient(
+    colors: [.red, .pink, .orange, .yellow],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
 
-    var body: some View {
+public struct LandingScreen: View {
+//    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
+    @Binding private var launchStatus: Bool
+    public var body: some View {
         VStack {
-            LinearGradient(
-                colors: [.red, .pink, .orange, .yellow],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
+            backgroundGradient
             .mask(
                 VStack {
                     Image(systemName: "pawprint.circle.fill")
@@ -31,46 +33,37 @@ struct LandingScreen: View {
                         .font(.custom("GillSans", fixedSize: 15))
                         .offset(y: 50)
                     
-                    Button(action: {
-        //                completedAccountSetup = true
-                    }) {
-                        
-                        Text("Tap to get started")
-                            .fontWeight(.bold)
-                            .padding()
-                            .foregroundColor(.white)
-                            .border(Color.black, width: 3)
-//                            .background(Color.black)
-                            .cornerRadius(5)
-                            .offset(y: 100)
-                            
-                    }
+                   
                     
                 }
             )
+       
+            Button(action: {
+                launchStatus = true
+            }) {
+                
+                Text("Tap to get started")
+                    .fontWeight(.bold)
+                    .padding()
+                    .foregroundColor(Color.red)
+                    .border(backgroundGradient, width: 3)
+                    .cornerRadius(5)
+                    .offset(y: -30)
+            }
 
-//            Button(action: {
-////                completedAccountSetup = true
-//            }) {
-//                HStack {
-//                    Image(systemName: "apple.logo")
-//                        .font(.title)
-//                    Text("Sign in with Apple")
-//                        .fontWeight(.bold)
-//
-//                }
-//                .padding()
-//                .foregroundColor(.white)
-//                .background(Color.black)
-//                .cornerRadius(30)
-//                .offset(y: -50)
-//            }
         }
+    }
+    public init(pressedStart: Binding<Bool>) {
+        self._launchStatus = pressedStart
     }
 }
 
+
 struct LandingScreen_Previews: PreviewProvider {
+    @State private static var pressedStart: Bool = false
+    
     static var previews: some View {
-        LandingScreen()
+        
+        LandingScreen(pressedStart: $pressedStart)
     }
 }

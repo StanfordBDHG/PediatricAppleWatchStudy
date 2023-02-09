@@ -12,7 +12,7 @@
 "WELCOME_TITLE" = "Welcome to PAWS!";
 "WELCOME_SUBTITLE" = "We are excited to have you join the Pediatric Apple Watch Study (PAWS) to improve diagnosis of arrhythmias in patients like you!
 
-On this page, we'll walk through the app's main features. Next, you'll complete contain important onboarding information to confirm your participation in the study.";
+On this page, we'll walk through the app's main features. Next, you'll complete  important onboarding information to confirm your participation in the study.";
 
 "WELCOME_AREA1_TITLE" = "Home Page";
 "WELCOME_AREA1_DESCRIPTION" = "On this page you'll be able to see your patient information and a summary of the ECG recordings  uploaded from your Apple Watch ";
@@ -26,7 +26,7 @@ On this page, we'll walk through the app's main features. Next, you'll complete 
 "WELCOME_BUTTON" = "Begin onboarding";
 
 // MARK: Interesting Modules
-"INTERESTING_MODULES_TITLE" = "Onboarding";
+"INTERESTING_MODULES_TITLE" = "PAWS Onboarding";
 "INTERESTING_MODULES_SUBTITLE" = "You'll need to complete a few more steps
 to get started...";
 

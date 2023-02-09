@@ -91,6 +91,13 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
+        ),
+        .target(
+            name: "PAWSRegisterScreen",
+            dependencies: [],
+            resources: [
+                .process("Resources")
+            ]
         )
     ]
 )

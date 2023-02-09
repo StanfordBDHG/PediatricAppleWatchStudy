@@ -10,7 +10,7 @@ import CardinalKit
 import PAWSOnboardingFlow
 import PAWSSharedContext
 import SwiftUI
-
+import PAWSLandingScreen
 
 @main
 struct PAWS: App {
@@ -18,20 +18,33 @@ struct PAWS: App {
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
 //    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
 
+    @State var pressedStart = false
     
+    var isSheetPresented: Binding<Bool> {
+        Binding(
+            get: {
+                !completedOnboardingFlow && pressedStart
+            }, set: { _ in }
+        )
+    }
     
     var body: some Scene {
         WindowGroup {
 //            if  completedAccountSetup {
-                HomeView()
-                    .sheet(isPresented: !$completedOnboardingFlow) {
+            Group {
+                if completedOnboardingFlow  {
+                    HomeView()
+                } else {
+                    LandingScreen(pressedStart: $pressedStart)
+                }
+            }
+                    .sheet(isPresented: isSheetPresented) {
                         OnboardingFlow()
                     }
+                    .interactiveDismissDisabled(true)
                     .testingSetup()
                 .cardinalKit(appDelegate)
-//            } else {
-//                /*@START_MENU_TOKEN@*/EmptyView()/*@END_MENU_TOKEN@*/
-//            }
+
         }
     }
 }

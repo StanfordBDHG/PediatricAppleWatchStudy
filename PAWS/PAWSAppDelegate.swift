@@ -35,12 +35,9 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
                         HKQuantityType(.restingHeartRate),
                         deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
                     )
+                   
                     CollectSample(
-                        HKQuantityType(.walkingHeartRateAverage),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType(.heartRateRecoveryOneMinute),
+                        HKQuantityType.electrocardiogramType(),
                         deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
                     )
                 } adapter: {

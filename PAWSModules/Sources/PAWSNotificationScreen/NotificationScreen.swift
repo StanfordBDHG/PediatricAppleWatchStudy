@@ -6,14 +6,28 @@
 // SPDX-License-Identifier: MIT
 //
 
-
 import SwiftUI
 
-struct NotificationScreen: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+public struct NotificationScreen: View {
+    
+    public var body: some View {
+        ScrollView(.vertical) {
+            VStack(alignment: .leading){
+                Text("Notifications")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .padding([.top, .bottom], 20)
+                Notification()
+                Notification()
+                Notification()
+                Notification()
+            }
+        }
+        
     }
+    public init(){}
 }
+
 
 struct NotificationScreen_Previews: PreviewProvider {
     static var previews: some View {

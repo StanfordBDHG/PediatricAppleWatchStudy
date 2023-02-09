@@ -9,27 +9,34 @@
 import PAWSContacts
 import PAWSMockDataStorageProvider
 import PAWSSchedule
+import PAWSNotificationScreen
 import PAWSSharedContext
 import SwiftUI
 
 
 struct HomeView: View {
     enum Tabs: String {
-        case schedule
+        //case schedule
+        case notifications
         case contact
         case mockUpload
     }
     
     
-    @AppStorage(StorageKeys.homeTabSelection) var selectedTab = Tabs.schedule
+    @AppStorage(StorageKeys.homeTabSelection) var selectedTab = Tabs.notifications
     
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ScheduleView()
-                .tag(Tabs.schedule)
+            //            ScheduleView()
+            //                .tag(Tabs.schedule)
+            //                .tabItem {
+            //                    Label("SCHEDULE_TAB_TITLE", systemImage: "square.and.arrow.up")
+            //                }
+            NotificationScreen()
+                .tag(Tabs.notifications)
                 .tabItem {
-                    Label("SCHEDULE_TAB_TITLE", systemImage: "square.and.arrow.up")
+                    Label("NOTIFICATIONS_TAB_TITLE", systemImage: "bell.fill")
                 }
             Contacts()
                 .tag(Tabs.contact)
