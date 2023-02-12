@@ -7,22 +7,22 @@
 //
 
 import FHIR
-import HealthKitOnFHIR
 import Foundation
+import HealthKitOnFHIR
 
 
 extension Foundation.Bundle {
-    func ecgTracing(withName name: String) -> HKElectrocardiogramMapping {
+    func ecgTracing(withName name: String) -> Observation {
         guard let resourceURL = self.url(forResource: name, withExtension: "json") else {
             print(self.bundleURL)
-            fatalError("Could not find the ecgTracing \"\(name)\".json in Bundle.")
+            fatalError("Could not find the ecgTracing \"\(name).json\" in Bundle.")
         }
         
         do {
-            let resourceData: Data = name.data(using: .utf8)!
-            return try JSONDecoder().decode(HKElectrocardiogramMapping.self, from: resourceData)
+            let resourceData = try Data(contentsOf: resourceURL)
+            return try JSONDecoder().decode(Observation.self, from: resourceData)
         } catch {
-            fatalError("Could not decode the FHIR ecgTracing named \"\(name).json\": \(error)")
+            fatalError("Could not decode the FHIR ECG data named \"\(name).json\": \(error)")
         }
     }
 }

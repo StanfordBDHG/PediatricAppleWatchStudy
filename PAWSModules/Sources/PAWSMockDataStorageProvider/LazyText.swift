@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
 import HealthKitOnFHIR
+import SwiftUI
 
 struct LazyText: View {
     private let text: String
@@ -36,12 +36,20 @@ struct LazyText: View {
     }
 }
 
+
 struct LazyText_Previews: PreviewProvider {
+    static let mappingJSONString = {
+        let observation = Bundle.module.ecgTracing(withName: "ECGObservation")
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        let jsonData = (try? jsonEncoder.encode(observation)) ?? Data()
+        return String(data: jsonData, encoding: .utf8) ?? ""
+    }()
+    
     
     static var previews: some View {
-  //      let mapping = Bundle.main.ecgTracing(withName: "ECGSample")
-        let mapping = "Pizza party"
-        LazyText(text: String(describing: mapping))
+        ScrollView {
+            LazyText(text: mappingJSONString)
+        }
     }
 }
-

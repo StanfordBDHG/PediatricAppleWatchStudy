@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
 import HealthKitOnFHIR
+import SwiftUI
 
 
 struct MockUploadDetailView: View {
@@ -27,4 +27,3 @@ struct MockUploadDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
     }
 }
-

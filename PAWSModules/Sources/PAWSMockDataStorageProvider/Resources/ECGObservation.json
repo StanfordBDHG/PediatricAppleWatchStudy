@@ -1,0 +1,165 @@
+{
+  "category" : [
+    {
+      "coding" : [
+        {
+          "code" : "procedure",
+          "display" : "Procedure",
+          "system" : "http://terminology.hl7.org/CodeSystem/observation-category"
+        }
+      ]
+    }
+  ],
+  "code" : {
+    "coding" : [
+      {
+        "code" : "HKElectrocardiogram",
+        "display" : "Electrocardiogram",
+        "system" : "http://developer.apple.com/documentation/healthkit"
+      },
+      {
+        "code" : "131329",
+        "display" : "MDC_ECG_ELEC_POTL_I",
+        "system" : "urn:oid:2.16.840.1.113883.6.24"
+      }
+    ]
+  },
+  "component" : [
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "HKElectrocardiogram.NumberOfVoltageMeasurements",
+            "display" : "Electrocardiogram Number of Voltage Measurements",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueQuantity" : {
+        "unit" : "measurements",
+        "value" : 22112
+      }
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "HKElectrocardiogram.SamplingFrequency",
+            "display" : "Sampling Frequency",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueQuantity" : {
+        "code" : "hertz",
+        "system" : "http://unitsofmeasure.org",
+        "unit" : "hertz",
+        "value" : 512
+      }
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "HKElectrocardiogram.Classification",
+            "display" : "Electrocardiogram Classification",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueString" : "sinusRhythm"
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "8867-4",
+            "display" : "Heart rate",
+            "system" : "http://loinc.org"
+          },
+          {
+            "code" : "HKQuantityTypeIdentifierHeartRate",
+            "display" : "Heart Rate",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueQuantity" : {
+        "code" : "/min",
+        "system" : "http://unitsofmeasure.org",
+        "unit" : "beats/minute",
+        "value" : 140
+      }
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "HKElectrocardiogram.SymptomsStatus",
+            "display" : "Electrocardiogram Symptoms Status",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueString" : "present"
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "HKCategoryTypeIdentifierRapidPoundingOrFlutteringHeartbeat",
+            "display" : "Rapid Pounding Or Fluttering Heartbeat",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueString" : "unspecified"
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "HKCategoryTypeIdentifierFatigue",
+            "display" : "Fatigue",
+            "system" : "http://developer.apple.com/documentation/healthkit"
+          }
+        ]
+      },
+      "valueString" : "unspecified"
+    },
+    {
+      "code" : {
+        "coding" : [
+          {
+            "code" : "131329",
+            "display" : "MDC_ECG_ELEC_POTL_I",
+            "system" : "urn:oid:2.16.840.1.113883.6.24"
+          }
+        ]
+      },
+      "valueSampledData" : {
+        "data" : "-122.59088134765625 -262.6523132324219 -398.10791015625 -517.7991333007812 ....",
+        "dimensions" : 1,
+        "origin" : {
+          "code" : "uV",
+          "system" : "http://unitsofmeasure.org",
+          "unit" : "uV",
+          "value" : 0
+        },
+        "period" : 0.00195303667126447232
+      }
+    }
+  ],
+  "effectivePeriod" : {
+    "end" : "2022-12-20T01:41:00-08:00",
+    "start" : "2022-12-20T01:41:43.1875-08:00"
+  },
+  "identifier" : [
+    {
+      "id" : "E3E98DA2-7124-4567-93CB-0B52647EA332"
+    }
+  ],
+  "issued" : "2022-12-20T19:14:52.072656035-08:00",
+  "resourceType" : "Observation",
+  "status" : "final"
+}
