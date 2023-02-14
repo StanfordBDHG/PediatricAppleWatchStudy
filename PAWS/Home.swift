@@ -16,7 +16,6 @@ import SwiftUI
 
 struct HomeView: View {
     enum Tabs: String {
-        //case schedule
         case notifications
         case contact
         case mockUpload
