@@ -38,7 +38,6 @@ struct InterestingModules: View {
                         title: "INTERESTING_MODULES_AREA3_TITLE".moduleLocalized,
                         description: "INTERESTING_MODULES_AREA3_DESCRIPTION".moduleLocalized
                     )
-                    
                 ],
                 actionText: "INTERESTING_MODULES_BUTTON".moduleLocalized,
                 action: {

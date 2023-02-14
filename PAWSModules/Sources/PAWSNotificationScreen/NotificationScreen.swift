@@ -9,10 +9,9 @@
 import SwiftUI
 
 public struct NotificationScreen: View {
-    
     public var body: some View {
         ScrollView(.vertical) {
-            VStack(alignment: .leading){
+            VStack(alignment: .leading) {
                 Text("Notifications")
                     .font(.title)
                     .fontWeight(.bold)
@@ -23,9 +22,8 @@ public struct NotificationScreen: View {
                 Notification()
             }
         }
-        
     }
-    public init(){}
+    public init() {}
 }
 
 

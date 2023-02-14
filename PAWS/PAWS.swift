@@ -7,10 +7,10 @@
 //
 
 import CardinalKit
+import PAWSLandingScreen
 import PAWSOnboardingFlow
 import PAWSSharedContext
 import SwiftUI
-import PAWSLandingScreen
 
 @main
 struct PAWS: App {
@@ -32,7 +32,7 @@ struct PAWS: App {
         WindowGroup {
 //            if  completedAccountSetup {
             Group {
-                if completedOnboardingFlow  {
+                if completedOnboardingFlow {
                     HomeView()
                 } else {
                     LandingScreen(pressedStart: $pressedStart)
@@ -44,7 +44,6 @@ struct PAWS: App {
                     .interactiveDismissDisabled(true)
                     .testingSetup()
                 .cardinalKit(appDelegate)
-
         }
     }
 }

@@ -24,9 +24,7 @@ let package = Package(
         .library(name: "PAWSSchedule", targets: ["PAWSSchedule"]),
         .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"]),
         .library(name: "PAWSLandingScreen", targets: ["PAWSLandingScreen"]),
-        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"]),
-
-
+        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
     ],
     dependencies: [
         .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.2.1"))

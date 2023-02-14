@@ -8,15 +8,15 @@
 
 import PAWSContacts
 import PAWSMockDataStorageProvider
-import PAWSSchedule
 import PAWSNotificationScreen
+import PAWSSchedule
 import PAWSSharedContext
 import SwiftUI
 
 
 struct HomeView: View {
     enum Tabs: String {
-        //case schedule
+        // case schedule
         case notifications
         case contact
         case mockUpload

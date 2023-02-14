@@ -34,7 +34,6 @@ struct RegisterScreen: View {
                     Button(action: {
         //                completedAccountSetup = true
                     }) {
-                        
                         Text("Tap to get started")
                             .fontWeight(.bold)
                             .padding()
@@ -43,9 +42,7 @@ struct RegisterScreen: View {
 //                            .background(Color.black)
                             .cornerRadius(5)
                             .offset(y: 100)
-                            
                     }
-                    
                 }
             )
 
@@ -74,4 +71,3 @@ struct RegisterScreen_Previews: PreviewProvider {
         RegisterScreen()
     }
 }
-

@@ -19,6 +19,4 @@ public enum StorageKeys {
     // MARK: - Home
     /// The currently selected home tab.
     public static let homeTabSelection = "home.tabselection"
-
-   
 }

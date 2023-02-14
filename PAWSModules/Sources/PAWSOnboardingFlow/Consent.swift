@@ -23,7 +23,6 @@ struct Consent: View {
     }
     
     var body: some View {
-        
         VStack {
             Image(systemName: "pawprint.circle.fill")
                 .resizable()
@@ -48,8 +47,6 @@ struct Consent: View {
             )
             .offset(y: -20)
         }
-        
-      
     }
     
     

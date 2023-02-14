@@ -8,17 +8,15 @@
 
 import SwiftUI
 
-let backgroundGradient =  LinearGradient(
+let backgroundGradient = LinearGradient(
     colors: [.red, .pink, .yellow],
         startPoint: .leading,
         endPoint: .trailing
     )
 
 struct Notification: View {
-    
     var body: some View {
-        
-        VStack (alignment: .leading) {
+        VStack(alignment: .leading) {
             Text("February 8th, 2023")
                 .font(.title3)
                 .fontWeight(.bold)
@@ -33,8 +31,6 @@ struct Notification: View {
                             Text("12:30 PM")
                                 .font(.subheadline)
                             .padding([.leading, .trailing], 20)
-                        
-                        
                     }
              
                 Divider()
@@ -45,7 +41,6 @@ struct Notification: View {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
             }
-                
             }
             .frame(width: 320)
             .opacity(0.9)
@@ -54,7 +49,6 @@ struct Notification: View {
             .shadow(radius: 10)
         }
     }
-    
 }
 
 struct Notification_Previews: PreviewProvider {
@@ -62,4 +56,3 @@ struct Notification_Previews: PreviewProvider {
         Notification()
     }
 }
-

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-let backgroundGradient =  LinearGradient(
+let backgroundGradient = LinearGradient(
     colors: [.red, .pink, .orange, .yellow],
         startPoint: .leading,
         endPoint: .trailing
@@ -32,16 +32,12 @@ public struct LandingScreen: View {
                     Text("The Pediatric Apple Watch Study")
                         .font(.custom("GillSans", fixedSize: 15))
                         .offset(y: 50)
-                    
-                   
-                    
                 }
             )
        
             Button(action: {
                 launchStatus = true
             }) {
-                
                 Text("Tap to get started")
                     .fontWeight(.bold)
                     .padding()
@@ -50,7 +46,6 @@ public struct LandingScreen: View {
                     .cornerRadius(5)
                     .offset(y: -30)
             }
-
         }
     }
     public init(pressedStart: Binding<Bool>) {
@@ -60,10 +55,9 @@ public struct LandingScreen: View {
 
 
 struct LandingScreen_Previews: PreviewProvider {
-    @State private static var pressedStart: Bool = false
+    @State private static var pressedStart = false
     
     static var previews: some View {
-        
         LandingScreen(pressedStart: $pressedStart)
     }
 }
