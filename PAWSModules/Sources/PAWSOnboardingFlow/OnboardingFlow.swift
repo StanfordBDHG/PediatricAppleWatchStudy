@@ -15,7 +15,6 @@ public struct OnboardingFlow: View {
     enum Step: String, Codable {
         case interestingModules
         case consent
-//        case register
         case healthKitPermissions
     }
     
