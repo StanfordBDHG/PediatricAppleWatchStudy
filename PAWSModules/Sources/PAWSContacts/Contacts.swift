@@ -33,8 +33,6 @@ public struct Contacts: View {
                 return address
             }(),
             contactOptions: [
-                // .call("+1 (650) 723-2300"),
-                // .text("+1 (650) 723-2300"),
                 .email(addresses: ["ceresnak@stanford.edu"]),
                 ContactOption(
                     image: Image(systemName: "safari.fill"),
@@ -66,8 +64,6 @@ public struct Contacts: View {
                 return address
             }(),
             contactOptions: [
-                // .call("+1 (650) 723-2300"),
-                // .text("+1 (650) 723-2300"),
                 .email(addresses: ["aydinz@stanford.edu"]),
                 ContactOption(
                     image: Image(systemName: "safari.fill"),
