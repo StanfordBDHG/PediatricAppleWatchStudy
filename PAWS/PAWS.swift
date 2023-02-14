@@ -36,11 +36,11 @@ struct PAWS: App {
                     LandingScreen(pressedStart: $pressedStart)
                 }
             }
-                    .sheet(isPresented: isSheetPresented) {
-                        OnboardingFlow()
-                    }
-                    .interactiveDismissDisabled(true)
-                    .testingSetup()
+                .sheet(isPresented: isSheetPresented) {
+                    OnboardingFlow()
+                }
+                .interactiveDismissDisabled(true)
+                .testingSetup()
                 .cardinalKit(appDelegate)
 
         }
