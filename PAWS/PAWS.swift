@@ -16,7 +16,6 @@ import SwiftUI
 struct PAWS: App {
     @UIApplicationDelegateAdaptor(PAWSAppDelegate.self) var appDelegate
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
-//    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
 
     @State var pressedStart = false
     
@@ -30,7 +29,6 @@ struct PAWS: App {
     
     var body: some Scene {
         WindowGroup {
-//            if  completedAccountSetup {
             Group {
                 if completedOnboardingFlow {
                     HomeView()
@@ -38,11 +36,11 @@ struct PAWS: App {
                     LandingScreen(pressedStart: $pressedStart)
                 }
             }
-                    .sheet(isPresented: isSheetPresented) {
-                        OnboardingFlow()
-                    }
-                    .interactiveDismissDisabled(true)
-                    .testingSetup()
+                .sheet(isPresented: isSheetPresented) {
+                    OnboardingFlow()
+                }
+                .interactiveDismissDisabled(true)
+                .testingSetup()
                 .cardinalKit(appDelegate)
         }
     }

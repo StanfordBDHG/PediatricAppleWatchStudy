@@ -16,7 +16,6 @@ import SwiftUI
 
 struct HomeView: View {
     enum Tabs: String {
-        // case schedule
         case notifications
         case contact
         case mockUpload
@@ -28,11 +27,6 @@ struct HomeView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            //            ScheduleView()
-            //                .tag(Tabs.schedule)
-            //                .tabItem {
-            //                    Label("SCHEDULE_TAB_TITLE", systemImage: "square.and.arrow.up")
-            //                }
             NotificationScreen()
                 .tag(Tabs.notifications)
                 .tabItem {
