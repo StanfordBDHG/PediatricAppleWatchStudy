@@ -15,8 +15,8 @@ let backgroundGradient = LinearGradient(
     )
 
 public struct LandingScreen: View {
-//    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
     @Binding private var launchStatus: Bool
+    
     public var body: some View {
         VStack {
             backgroundGradient

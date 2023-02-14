@@ -73,22 +73,13 @@ let package = Package(
             ]
         ),
         .target(
-            name: "PAWSSharedContext",
-            dependencies: []
+            name: "PAWSSharedContext"
         ),
         .target(
-            name: "PAWSLandingScreen",
-            dependencies: [],
-            resources: [
-                .process("Resources")
-            ]
+            name: "PAWSLandingScreen"
         ),
         .target(
-            name: "PAWSNotificationScreen",
-            dependencies: [],
-            resources: [
-                .process("Resources")
-            ]
-        ),
+            name: "PAWSNotificationScreen"
+        )
     ]
 )

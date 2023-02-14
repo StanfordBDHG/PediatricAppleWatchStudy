@@ -31,6 +31,7 @@
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
 		3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3637947D2992F3B000B3C006 /* PAWSLandingScreen */; };
 		36379481299308AA00B3C006 /* PAWSNotificationScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 36379480299308AA00B3C006 /* PAWSNotificationScreen */; };
+		36BB4943299B6687005071A3 /* paws-logo.png.license in Resources */ = {isa = PBXBuildFile; fileRef = 36BB4942299B6687005071A3 /* paws-logo.png.license */; };
 		653A2551283387FE005D4D48 /* PAWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A2550283387FE005D4D48 /* PAWS.swift */; };
 		653A255528338800005D4D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 653A255428338800005D4D48 /* Assets.xcassets */; };
 		653A256228338800005D4D48 /* PAWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A256128338800005D4D48 /* PAWSTests.swift */; };
@@ -66,6 +67,7 @@
 		2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PAWS.xctestplan; sourceTree = "<group>"; };
 		2FC9759E2978E39600BA99FE /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		2FC975A72978F11A00BA99FE /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		36BB4942299B6687005071A3 /* paws-logo.png.license */ = {isa = PBXFileReference; lastKnownFileType = text; path = "paws-logo.png.license"; sourceTree = "<group>"; };
 		653A254D283387FE005D4D48 /* PAWS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PAWS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		653A2550283387FE005D4D48 /* PAWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWS.swift; sourceTree = "<group>"; };
 		653A255428338800005D4D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				2FAEC07F297F583900C11C42 /* PAWS.entitlements */,
 				653A258928339462005D4D48 /* Info.plist */,
 				653A255428338800005D4D48 /* Assets.xcassets */,
+				36BB4942299B6687005071A3 /* paws-logo.png.license */,
 				2FC9759E2978E39600BA99FE /* Localizable.strings */,
 			);
 			path = "Supporting Files";
@@ -326,6 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36BB4943299B6687005071A3 /* paws-logo.png.license in Resources */,
 				653A255528338800005D4D48 /* Assets.xcassets in Resources */,
 				2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */,
 			);
