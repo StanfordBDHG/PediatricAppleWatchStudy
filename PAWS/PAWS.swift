@@ -29,7 +29,6 @@ struct PAWS: App {
     
     var body: some Scene {
         WindowGroup {
-//            if  completedAccountSetup {
             Group {
                 if completedOnboardingFlow  {
                     HomeView()
