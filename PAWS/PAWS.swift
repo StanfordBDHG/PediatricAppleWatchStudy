@@ -16,7 +16,6 @@ import PAWSLandingScreen
 struct PAWS: App {
     @UIApplicationDelegateAdaptor(PAWSAppDelegate.self) var appDelegate
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
-//    @AppStorage(StorageKeys.accountCreated) var completedAccountSetup = false
 
     @State var pressedStart = false
     
