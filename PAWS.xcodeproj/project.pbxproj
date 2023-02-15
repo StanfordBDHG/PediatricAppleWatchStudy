@@ -25,7 +25,6 @@
 		2F59B93D298C628800C5107F /* PAWSContacts in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B93C298C628800C5107F /* PAWSContacts */; };
 		2F59B93F298C628800C5107F /* PAWSMockDataStorageProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B93E298C628800C5107F /* PAWSMockDataStorageProvider */; };
 		2F59B941298C628800C5107F /* PAWSOnboardingFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B940298C628800C5107F /* PAWSOnboardingFlow */; };
-		2F59B943298C628800C5107F /* PAWSSchedule in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B942298C628800C5107F /* PAWSSchedule */; };
 		2F59B945298C628800C5107F /* PAWSSharedContext in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B944298C628800C5107F /* PAWSSharedContext */; };
 		2F5E32BD297E05EA003432F8 /* PAWSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
@@ -91,7 +90,6 @@
 				2F49B784298041F300BCB272 /* Contact in Frameworks */,
 				2F49B7782980407C00BCB272 /* FHIR in Frameworks */,
 				2F49B7802980418400BCB272 /* Onboarding in Frameworks */,
-				2F59B943298C628800C5107F /* PAWSSchedule in Frameworks */,
 				2F49B7762980407C00BCB272 /* CardinalKit in Frameworks */,
 				2F59B93D298C628800C5107F /* PAWSContacts in Frameworks */,
 				2F49B77C2980407C00BCB272 /* HealthKitToFHIRAdapter in Frameworks */,
@@ -218,7 +216,6 @@
 				2F59B93C298C628800C5107F /* PAWSContacts */,
 				2F59B93E298C628800C5107F /* PAWSMockDataStorageProvider */,
 				2F59B940298C628800C5107F /* PAWSOnboardingFlow */,
-				2F59B942298C628800C5107F /* PAWSSchedule */,
 				2F59B944298C628800C5107F /* PAWSSharedContext */,
 				3637947D2992F3B000B3C006 /* PAWSLandingScreen */,
 				36379480299308AA00B3C006 /* PAWSNotificationScreen */,
@@ -824,10 +821,6 @@
 		2F59B940298C628800C5107F /* PAWSOnboardingFlow */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PAWSOnboardingFlow;
-		};
-		2F59B942298C628800C5107F /* PAWSSchedule */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PAWSSchedule;
 		};
 		2F59B944298C628800C5107F /* PAWSSharedContext */ = {
 			isa = XCSwiftPackageProductDependency;

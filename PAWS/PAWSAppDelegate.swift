@@ -45,7 +45,6 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
             }
             QuestionnaireDataSource()
             MockDataStorageProvider()
-            PAWSScheduler()
         }
     }
 }

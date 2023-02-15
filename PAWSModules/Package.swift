@@ -21,7 +21,6 @@ let package = Package(
         .library(name: "PAWSContacts", targets: ["PAWSContacts"]),
         .library(name: "PAWSMockDataStorageProvider", targets: ["PAWSMockDataStorageProvider"]),
         .library(name: "PAWSOnboardingFlow", targets: ["PAWSOnboardingFlow"]),
-        .library(name: "PAWSSchedule", targets: ["PAWSSchedule"]),
         .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"]),
         .library(name: "PAWSLandingScreen", targets: ["PAWSLandingScreen"]),
         .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
@@ -61,15 +60,6 @@ let package = Package(
             ],
             resources: [
                 .process("Resources")
-            ]
-        ),
-        .target(
-            name: "PAWSSchedule",
-            dependencies: [
-                .target(name: "PAWSSharedContext"),
-                .product(name: "FHIR", package: "CardinalKit"),
-                .product(name: "Questionnaires", package: "CardinalKit"),
-                .product(name: "Scheduler", package: "CardinalKit")
             ]
         ),
         .target(
