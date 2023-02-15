@@ -27,7 +27,7 @@ let package = Package(
         .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.2.1"))
+        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.0"))
     ],
     targets: [
         .target(

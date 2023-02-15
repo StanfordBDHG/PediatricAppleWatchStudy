@@ -38,8 +38,8 @@ struct PAWS: App {
             }
                 .sheet(isPresented: isSheetPresented) {
                     OnboardingFlow()
+                        .interactiveDismissDisabled(true)
                 }
-                .interactiveDismissDisabled(true)
                 .testingSetup()
                 .cardinalKit(appDelegate)
         }
