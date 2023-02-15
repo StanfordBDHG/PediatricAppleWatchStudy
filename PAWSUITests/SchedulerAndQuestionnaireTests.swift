@@ -6,10 +6,10 @@
 // SPDX-License-Identifier: MIT
 //
 
-//import XCTest
+// import XCTest
 //
 //
-//class SchedulerAndQuestionnaireTests: XCTestCase {
+// class SchedulerAndQuestionnaireTests: XCTestCase {
 //    override func setUpWithError() throws {
 //        try super.setUpWithError()
 //
@@ -56,4 +56,4 @@
 //        XCTAssertTrue(!app.staticTexts["Start Questionnaire"].waitForExistence(timeout: 0.5))
 //        XCTAssertTrue(app.images["Selected"].waitForExistence(timeout: 0.5))
 //    }
-//}
+// }

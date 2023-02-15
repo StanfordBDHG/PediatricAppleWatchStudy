@@ -6,11 +6,11 @@
 //// SPDX-License-Identifier: MIT
 ////
 //
-//import XCTest
-//import XCTHealthKit
+// import XCTest
+// import XCTHealthKit
 //
 //
-//class OnboardingTests: XCTestCase {
+// class OnboardingTests: XCTestCase {
 //    override func setUpWithError() throws {
 //        try super.setUpWithError()
 //
@@ -32,10 +32,10 @@
 ////        XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 0.5))
 ////        XCTAssertTrue(tabBar.buttons["Mock Upload"].waitForExistence(timeout: 0.5))
 //    }
-//}
+// }
 //
 //
-////extension XCUIApplication {
+//// extension XCUIApplication {
 ////    func conductOnboardingIfNeeded() throws {
 ////        if self.staticTexts["CardinalKit\nPAWS Application"].waitForExistence(timeout: 0.5) {
 ////            try navigateOnboardingFlow(assertThatHealthKitConsentIsShown: false)

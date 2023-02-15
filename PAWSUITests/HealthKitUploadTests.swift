@@ -6,11 +6,11 @@
 //// SPDX-License-Identifier: MIT
 ////
 //
-//import XCTest
-//import XCTHealthKit
+// import XCTest
+// import XCTHealthKit
 //
 //
-//class HealthKitUploadTests: XCTestCase {
+// class HealthKitUploadTests: XCTestCase {
 //    override func setUpWithError() throws {
 //        try super.setUpWithError()
 //
@@ -64,4 +64,4 @@
 //            XCTAssertFalse(app.staticTexts.containing(predicate).firstMatch.waitForExistence(timeout: 0.5))
 //        }
 //    }
-//}
+// }
