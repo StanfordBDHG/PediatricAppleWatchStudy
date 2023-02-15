@@ -35,10 +35,10 @@ public struct LandingScreen: View {
                         .offset(y: 50)
                 }
             )
-       
-            Button(action: {
-                launchStatus = true
-            }) {
+            Button(
+                action: {
+                    launchStatus = true
+                }, label: {
                 Text("Tap to get started")
                     .fontWeight(.bold)
                     .padding()
@@ -46,9 +46,12 @@ public struct LandingScreen: View {
                     .border(backgroundGradient, width: 3)
                     .cornerRadius(5)
                     .offset(y: -30)
-            }
+                }
+            )
         }
     }
+    
+    
     public init(pressedStart: Binding<Bool>) {
         self._launchStatus = pressedStart
     }
