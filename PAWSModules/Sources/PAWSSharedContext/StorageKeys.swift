@@ -8,7 +8,6 @@
 
 /// Constants shared across the CardinalKit Teamplate Application to access storage information including the `AppStorage` and `SceneStorage`
 public enum StorageKeys {
-    public static let  accountCreated = "accountFlow"
     // MARK: - Onboarding
     /// A `Bool` flag indicating of the onboarding was completed.
     public static let onboardingFlowComplete = "onboardingFlow.complete"
