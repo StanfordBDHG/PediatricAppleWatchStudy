@@ -8,14 +8,15 @@
 
 import SwiftUI
 
-let backgroundGradient = LinearGradient(
-    colors: [.red, .pink, .orange, .yellow],
-    startPoint: .leading,
-    endPoint: .trailing
-    )
 
 public struct LandingScreen: View {
+    private let backgroundGradient = LinearGradient(
+        colors: [.red, .pink, .orange, .yellow],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
     @Binding private var launchStatus: Bool
+    
     
     public var body: some View {
         VStack {
