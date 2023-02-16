@@ -16,31 +16,60 @@ public struct Contacts: View {
     let contacts = [
         Contact(
             name: PersonNameComponents(
-                givenName: "Leland",
-                familyName: "Stanford"
+                givenName: "Scott",
+                familyName: "Ceresnak"
             ),
-            image: Image(systemName: "figure.wave.circle"),
-            title: "University Founder",
-            description: String(localized: "LELAND_STANFORD_BIO", bundle: .module),
+            image: Image(systemName: "person.circle"),
+            title: "Professor of Pediatrics (Cardiology)",
+            description: String(localized: "SCOTT_CERESNAK_BIO", bundle: .module),
             organization: "Stanford University",
             address: {
                 let address = CNMutablePostalAddress()
                 address.country = "USA"
                 address.state = "CA"
-                address.postalCode = "94305"
-                address.city = "Stanford"
-                address.street = "450 Serra Mall"
+                address.postalCode = "94304"
+                address.city = "Palo Alto"
+                address.street = "725 Welch Rd"
                 return address
             }(),
             contactOptions: [
-                .call("+1 (650) 723-2300"),
-                .text("+1 (650) 723-2300"),
-                .email(addresses: ["contact@stanford.edu"]),
+                .email(addresses: ["ceresnak@stanford.edu"]),
                 ContactOption(
                     image: Image(systemName: "safari.fill"),
                     title: "Website",
                     action: {
-                        if let url = URL(string: "https://stanford.edu") {
+                        if let url = URL(string: "https://profiles.stanford.edu/intranet/scott-ceresnak?tab=bio") {
+                           UIApplication.shared.open(url)
+                        }
+                    }
+                )
+            ]
+        ),
+        Contact(
+            name: PersonNameComponents(
+                givenName: "Aydin",
+                familyName: "Zahedivash"
+            ),
+            image: Image(systemName: "person.circle"),
+            title: "Pediatric Stanford Cardiology Fellow",
+            description: String(localized: "AYDIN_ZAHEDIVASH_BIO", bundle: .module),
+            organization: "Stanford University",
+            address: {
+                let address = CNMutablePostalAddress()
+                address.country = "USA"
+                address.state = "CA"
+                address.postalCode = "94304"
+                address.city = "Palo Alto"
+                address.street = "725 Welch Rd"
+                return address
+            }(),
+            contactOptions: [
+                .email(addresses: ["aydinz@stanford.edu"]),
+                ContactOption(
+                    image: Image(systemName: "safari.fill"),
+                    title: "Website",
+                    action: {
+                        if let url = URL(string: "https://profiles.stanford.edu/intranet/scott-ceresnak?tab=bio") {
                            UIApplication.shared.open(url)
                         }
                     }

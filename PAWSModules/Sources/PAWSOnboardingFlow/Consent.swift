@@ -23,20 +23,30 @@ struct Consent: View {
     }
     
     var body: some View {
-        ConsentView(
-            header: {
-                OnboardingTitleView(
-                    title: "CONSENT_TITLE".moduleLocalized,
-                    subtitle: "CONSENT_SUBTITLE".moduleLocalized
-                )
-            },
-            asyncMarkdown: {
-                consentDocument
-            },
-            action: {
-                onboardingSteps.append(.healthKitPermissions)
-            }
-        )
+        VStack {
+            Image(systemName: "pawprint.circle.fill")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 80, height: 80)
+                .foregroundColor(.red)
+                .offset(y: 10)
+            ConsentView(
+                header: {
+                    OnboardingTitleView(
+                        title: "CONSENT_TITLE".moduleLocalized,
+                        subtitle: "CONSENT_SUBTITLE".moduleLocalized
+                    )
+                },
+                
+                asyncMarkdown: {
+                    consentDocument
+                },
+                action: {
+                    onboardingSteps.append(.healthKitPermissions)
+                }
+            )
+            .offset(y: -20)
+        }
     }
     
     

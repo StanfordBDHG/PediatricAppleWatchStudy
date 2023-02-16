@@ -7,22 +7,38 @@
 //
 
 import CardinalKit
+import PAWSLandingScreen
 import PAWSOnboardingFlow
 import PAWSSharedContext
 import SwiftUI
-
 
 @main
 struct PAWS: App {
     @UIApplicationDelegateAdaptor(PAWSAppDelegate.self) var appDelegate
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
+
+    @State var pressedStart = false
     
+    var isSheetPresented: Binding<Bool> {
+        Binding(
+            get: {
+                !completedOnboardingFlow && pressedStart
+            }, set: { _ in }
+        )
+    }
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .sheet(isPresented: !$completedOnboardingFlow) {
+            Group {
+                if completedOnboardingFlow {
+                    HomeView()
+                } else {
+                    LandingScreen(pressedStart: $pressedStart)
+                }
+            }
+                .sheet(isPresented: isSheetPresented) {
                     OnboardingFlow()
+                        .interactiveDismissDisabled(true)
                 }
                 .testingSetup()
                 .cardinalKit(appDelegate)
