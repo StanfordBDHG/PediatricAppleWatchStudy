@@ -15,6 +15,8 @@ class OnboardingTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
+        try disablePasswordAutofill()
+        
         continueAfterFailure = false
         
         let app = XCUIApplication()
@@ -145,6 +147,7 @@ extension XCUIApplication {
             
             XCTAssertTrue(staticTexts["Leland Stanford"].waitForExistence(timeout: 2))
             XCTAssertTrue(staticTexts["leland@stanford.edu"].waitForExistence(timeout: 2))
+            
             XCTAssertTrue(scrollViews.otherElements.buttons["Next"].waitForExistence(timeout: 2))
             scrollViews.otherElements.buttons["Next"].tap()
         }
