@@ -12,7 +12,6 @@ import HealthKit
 import HealthKitDataSource
 import HealthKitToFHIRAdapter
 import PAWSMockDataStorageProvider
-import PAWSSchedule
 import Questionnaires
 import Scheduler
 import SwiftUI
