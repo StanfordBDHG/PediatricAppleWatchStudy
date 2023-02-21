@@ -12,6 +12,8 @@
 .build/
 !PAWS.xcodeproj
 
+project.xcworkspace/
+
 # IDE related folders
 .idea
 

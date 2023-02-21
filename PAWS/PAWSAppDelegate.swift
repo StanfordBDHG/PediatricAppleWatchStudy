@@ -12,7 +12,6 @@ import HealthKit
 import HealthKitDataSource
 import HealthKitToFHIRAdapter
 import PAWSMockDataStorageProvider
-import PAWSSchedule
 import Questionnaires
 import Scheduler
 import SwiftUI
@@ -24,7 +23,19 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(
-                        HKQuantityType(.stepCount),
+                        HKQuantityType(.heartRate),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType(.heartRateVariabilitySDNN),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType(.restingHeartRate),
+                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                    )
+                    CollectSample(
+                        HKQuantityType.electrocardiogramType(),
                         deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
                     )
                     CollectSample(
@@ -41,7 +52,6 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
             }
             QuestionnaireDataSource()
             MockDataStorageProvider()
-            PAWSScheduler()
         }
     }
 }

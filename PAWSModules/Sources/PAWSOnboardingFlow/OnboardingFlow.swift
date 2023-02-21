@@ -23,19 +23,27 @@ public struct OnboardingFlow: View {
     
     
     public var body: some View {
-        NavigationStack(path: $onboardingSteps) {
-            Welcome(onboardingSteps: $onboardingSteps)
-                .navigationDestination(for: Step.self) { onboardingStep in
-                    switch onboardingStep {
-                    case .interestingModules:
-                        InterestingModules(onboardingSteps: $onboardingSteps)
-                    case .consent:
-                        Consent(onboardingSteps: $onboardingSteps)
-                    case .healthKitPermissions:
-                        HealthKitPermissions()
+        VStack {
+            NavigationStack(path: $onboardingSteps) {
+                Image(systemName: "pawprint.circle.fill")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(.red)
+                    .offset(y: 20)
+                Welcome(onboardingSteps: $onboardingSteps)
+                    .navigationDestination(for: Step.self) { onboardingStep in
+                        switch onboardingStep {
+                        case .interestingModules:
+                            InterestingModules(onboardingSteps: $onboardingSteps)
+                        case .consent:
+                            Consent(onboardingSteps: $onboardingSteps)
+                        case .healthKitPermissions:
+                            HealthKitPermissions()
+                        }
                     }
-                }
-                .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
     
