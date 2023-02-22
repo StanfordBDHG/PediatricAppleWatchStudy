@@ -21,11 +21,12 @@ let package = Package(
         .library(name: "PAWSContacts", targets: ["PAWSContacts"]),
         .library(name: "PAWSMockDataStorageProvider", targets: ["PAWSMockDataStorageProvider"]),
         .library(name: "PAWSOnboardingFlow", targets: ["PAWSOnboardingFlow"]),
-        .library(name: "PAWSSchedule", targets: ["PAWSSchedule"]),
-        .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"])
+        .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"]),
+        .library(name: "PAWSLandingScreen", targets: ["PAWSLandingScreen"]),
+        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.2.1"))
+        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.0"))
     ],
     targets: [
         .target(
@@ -54,6 +55,7 @@ let package = Package(
             dependencies: [
                 .target(name: "PAWSSharedContext"),
                 .product(name: "FHIR", package: "CardinalKit"),
+                .product(name: "FirebaseAccount", package: "CardinalKit"),
                 .product(name: "HealthKitDataSource", package: "CardinalKit"),
                 .product(name: "Onboarding", package: "CardinalKit")
             ],
@@ -62,17 +64,13 @@ let package = Package(
             ]
         ),
         .target(
-            name: "PAWSSchedule",
-            dependencies: [
-                .target(name: "PAWSSharedContext"),
-                .product(name: "FHIR", package: "CardinalKit"),
-                .product(name: "Questionnaires", package: "CardinalKit"),
-                .product(name: "Scheduler", package: "CardinalKit")
-            ]
+            name: "PAWSSharedContext"
         ),
         .target(
-            name: "PAWSSharedContext",
-            dependencies: []
+            name: "PAWSLandingScreen"
+        ),
+        .target(
+            name: "PAWSNotificationScreen"
         )
     ]
 )

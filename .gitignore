@@ -12,6 +12,8 @@
 .build/
 !PAWS.xcodeproj
 
+project.xcworkspace/
+
 # IDE related folders
 .idea
 
@@ -29,3 +31,16 @@ xcuserdata/
 report.junit
 report.html
 PAWS.xcresult
+
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+firebase-debug.log*
+firebase-debug.*.log*
+
+# Firebase cache
+.firebase/

@@ -7,12 +7,15 @@
 //
 
 import XCTest
+import XCTestExtensions
 import XCTHealthKit
 
 
 class HealthKitUploadTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
+        
+        try disablePasswordAutofill()
         
         continueAfterFailure = false
         
@@ -27,41 +30,38 @@ class HealthKitUploadTests: XCTestCase {
         
         try app.conductOnboardingIfNeeded()
         
-        try navigateToMockUpload()
-        try assertObservationCellPresent(false)
+        try app.navigateToMockUpload()
+        try app.assertObservationCellPresent(false)
         
-        app.terminate()
-        
-        try exitAppAndOpenHealth(.steps)
+        try exitAppAndOpenHealth(.electrocardiograms)
         
         app.activate()
         
-        try navigateToMockUpload()
-        try assertObservationCellPresent(true, pressIfPresent: true)
-        try assertObservationCellPresent(true, pressIfPresent: false)
+        sleep(5)
+        
+        try app.navigateToMockUpload()
+        try app.assertObservationCellPresent(true, pressIfPresent: true)
+        try app.assertObservationCellPresent(true, pressIfPresent: false)
+    }
+}
+
+extension XCUIApplication {
+    fileprivate func navigateToMockUpload() throws {
+        XCTAssertTrue(tabBars["Tab Bar"].buttons["Mock Upload"].waitForExistence(timeout: 2))
+        tabBars["Tab Bar"].buttons["Mock Upload"].tap()
     }
     
-    
-    private func navigateToMockUpload() throws {
-        let app = XCUIApplication()
-        
-        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Mock Upload"].waitForExistence(timeout: 0.5))
-        app.tabBars["Tab Bar"].buttons["Mock Upload"].tap()
-    }
-    
-    private func assertObservationCellPresent(_ shouldBePresent: Bool, pressIfPresent: Bool = true) throws {
-        let app = XCUIApplication()
-        
+    fileprivate func assertObservationCellPresent(_ shouldBePresent: Bool, pressIfPresent: Bool = true) throws {
         let observationText = "/Observation/"
         let predicate = NSPredicate(format: "label CONTAINS[c] %@", observationText)
         
         if shouldBePresent {
-            XCTAssertTrue(app.staticTexts.containing(predicate).firstMatch.waitForExistence(timeout: 0.5))
+            XCTAssertTrue(staticTexts.containing(predicate).firstMatch.waitForExistence(timeout: 2))
             if pressIfPresent {
-                app.staticTexts.containing(predicate).firstMatch.tap()
+                staticTexts.containing(predicate).firstMatch.tap()
             }
         } else {
-            XCTAssertFalse(app.staticTexts.containing(predicate).firstMatch.waitForExistence(timeout: 0.5))
+            XCTAssertFalse(staticTexts.containing(predicate).firstMatch.waitForExistence(timeout: 2))
         }
     }
 }

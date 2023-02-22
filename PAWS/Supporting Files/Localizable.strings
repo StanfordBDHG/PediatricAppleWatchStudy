@@ -7,6 +7,9 @@
 //
 
 
+// MARK: - Notifications
+"NOTIFICATIONS_TAB_TITLE" = "Notifications";
+
 // MARK: - Contacts
 "CONTACTS_TAB_TITLE" = "Contacts";
 

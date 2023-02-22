@@ -22,6 +22,12 @@ struct HealthKitPermissions: View {
         OnboardingView(
             contentView: {
                 VStack {
+                    Image(systemName: "pawprint.circle.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.red)
+                        .offset(y: 20)
                     OnboardingTitleView(
                         title: "HEALTHKIT_PERMISSIONS_TITLE".moduleLocalized,
                         subtitle: "HEALTHKIT_PERMISSIONS_SUBTITLE".moduleLocalized

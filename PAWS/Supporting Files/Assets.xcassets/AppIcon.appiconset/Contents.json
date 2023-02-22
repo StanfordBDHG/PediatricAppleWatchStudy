@@ -1,6 +1,10 @@
 {
   "images" : [
     {
+    <<<<<<< danny
+    =======
+      "filename" : "paws-logo.png",
+    >>>>>>> main
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
