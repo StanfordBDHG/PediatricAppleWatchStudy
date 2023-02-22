@@ -15,13 +15,17 @@ struct MockUpload: Identifiable, Hashable {
         case delete
     }
     
+    enum UploadStatus {
+        case success
+        case failure
+    }
     
     let identifier: String
     let date = Date()
     let type: UploadType
     let path: String
     let body: String?
-    
+    let status: UploadStatus
     
     var id: String {
         "\(type): \(path)/\(identifier) at \(date.debugDescription)"
@@ -33,5 +37,6 @@ struct MockUpload: Identifiable, Hashable {
         self.type = type
         self.path = path
         self.body = body
+        self.status = .success
     }
 }

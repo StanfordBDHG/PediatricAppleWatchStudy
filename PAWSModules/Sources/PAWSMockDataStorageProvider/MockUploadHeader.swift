@@ -19,16 +19,34 @@ struct MockUploadHeader: View {
                 switch mockUpload.type {
                 case .add:
                     Image(systemName: "arrow.up.doc.fill")
-                        .foregroundColor(.green)
+                        .foregroundColor(.blue)
                 case .delete:
                     Image(systemName: "trash.fill")
                         .foregroundColor(.red)
                 }
-                Text("/\(mockUpload.path)/")
+                Text("\(mockUpload.path)")
             }
                 .font(.title3)
                 .bold()
                 .padding(.bottom, 12)
+            
+            switch mockUpload.status {
+            case .success:
+                HStack(alignment: .center, spacing: 12) {
+                    Image(systemName: "person.crop.circle.badge.plus")
+                        .foregroundColor(.green)
+                    Text("Recording successfully uploaded!")
+                }
+                    .padding(.bottom, 6)
+            case .failure:
+                HStack(alignment: .center, spacing: 12) {
+                    Image(systemName: "person.crop.circle.badge.minus")
+                        .foregroundColor(.red)
+                    Text("Recording upload is pending")
+                }
+                    .padding(.bottom, 6)
+            }
+            
             Text("On \(format(mockUpload.date))")
                 .font(.subheadline)
             Text("\(mockUpload.identifier)")
