@@ -42,7 +42,11 @@ struct Consent: View {
                     consentDocument
                 },
                 action: {
-                    onboardingSteps.append(.healthKitPermissions)
+                    if !CommandLine.arguments.contains("--disableFirebase") {
+                        onboardingSteps.append(.accountSetup)
+                    } else {
+                        onboardingSteps.append(.healthKitPermissions)
+                    }
                 }
             )
             .offset(y: -20)

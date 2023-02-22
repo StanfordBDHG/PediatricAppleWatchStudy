@@ -27,6 +27,10 @@
 		2F59B941298C628800C5107F /* PAWSOnboardingFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B940298C628800C5107F /* PAWSOnboardingFlow */; };
 		2F59B945298C628800C5107F /* PAWSSharedContext in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B944298C628800C5107F /* PAWSSharedContext */; };
 		2F5E32BD297E05EA003432F8 /* PAWSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */; };
+		2F9056D3299E1B9C003D3802 /* FHIRToFirestoreAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D2299E1B9C003D3802 /* FHIRToFirestoreAdapter */; };
+		2F9056D5299E1B9C003D3802 /* FirestoreDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D4299E1B9C003D3802 /* FirestoreDataStorage */; };
+		2F9056D7299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */; };
+		2F9056DB299E1C97003D3802 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
 		3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3637947D2992F3B000B3C006 /* PAWSLandingScreen */; };
@@ -61,6 +65,7 @@
 		2F4E23862989DB360013F3D9 /* ContactsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTests.swift; sourceTree = "<group>"; };
 		2F4E23882989DB400013F3D9 /* HealthKitUploadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitUploadTests.swift; sourceTree = "<group>"; };
 		2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWSAppDelegate.swift; sourceTree = "<group>"; };
+		2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FAEC07F297F583900C11C42 /* PAWS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PAWS.entitlements; sourceTree = "<group>"; };
 		2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PAWS.xctestplan; sourceTree = "<group>"; };
 		2FC9759E2978E39600BA99FE /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -83,11 +88,14 @@
 				2F59B941298C628800C5107F /* PAWSOnboardingFlow in Frameworks */,
 				2F49B7822980419C00BCB272 /* Questionnaires in Frameworks */,
 				2F49B77E2980407C00BCB272 /* Scheduler in Frameworks */,
+				2F9056D3299E1B9C003D3802 /* FHIRToFirestoreAdapter in Frameworks */,
 				3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */,
+				2F9056D5299E1B9C003D3802 /* FirestoreDataStorage in Frameworks */,
 				2F59B93F298C628800C5107F /* PAWSMockDataStorageProvider in Frameworks */,
 				2F49B77A2980407C00BCB272 /* HealthKitDataSource in Frameworks */,
 				2F59B945298C628800C5107F /* PAWSSharedContext in Frameworks */,
 				2F49B784298041F300BCB272 /* Contact in Frameworks */,
+				2F9056D7299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter in Frameworks */,
 				2F49B7782980407C00BCB272 /* FHIR in Frameworks */,
 				2F49B7802980418400BCB272 /* Onboarding in Frameworks */,
 				2F49B7762980407C00BCB272 /* CardinalKit in Frameworks */,
@@ -120,6 +128,7 @@
 			children = (
 				2FAEC07F297F583900C11C42 /* PAWS.entitlements */,
 				653A258928339462005D4D48 /* Info.plist */,
+				2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */,
 				653A255428338800005D4D48 /* Assets.xcassets */,
 				2FC9759E2978E39600BA99FE /* Localizable.strings */,
 			);
@@ -219,6 +228,9 @@
 				2F59B944298C628800C5107F /* PAWSSharedContext */,
 				3637947D2992F3B000B3C006 /* PAWSLandingScreen */,
 				36379480299308AA00B3C006 /* PAWSNotificationScreen */,
+				2F9056D2299E1B9C003D3802 /* FHIRToFirestoreAdapter */,
+				2F9056D4299E1B9C003D3802 /* FirestoreDataStorage */,
+				2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */,
 			);
 			productName = TemplateApplication;
 			productReference = 653A254D283387FE005D4D48 /* PAWS.app */;
@@ -317,6 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F9056DB299E1C97003D3802 /* GoogleService-Info.plist in Resources */,
 				653A255528338800005D4D48 /* Assets.xcassets in Resources */,
 				2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */,
 			);
@@ -341,6 +354,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		36BB4944299C7C00005071A3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -825,6 +839,21 @@
 		2F59B944298C628800C5107F /* PAWSSharedContext */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PAWSSharedContext;
+		};
+		2F9056D2299E1B9C003D3802 /* FHIRToFirestoreAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
+			productName = FHIRToFirestoreAdapter;
+		};
+		2F9056D4299E1B9C003D3802 /* FirestoreDataStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
+			productName = FirestoreDataStorage;
+		};
+		2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
+			productName = FirestoreStoragePrefixUserIdAdapter;
 		};
 		3637947D2992F3B000B3C006 /* PAWSLandingScreen */ = {
 			isa = XCSwiftPackageProductDependency;
