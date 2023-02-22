@@ -8,6 +8,10 @@
 
 import CardinalKit
 import FHIR
+import FHIRToFirestoreAdapter
+import FirebaseAccount
+import FirestoreDataStorage
+import FirestoreStoragePrefixUserIdAdapter
 import HealthKit
 import HealthKitDataSource
 import HealthKitToFHIRAdapter
@@ -20,38 +24,50 @@ import SwiftUI
 class PAWSAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: FHIR()) {
+            if !CommandLine.arguments.contains("--disableFirebase") {
+                FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
+                firestore
+            }
             if HKHealthStore.isHealthDataAvailable() {
-                HealthKit {
-                    CollectSample(
-                        HKQuantityType(.heartRate),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType(.heartRateVariabilitySDNN),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType(.restingHeartRate),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType.electrocardiogramType(),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType(.heartRate),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType.electrocardiogramType(),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                } adapter: {
-                    HealthKitToFHIRAdapter()
-                }
+                healthKit
             }
             QuestionnaireDataSource()
             MockDataStorageProvider()
+        }
+    }
+    
+    
+    private var firestore: Firestore<FHIR> {
+        Firestore(
+            adapter: {
+                FHIRToFirestoreAdapter()
+                FirestoreStoragePrefixUserIdAdapter()
+            },
+            settings: .emulator
+        )
+    }
+    
+    
+    private var healthKit: HealthKit<FHIR> {
+        HealthKit {
+            CollectSample(
+                HKQuantityType(.heartRate),
+                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+            )
+            CollectSample(
+                HKQuantityType(.heartRateVariabilitySDNN),
+                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+            )
+            CollectSample(
+                HKQuantityType(.restingHeartRate),
+                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+            )
+            CollectSample(
+                HKQuantityType.electrocardiogramType(),
+                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+            )
+        } adapter: {
+            HealthKitToFHIRAdapter()
         }
     }
 }

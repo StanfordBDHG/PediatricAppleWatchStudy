@@ -55,6 +55,7 @@ let package = Package(
             dependencies: [
                 .target(name: "PAWSSharedContext"),
                 .product(name: "FHIR", package: "CardinalKit"),
+                .product(name: "FirebaseAccount", package: "CardinalKit"),
                 .product(name: "HealthKitDataSource", package: "CardinalKit"),
                 .product(name: "Onboarding", package: "CardinalKit")
             ],
