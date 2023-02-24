@@ -64,7 +64,6 @@ struct AccountSetup: View {
                 backgroundGradient
                 .mask(
                     Image(systemName: "pawprint.circle.fill")
-
                 )
             } else {
                 backgroundGradient
