@@ -8,8 +8,11 @@
 
 import CardinalKit
 import FHIR
+import FirebaseAuth
+import FirebaseCore
+import FirebaseFirestore
+import FirestoreDataStorage
 import Foundation
-
 
 /// A data storage provider that collects all uploads and displays them in a user interface using the ``MockUploadList``.
 public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvider, ObservableObject {
@@ -29,6 +32,9 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
     
     
     public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
+        let user = Auth.auth().currentUser
+        let uid = user?.uid ?? ""
+        
         switch element {
         case let .addition(element):
             let data = try encoder.encode(element)

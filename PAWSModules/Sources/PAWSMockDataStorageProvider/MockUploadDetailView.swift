@@ -19,8 +19,9 @@ struct MockUploadDetailView: View {
             Section(String(localized: "MOCK_UPLOAD_DETAIL_HEADER", bundle: .module)) {
                 MockUploadHeader(mockUpload: mockUpload)
             }
+            
             Section(String(localized: "MOCK_UPLOAD_DETAIL_BODY", bundle: .module)) {
-                LazyText(text: mockUpload.body ?? "")
+            LazyText(text: mockUpload.body ?? "")
             }
         }
             .listStyle(.insetGrouped)

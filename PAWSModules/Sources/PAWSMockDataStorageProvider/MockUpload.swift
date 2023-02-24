@@ -6,6 +6,10 @@
 // SPDX-License-Identifier: MIT
 //
 
+import FirebaseAuth
+import FirebaseCore
+import FirebaseFirestore
+import FirestoreDataStorage
 import Foundation
 
 
@@ -25,7 +29,6 @@ struct MockUpload: Identifiable, Hashable {
     let type: UploadType
     let path: String
     let body: String?
-    let status: UploadStatus
     
     var id: String {
         "\(type): \(path)/\(identifier) at \(date.debugDescription)"
@@ -37,6 +40,5 @@ struct MockUpload: Identifiable, Hashable {
         self.type = type
         self.path = path
         self.body = body
-        self.status = .success
     }
 }
