@@ -39,14 +39,14 @@ public struct OnboardingFlow: View {
                         switch onboardingStep {
                         case .interestingModules:
                             InterestingModules(onboardingSteps: $onboardingSteps)
-                        case .consent:
-                            Consent(onboardingSteps: $onboardingSteps)
                         case .accountSetup:
                             AccountSetup(onboardingSteps: $onboardingSteps)
                         case .login:
                             PAWSLogin()
                         case .signUp:
                             PAWSSignUp()
+                        case .consent:
+                            Consent(onboardingSteps: $onboardingSteps)
                         case .healthKitPermissions:
                             HealthKitPermissions()
                         }
