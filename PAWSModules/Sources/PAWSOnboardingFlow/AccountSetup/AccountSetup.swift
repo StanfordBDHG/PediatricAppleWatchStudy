@@ -16,7 +16,11 @@ import SwiftUI
 struct AccountSetup: View {
     @Binding private var onboardingSteps: [OnboardingFlow.Step]
     @EnvironmentObject var account: Account
-    
+    private let backgroundGradient = LinearGradient(
+        colors: [.red, .pink, .orange, .yellow],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
     
     var body: some View {
         OnboardingView(
@@ -57,9 +61,18 @@ struct AccountSetup: View {
     private var accountImage: some View {
         Group {
             if account.signedIn {
-                Image(systemName: "person.badge.shield.checkmark.fill")
+                backgroundGradient
+                .mask(
+                    Image(systemName: "pawprint.circle.fill")
+
+                )
             } else {
-                Image(systemName: "person.fill.badge.plus")
+                backgroundGradient
+                .mask(
+                    VStack {
+                        Image(systemName: "pawprint.circle")
+                    }
+                )
             }
         }
             .font(.system(size: 150))
