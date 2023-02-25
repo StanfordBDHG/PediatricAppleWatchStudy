@@ -12,6 +12,7 @@ import SwiftUI
 
 
 /// Displays the contacts for the CS342 2023 PAWS Team Application.
+
 public struct Contacts: View {
     let contacts = [
         Contact(
