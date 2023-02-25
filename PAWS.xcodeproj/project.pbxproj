@@ -31,6 +31,8 @@
 		2F9056D5299E1B9C003D3802 /* FirestoreDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D4299E1B9C003D3802 /* FirestoreDataStorage */; };
 		2F9056D7299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */; };
 		2F9056DB299E1C97003D3802 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */; };
+		2FABBC5929A8975900DF3BBC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5829A8975900DF3BBC /* FirebaseFirestore */; };
+		2FABBC5B29A8975900DF3BBC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
 		3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3637947D2992F3B000B3C006 /* PAWSLandingScreen */; };
@@ -89,6 +91,8 @@
 				2F49B7822980419C00BCB272 /* Questionnaires in Frameworks */,
 				2F49B77E2980407C00BCB272 /* Scheduler in Frameworks */,
 				2F9056D3299E1B9C003D3802 /* FHIRToFirestoreAdapter in Frameworks */,
+				2FABBC5B29A8975900DF3BBC /* FirebaseFirestoreSwift in Frameworks */,
+				2FABBC5929A8975900DF3BBC /* FirebaseFirestore in Frameworks */,
 				3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */,
 				2F9056D5299E1B9C003D3802 /* FirestoreDataStorage in Frameworks */,
 				2F59B93F298C628800C5107F /* PAWSMockDataStorageProvider in Frameworks */,
@@ -231,6 +235,8 @@
 				2F9056D2299E1B9C003D3802 /* FHIRToFirestoreAdapter */,
 				2F9056D4299E1B9C003D3802 /* FirestoreDataStorage */,
 				2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */,
+				2FABBC5829A8975900DF3BBC /* FirebaseFirestore */,
+				2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */,
 			);
 			productName = TemplateApplication;
 			productReference = 653A254D283387FE005D4D48 /* PAWS.app */;
@@ -312,7 +318,7 @@
 				2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */,
 				2F4E237F2989C5930013F3D9 /* XCRemoteSwiftPackageReference "XCTHealthKit" */,
 				2F36AD25299D989F00B1077C /* XCRemoteSwiftPackageReference "XCTestExtensions" */,
-				54D520D729A6C42400FC1CB6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 653A254E283387FE005D4D48 /* Products */;
 			projectDirPath = "";
@@ -772,12 +778,12 @@
 				minimumVersion = 0.3.1;
 			};
 		};
-		54D520D729A6C42400FC1CB6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
+				minimumVersion = 10.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -863,6 +869,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
 			productName = FirestoreStoragePrefixUserIdAdapter;
+		};
+		2FABBC5829A8975900DF3BBC /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 		3637947D2992F3B000B3C006 /* PAWSLandingScreen */ = {
 			isa = XCSwiftPackageProductDependency;
