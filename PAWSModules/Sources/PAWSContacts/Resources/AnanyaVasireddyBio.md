@@ -1,0 +1,1 @@
+Ananya Vasireddy is a sophomore at Stanford University studying computer science on the computational biology track. In addition to her interest in digital health, she loves to sing and is the co-Music Director for Raagapella, Stanford's premier South Asian fusion acapella group. 

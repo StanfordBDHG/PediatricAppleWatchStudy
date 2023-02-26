@@ -12,6 +12,30 @@ import SwiftUI
 
 
 /// Displays the contacts for the CS342 2023 PAWS Team Application.
+struct DescriptionView: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("Study Description")
+                .font(.custom("Avenir Next Medium", fixedSize: 36))
+            Text("Stanford Sophomore")
+                .font(.custom("Avenir Next Medium Italic", fixedSize: 20))
+            Text(description)
+                .font(.custom("Avenir Next Medium", fixedSize: 15))
+                .padding()
+        }
+    }
+    
+    
+    private var description: String {
+        guard let descriptionPath = Bundle.module.path(forResource: "AnanyaVasireddyBio", ofType: "md"),
+              let description = try? String(contentsOfFile: descriptionPath) else {
+            return ""
+        }
+        
+        return description
+    }
+}
+
 
 public struct Contacts: View {
     let contacts = [
@@ -51,7 +75,7 @@ public struct Contacts: View {
                 givenName: "Aydin",
                 familyName: "Zahedivash"
             ),
-            image: Image(systemName: "person.circle"),
+            image: Image("Aydin", bundle: .module),
             title: "Pediatric Stanford Cardiology Fellow",
             description: String(localized: "AYDIN_ZAHEDIVASH_BIO", bundle: .module),
             organization: "Stanford University",
@@ -81,11 +105,26 @@ public struct Contacts: View {
     
     
     public var body: some View {
-        NavigationStack {
-            ContactsList(contacts: contacts)
-                .navigationTitle(String(localized: "CONTACTS_NAVIGATION_TITLE", bundle: .module))
+            NavigationStack {
+                ScrollView(.vertical) {
+                    DescriptionView()
+                    ForEach(contacts, id: \.name) { contact in
+                        ContactView(contact: contact)
+                            .padding()
+                            .background {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundColor(Color(.systemBackground))
+                                    .shadow(radius: 5)
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 6)
+                    }
+                        .padding(.vertical, 6)
+                }
+                    .background(Color(.systemGroupedBackground))
+                    .navigationTitle(String(localized: "CONTACTS_NAVIGATION_TITLE", bundle: .module))
+            }
         }
-    }
     
     
     public init() {}
