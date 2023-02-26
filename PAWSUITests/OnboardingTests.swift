@@ -106,7 +106,7 @@ extension XCUIApplication {
     }
     
     private func navigateOnboardingAccount() throws {
-        XCTAssertTrue(staticTexts["Your Account"].waitForExistence(timeout: 2))
+        XCTAssertTrue(staticTexts["Your PAWS Account"].waitForExistence(timeout: 2))
         
         guard !buttons["Next"].waitForExistence(timeout: 5) else {
             buttons["Next"].tap()

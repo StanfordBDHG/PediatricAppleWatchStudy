@@ -26,7 +26,8 @@ let package = Package(
         .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.0"))
+        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.3.0")
     ],
     targets: [
         .target(
@@ -44,7 +45,11 @@ let package = Package(
             dependencies: [
                 .target(name: "PAWSSharedContext"),
                 .product(name: "CardinalKit", package: "CardinalKit"),
-                .product(name: "FHIR", package: "CardinalKit")
+                .product(name: "FHIR", package: "CardinalKit"),
+                .product(name: "FirestoreDataStorage", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ],
             resources: [
                 .process("Resources")

@@ -10,12 +10,14 @@ import CardinalKit
 import FHIR
 import FHIRToFirestoreAdapter
 import FirebaseAccount
+import class FirebaseFirestore.FirestoreSettings
 import FirestoreDataStorage
 import FirestoreStoragePrefixUserIdAdapter
 import HealthKit
 import HealthKitDataSource
 import HealthKitToFHIRAdapter
 import PAWSMockDataStorageProvider
+import PAWSSharedContext
 import Questionnaires
 import Scheduler
 import SwiftUI
@@ -24,8 +26,12 @@ import SwiftUI
 class PAWSAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: FHIR()) {
-            if !CommandLine.arguments.contains("--disableFirebase") {
-                FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
+            if !FeatureFlags.disableFirebase {
+                if FeatureFlags.useFirebaseEmulator {
+                    FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
+                } else {
+                    FirebaseAccountConfiguration()
+                }
                 firestore
             }
             if HKHealthStore.isHealthDataAvailable() {
@@ -38,12 +44,20 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
     
     
     private var firestore: Firestore<FHIR> {
-        Firestore(
+        var firestoreSettings = FirestoreSettings()
+        if FeatureFlags.useFirebaseEmulator {
+            let settings = FirestoreSettings()
+            settings.host = "localhost:8080"
+            settings.isPersistenceEnabled = false
+            settings.isSSLEnabled = false
+        }
+        
+        return Firestore(
             adapter: {
                 FHIRToFirestoreAdapter()
                 FirestoreStoragePrefixUserIdAdapter()
             },
-            settings: .emulator
+            settings: firestoreSettings
         )
     }
     
