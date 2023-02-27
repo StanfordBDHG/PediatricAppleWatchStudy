@@ -13,21 +13,33 @@ import SwiftUI
 
 /// Displays the contacts for the CS342 2023 PAWS Team Application.
 struct DescriptionView: View {
+    private let backgroundGradient = LinearGradient(
+        colors: [.red, .pink, .yellow],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
+    
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 1) {
             Text("Study Description")
-                .font(.custom("Avenir Next Medium", fixedSize: 36))
-            Text("Stanford Sophomore")
-                .font(.custom("Avenir Next Medium Italic", fixedSize: 20))
-            Text(description)
-                .font(.custom("Avenir Next Medium", fixedSize: 15))
+                .font(.custom("Arial Bold", fixedSize: 28))
                 .padding()
+            Text(description)
+                .font(.custom("Arial", fixedSize: 16))
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundColor(Color(.systemBackground))
+                        .shadow(radius: 5)
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 2)
+            
         }
     }
     
-    
     private var description: String {
-        guard let descriptionPath = Bundle.module.path(forResource: "AnanyaVasireddyBio", ofType: "md"),
+        guard let descriptionPath = Bundle.module.path(forResource: "StudyDescription", ofType: "md"),
               let description = try? String(contentsOfFile: descriptionPath) else {
             return ""
         }
@@ -36,6 +48,101 @@ struct DescriptionView: View {
     }
 }
 
+struct FAQView: View {
+    var body: some View {
+        VStack(spacing: 1) {
+            Text("1. What will happen to me in this study?")
+                .font(.custom("Arial Italic", fixedSize: 20))
+            Text(question1)
+                .font(.custom("Arial", fixedSize: 16))
+                .padding()
+            Text("2. Can anything bad happen to me?")
+                .font(.custom("Arial Italic", fixedSize: 20))
+            Text(question2)
+                .font(.custom("Arial", fixedSize: 16))
+                .padding()
+            Text("3. Can anything good happen to me?")
+                .font(.custom("Arial Italic", fixedSize: 20))
+            Text(question3)
+                .font(.custom("Arial", fixedSize: 16))
+                .padding()
+            Text("4. Will anyone know I am in the study?")
+                .font(.custom("Arial Italic", fixedSize: 20))
+            Text(question4)
+                .font(.custom("Arial", fixedSize: 16))
+                .padding()
+            Text("5. Who can I talk to about this study?")
+                .font(.custom("Arial Italic", fixedSize: 20))
+            Text(question5)
+                .font(.custom("Arial", fixedSize: 16))
+                .padding()
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .shadow(radius: 5)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
+    }
+    
+    
+    private var question1: String {
+        guard let question1Path = Bundle.module.path(forResource: "Question1", ofType: "md"),
+              let question1 = try? String(contentsOfFile: question1Path) else {
+            return ""
+        }
+        
+        return question1
+    }
+    
+    private var question2: String {
+        guard let question2Path = Bundle.module.path(forResource: "Question2", ofType: "md"),
+              let question2 = try? String(contentsOfFile: question2Path) else {
+            return ""
+        }
+        
+        return question2
+    }
+    
+    private var question3: String {
+        guard let question3Path = Bundle.module.path(forResource: "Question3", ofType: "md"),
+              let question3 = try? String(contentsOfFile: question3Path) else {
+            return ""
+        }
+        
+        return question3
+    }
+    
+    private var question4: String {
+        guard let question4Path = Bundle.module.path(forResource: "Question4", ofType: "md"),
+              let question4 = try? String(contentsOfFile: question4Path) else {
+            return ""
+        }
+        
+        return question4
+    }
+    
+    private var question5: String {
+        guard let question5Path = Bundle.module.path(forResource: "Question5", ofType: "md"),
+              let question5 = try? String(contentsOfFile: question5Path) else {
+            return ""
+        }
+        
+        return question5
+    }
+    
+    private var question6: String {
+        guard let question6Path = Bundle.module.path(forResource: "Question6", ofType: "md"),
+              let question6 = try? String(contentsOfFile: question6Path) else {
+            return ""
+        }
+        
+        return question6
+    }
+}
 
 public struct Contacts: View {
     let contacts = [
@@ -108,6 +215,13 @@ public struct Contacts: View {
             NavigationStack {
                 ScrollView(.vertical) {
                     DescriptionView()
+                        .padding(.vertical, 12)
+                    Text("FAQ")
+                        .font(.custom("Arial Bold", fixedSize: 28))
+                    FAQView()
+                        .padding(.vertical, 12)
+                    Text("Contacts")
+                        .font(.custom("Arial Bold", fixedSize: 28))
                     ForEach(contacts, id: \.name) { contact in
                         ContactView(contact: contact)
                             .padding()
