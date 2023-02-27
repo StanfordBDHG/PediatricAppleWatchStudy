@@ -7,9 +7,9 @@
 //
 
 import PAWSContacts
+import PAWSHomeScreen
 import PAWSMockDataStorageProvider
 import PAWSNotificationScreen
-import PAWSHomeScreen
 import PAWSSharedContext
 import SwiftUI
 
@@ -42,7 +42,6 @@ struct HomeView: View {
                 .tabItem {
                     Label("CONTACTS_TAB_TITLE", systemImage: "person.fill")
                 }
-           
         }
     }
 }

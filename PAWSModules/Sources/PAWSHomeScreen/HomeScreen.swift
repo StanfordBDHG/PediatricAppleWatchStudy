@@ -6,10 +6,10 @@
 //// SPDX-License-Identifier: MIT
 ////
 //
-//import SwiftUI
+// import SwiftUI
 //
 //
-//public struct PAWSHomeScreen: View {
+// public struct PAWSHomeScreen: View {
 //    private let backgroundGradient = LinearGradient(
 //        colors: [.red, .pink, .orange, .yellow],
 //        startPoint: .leading,
@@ -57,11 +57,11 @@
 //
 //
 //    public init() {}
-//}
+// }
 //
 //
-//struct PAWSHomeScreen_Previews: PreviewProvider {
+// struct PAWSHomeScreen_Previews: PreviewProvider {
 //    static var previews: some View {
 //        PawsHomeScreen()
 //    }
-//}
+// }

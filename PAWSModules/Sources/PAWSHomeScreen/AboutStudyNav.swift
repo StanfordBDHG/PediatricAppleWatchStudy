@@ -6,13 +6,13 @@
 //// SPDX-License-Identifier: MIT
 ////
 //
-//import PAWSMockDataStorageProvider
-//import PAWSSharedContext
-//import SwiftUI
+// import PAWSMockDataStorageProvider
+// import PAWSSharedContext
+// import SwiftUI
 //
 //
 //
-//struct AboutStudyNav: View {
+// struct AboutStudyNav: View {
 //    private let backgroundGradient = LinearGradient(
 //        colors: [.red, .pink, .orange],
 //        startPoint: .leading,
@@ -37,10 +37,10 @@
 //            }
 //        )
 //    }
-//}
+// }
 //
-//struct AboutStudyNav_Previews: PreviewProvider {
+// struct AboutStudyNav_Previews: PreviewProvider {
 //    static var previews: some View {
 //        AboutStudyNav()
 //    }
-//}
+// }

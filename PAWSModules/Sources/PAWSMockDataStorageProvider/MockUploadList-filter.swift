@@ -75,4 +75,3 @@ struct MockUploadsListFilter_Previews: PreviewProvider {
             .environmentObject(MockDataStorageProvider())
     }
 }
-

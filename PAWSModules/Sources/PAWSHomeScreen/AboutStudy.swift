@@ -6,10 +6,10 @@
 //// SPDX-License-Identifier: MIT
 ////
 //
-//import SwiftUI
+// import SwiftUI
 //
 //
-//struct AboutStudy: View {
+// struct AboutStudy: View {
 //    private let backgroundGradient = LinearGradient(
 //        colors: [.red, .pink, .orange],
 //        startPoint: .leading,
@@ -51,11 +51,11 @@
 //        .border(.gray, width: 1)
 //        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 //    }
-//}
+// }
 //
 //
-//struct AboutStudy_Previews: PreviewProvider {
+// struct AboutStudy_Previews: PreviewProvider {
 //    static var previews: some View {
 //        LatestRecording()
 //    }
-//}
+// }
