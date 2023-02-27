@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+// swiftlint:disable all
+
 import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
