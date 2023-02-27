@@ -24,11 +24,9 @@ class NotificationsTests: XCTestCase {
     func testNotifications() throws {
         let app = XCUIApplication()
         
-        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Notifications"].waitForExistence(timeout: 2))
-        app.tabBars["Tab Bar"].buttons["Notifications"].tap()
-        
-        XCTAssertTrue(app.staticTexts["ECG Recording"].waitForExistence(timeout: 2))
-        
+        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Reports"].waitForExistence(timeout: 2))
+        app.tabBars["Tab Bar"].buttons["Reports"].tap()
+                
         app.swipeUp(velocity: .fast)
     }
 }
