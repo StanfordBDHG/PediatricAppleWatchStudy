@@ -35,6 +35,7 @@
 		2FABBC5B29A8975900DF3BBC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
+		362F57A729AC89630087E52D /* PAWSHomeScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 362F57A629AC89630087E52D /* PAWSHomeScreen */; };
 		3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3637947D2992F3B000B3C006 /* PAWSLandingScreen */; };
 		36379481299308AA00B3C006 /* PAWSNotificationScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 36379480299308AA00B3C006 /* PAWSNotificationScreen */; };
 		653A2551283387FE005D4D48 /* PAWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A2550283387FE005D4D48 /* PAWS.swift */; };
@@ -104,6 +105,7 @@
 				2F49B7802980418400BCB272 /* Onboarding in Frameworks */,
 				2F49B7762980407C00BCB272 /* CardinalKit in Frameworks */,
 				2F59B93D298C628800C5107F /* PAWSContacts in Frameworks */,
+				362F57A729AC89630087E52D /* PAWSHomeScreen in Frameworks */,
 				2F49B77C2980407C00BCB272 /* HealthKitToFHIRAdapter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,6 +239,7 @@
 				2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */,
 				2FABBC5829A8975900DF3BBC /* FirebaseFirestore */,
 				2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */,
+				362F57A629AC89630087E52D /* PAWSHomeScreen */,
 			);
 			productName = TemplateApplication;
 			productReference = 653A254D283387FE005D4D48 /* PAWS.app */;
@@ -879,6 +882,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		362F57A629AC89630087E52D /* PAWSHomeScreen */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PAWSHomeScreen;
 		};
 		3637947D2992F3B000B3C006 /* PAWSLandingScreen */ = {
 			isa = XCSwiftPackageProductDependency;

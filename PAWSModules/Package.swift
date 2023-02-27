@@ -23,7 +23,9 @@ let package = Package(
         .library(name: "PAWSOnboardingFlow", targets: ["PAWSOnboardingFlow"]),
         .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"]),
         .library(name: "PAWSLandingScreen", targets: ["PAWSLandingScreen"]),
-        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
+        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"]),
+        .library(name: "PAWSHomeScreen", targets: ["PAWSHomeScreen"])
+
     ],
     dependencies: [
         .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.0")),
@@ -76,6 +78,9 @@ let package = Package(
         ),
         .target(
             name: "PAWSNotificationScreen"
+        ),
+        .target(
+            name: "PAWSHomeScreen"
         )
     ]
 )

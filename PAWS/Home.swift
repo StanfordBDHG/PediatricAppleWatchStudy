@@ -9,38 +9,40 @@
 import PAWSContacts
 import PAWSMockDataStorageProvider
 import PAWSNotificationScreen
+import PAWSHomeScreen
 import PAWSSharedContext
 import SwiftUI
 
 
 struct HomeView: View {
     enum Tabs: String {
-        case notifications
         case contact
         case mockUpload
+//        case home
     }
     
     
-    @AppStorage(StorageKeys.homeTabSelection) var selectedTab = Tabs.notifications
+    @AppStorage(StorageKeys.homeTabSelection) var selectedTab = Tabs.mockUpload
     
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            NotificationScreen()
-                .tag(Tabs.notifications)
+//            PAWSHomeScreen()
+//                .tag(Tabs.home)
+//                .tabItem {
+//                    Label("Home", systemImage: "house.fill")
+//                }
+            MockUploadList()
+                .tag(Tabs.mockUpload)
                 .tabItem {
-                    Label("NOTIFICATIONS_TAB_TITLE", systemImage: "bell.fill")
+                    Label("MOCK_UPLOAD_TAB_TITLE", systemImage: "server.rack")
                 }
             Contacts()
                 .tag(Tabs.contact)
                 .tabItem {
                     Label("CONTACTS_TAB_TITLE", systemImage: "person.fill")
                 }
-            MockUploadList()
-                .tag(Tabs.mockUpload)
-                .tabItem {
-                    Label("MOCK_UPLOAD_TAB_TITLE", systemImage: "server.rack")
-                }
+           
         }
     }
 }
