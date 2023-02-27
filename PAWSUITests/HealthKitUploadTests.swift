@@ -44,5 +44,4 @@ extension XCUIApplication {
         XCTAssertTrue(tabBars["Tab Bar"].buttons["Reports"].waitForExistence(timeout: 2))
         tabBars["Tab Bar"].buttons["Reports"].tap()
     }
-    
 }
