@@ -30,7 +30,6 @@ class HealthKitUploadTests: XCTestCase {
         try app.conductOnboardingIfNeeded()
         try app.navigateToMockUpload()
         try exitAppAndOpenHealth(.electrocardiograms)
-        
         app.activate()
         
         sleep(5)

@@ -18,20 +18,20 @@ struct HomeView: View {
     enum Tabs: String {
         case contact
         case mockUpload
-//        case home
+        case home
     }
     
     
-    @AppStorage(StorageKeys.homeTabSelection) var selectedTab = Tabs.mockUpload
+    @AppStorage(StorageKeys.homeTabSelection) var selectedTab = Tabs.home
     
     
     var body: some View {
         TabView(selection: $selectedTab) {
-//            PAWSHomeScreen()
-//                .tag(Tabs.home)
-//                .tabItem {
-//                    Label("Home", systemImage: "house.fill")
-//                }
+            PAWSHomeScreen()
+                .tag(Tabs.home)
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
+                }
             MockUploadList()
                 .tag(Tabs.mockUpload)
                 .tabItem {
