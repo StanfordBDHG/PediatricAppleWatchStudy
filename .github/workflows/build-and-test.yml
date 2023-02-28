@@ -16,13 +16,13 @@ on:
 jobs:
   reuse_action:
     name: REUSE Compliance Check
-    uses: StanfordBDHG/.github/.github/workflows/reuse.yml@v1
+    uses: StanfordBDHG/.github/.github/workflows/reuse.yml@v2
   swiftlint:
     name: SwiftLint
-    uses: StanfordBDHG/.github/.github/workflows/swiftlint.yml@v1
+    uses: StanfordBDHG/.github/.github/workflows/swiftlint.yml@v2
   buildandtest:
     name: Build and Test
-    uses: CS342/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: CS342/.github/.github/workflows/xcodebuild-or-fastlane.yml@v1
     with:
       artifactname: PAWS.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
