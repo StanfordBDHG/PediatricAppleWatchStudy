@@ -744,7 +744,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/CardinalKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.3.2;
+				minimumVersion = 0.3.3;
 			};
 		};
 		2F4E237F2989C5930013F3D9 /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
