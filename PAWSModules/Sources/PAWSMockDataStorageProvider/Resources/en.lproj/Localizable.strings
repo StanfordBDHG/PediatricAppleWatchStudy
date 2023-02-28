@@ -7,7 +7,7 @@
 //
 
 // MARK: - Mock Upload Data Storage Provider
-"MOCK_UPLOAD_LIST_PLACEHOLDER" = "The Mock Upload Data Storage Provider will display all uploads that would be triggered by the FHIR standard.";
-"MOCK_UPLOAD_LIST_TITLE" = "Mock Upload";
+"MOCK_UPLOAD_LIST_PLACEHOLDER" = "No recordings have been uploaded yet.";
+"MOCK_UPLOAD_LIST_TITLE" = "Reports";
 "MOCK_UPLOAD_DETAIL_HEADER" = "Upload Header";
 "MOCK_UPLOAD_DETAIL_BODY" = "Upload Details";
