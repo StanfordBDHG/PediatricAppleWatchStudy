@@ -79,7 +79,13 @@ let package = Package(
             name: "PAWSNotificationScreen"
         ),
         .target(
-            name: "PAWSHomeScreen"
+            name: "PAWSHomeScreen",
+            dependencies: [
+                .target(name: "PAWSMockDataStorageProvider"),
+                .target(name: "PAWSSharedContext"),
+                .target(name: "PAWSContacts"),
+                .target(name: "PAWSNotificationScreen")
+            ]
         )
     ]
 )
