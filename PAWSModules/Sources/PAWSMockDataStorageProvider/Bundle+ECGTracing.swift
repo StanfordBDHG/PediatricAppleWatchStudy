@@ -8,7 +8,6 @@
 
 import FHIR
 import Foundation
-import HealthKitOnFHIR
 
 
 extension Foundation.Bundle {
