@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import FirebaseAuth
 
 public struct HomeScreen: View {
     private let backgroundGradient = LinearGradient(
@@ -24,7 +24,7 @@ public struct HomeScreen: View {
                             .padding([.top], 10)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text("Your Name!")
+                        Text("Your Name")
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.top], 0)
