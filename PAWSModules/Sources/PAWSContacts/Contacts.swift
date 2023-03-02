@@ -25,7 +25,7 @@ struct DescriptionView: View {
                 .font(.custom("Arial Bold", fixedSize: 28))
                 .padding()
             Text(description)
-                .font(.custom("Arial", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
                 .background {
                     RoundedRectangle(cornerRadius: 10)
@@ -58,8 +58,8 @@ struct Question12View: View {
             Text("1. After pressing the event button on the Zio Patch, what do I do if I don’t get a successful recording on my Apple Watch?")
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
-            Text(response1)
-                .font(.custom("Arial", fixedSize: 16))
+            Text(question1)
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -85,7 +85,7 @@ struct Question12View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question2)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -116,15 +116,6 @@ struct Question12View: View {
         return question1
     }
     
-    private var response1: String {
-        guard let response1Path = Bundle.module.path(forResource: "Response1", ofType: "md"),
-              let response1 = try? String(contentsOfFile: response1Path) else {
-            return ""
-        }
-        
-        return response1
-    }
-    
     private var question2: String {
         guard let question2Path = Bundle.module.path(forResource: "Question2", ofType: "md"),
               let question2 = try? String(contentsOfFile: question2Path) else {
@@ -142,7 +133,7 @@ struct Question34View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question3)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -168,7 +159,7 @@ struct Question34View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question4)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -217,7 +208,7 @@ struct Question56View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question5)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -243,7 +234,7 @@ struct Question56View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question6)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -291,7 +282,7 @@ struct Question78View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question7)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -317,7 +308,7 @@ struct Question78View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question8)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -358,45 +349,6 @@ struct Question78View: View {
     }
 }
 
-struct Question8View: View {
-    var body: some View {
-        VStack(spacing: 1) {
-            Text("8. Who can I talk to about the study?")
-                .font(.custom("Arial Italic", fixedSize: 20))
-                .padding()
-            Text(question8)
-                .font(.custom("Arial", fixedSize: 16))
-                .padding()
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(.systemBackground))
-                .shadow(radius: 5)
-                .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
-                .cornerRadius(10)
-                .shadow(radius: 10)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-    }
-    
-    private var question8: String {
-        guard let question8Path = Bundle.module.path(forResource: "Question8", ofType: "md"),
-              let question8 = try? String(contentsOfFile: question8Path) else {
-            return ""
-        }
-        
-        return question8
-    }
-}
-
 struct Question9View: View {
     var body: some View {
         VStack(spacing: 1) {
@@ -404,7 +356,7 @@ struct Question9View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question9)
-                .font(.custom("Arial", fixedSize: 16))
+                .font(.custom("GillSans", fixedSize: 17))
                 .padding()
         }
         .padding(.vertical, 20)
