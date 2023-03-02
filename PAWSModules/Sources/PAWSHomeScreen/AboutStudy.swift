@@ -22,13 +22,16 @@ struct AboutStudy: View {
             VStack {
                 Image(systemName: "pawprint.circle.fill")
                     .resizable()
+                    //.aspectRatio(contentMode: .fit)
                     .scaledToFill()
-                    .frame(width: 80, height: 60, alignment: .center)
+                    .frame(width: 115, height: 75)
                     .foregroundColor(.red)
                     .padding([.top, .leading, .trailing], 20)
+                    //.offset(x:80, y:-5)
             }
             .padding([.top, .leading, .trailing, .bottom], 20)
             .cornerRadius(10)
+            .offset(x: 75)
             VStack(alignment: .leading, spacing: 8) {
                 Text("Contribute to Health Research")
                     .font(.headline)
@@ -36,18 +39,22 @@ struct AboutStudy: View {
                     .padding([.leading], 10)
                     .padding([.bottom], 1)
                     .fontWeight(.bold)
+                    .offset(x: 50, y:-10)
                 
                 Text("Find out how you're helping the Stanford Pediatric Apple Watch Study (PAWS).")
                         .font(.subheadline)
                         .padding([.top, .bottom], 10)
                         .padding([.leading], 10)
+                        .offset(y:-10)
             }
+            .offset(y: 10)
             .cornerRadius(10)
             .padding([.top], 1)
             .padding([.bottom], 20)
             AboutStudyNav()
+                .offset(x: 27)
         }
-        .frame(width: 320)
+        .frame(width: 380)
         .border(.gray, width: 1)
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }

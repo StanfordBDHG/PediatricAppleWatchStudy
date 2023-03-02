@@ -25,7 +25,7 @@ struct RecordingsNav: View {
             action: {
                 selectedTab = Tabs.mockUpload
             }, label: {
-            Text("View More Recordings")
+            Text("View More Recordings                                                                             ")
                 .fontWeight(.bold)
                 .padding()
                 .foregroundColor(Color.white)

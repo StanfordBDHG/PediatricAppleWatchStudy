@@ -25,7 +25,7 @@ struct AboutStudyNav: View {
             action: {
                 selectedTab = Tabs.contact
             }, label: {
-            Text("Learn More")
+            Text("Learn More                                                                              ")
                 .fontWeight(.bold)
                 .padding()
                 .foregroundColor(Color.white)

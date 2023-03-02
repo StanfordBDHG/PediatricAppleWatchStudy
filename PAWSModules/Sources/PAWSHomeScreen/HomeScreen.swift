@@ -10,12 +10,16 @@ import SwiftUI
 
 
 public struct HomeScreen: View {
+    private let user = Auth.auth().currentUser
+    
     private let backgroundGradient = LinearGradient(
         colors: [.red, .pink, .orange, .yellow],
         startPoint: .leading,
         endPoint: .trailing
     )
     public var body: some View {
+        let name = user?.displayName ?? "Your Name"
+        
         ScrollView(.vertical) {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
@@ -24,7 +28,8 @@ public struct HomeScreen: View {
                             .padding([.top], 10)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text("Your Name!")
+                        //let name = user?.displayName ?? "Your Name"
+                        Text(name)
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.top], 0)

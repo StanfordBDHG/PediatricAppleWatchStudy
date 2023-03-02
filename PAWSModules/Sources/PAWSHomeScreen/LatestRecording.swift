@@ -32,16 +32,20 @@ struct LatestRecording: View {
                         .padding([.leading], 10)
                         .padding([.bottom], 1)
                         .fontWeight(.bold)
+                        .offset(x: -35)
                     
                     Text("12:30 PM").font(.subheadline).padding([.top], 22).padding([.leading], 40)
+                        .offset(x: 45)
                 }
                 Text("Feb 6, 2023").font(.subheadline).padding([.leading, .bottom], 10)
+                    .offset(x: -35)
                 
                 HStack(alignment: .top, spacing: 8) {
                     Text("Successfully uploaded")
                         .font(.callout)
                         .padding([.leading, .bottom], 10)
                         .foregroundColor(.gray)
+                        .offset(x: -35)
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                         .imageScale(.large)
@@ -50,8 +54,9 @@ struct LatestRecording: View {
                 .padding([.top], 1)
                 .padding([.bottom], 20)
                 RecordingsNav()
+                    .offset(y: 10)
             }
-            .frame(width: 320)
+            .frame(width: 380)
             .border(.gray, width: 1)
             .cornerRadius(10)
         }
