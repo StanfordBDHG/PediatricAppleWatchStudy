@@ -1,1 +1,1 @@
-This study will explore how the Apple Watch® can work as a heart monitor for kids. You will have to wear the Apple Watch for 2 weeks, or as long as 6 months, and any time you feel like your heart is beating fast or differently, you will have to record an ECG on the watch. Other than you using an Apple Watch, there is no difference between being a part of the study and everything else about seeing your doctor.
+Don’t be concerned, simply start another ECG recording on the Apple Watch as soon as you can.

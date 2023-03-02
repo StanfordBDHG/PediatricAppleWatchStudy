@@ -1,1 +1,1 @@
-Only the researchers in charge of the study will know that you are in it. No one else will know, and your information will be kept secret.
+If you are experiencing symptoms that require immediate attention, please call 9-1-1. Neither the PAWS app nor the Apple Watch will call the emergency services for you.

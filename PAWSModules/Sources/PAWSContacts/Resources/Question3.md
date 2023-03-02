@@ -1,1 +1,1 @@
-Nothing good will directly happen to you but, by participating in this study, you will help us understand if the Apple Watch can be used to monitor heart problems in other kids. We hope that someday we can just give an Apple Watch to kids needing to have their heart tested.
+The research team will review your Apple Watch ECG data periodically but will not use it in place of traditional diagnostic methods to change the course of your care plan.

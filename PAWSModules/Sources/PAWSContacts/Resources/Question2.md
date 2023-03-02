@@ -1,1 +1,1 @@
-You will not get sick or hurt because of anything in this study. We will be studying your health information and all of your information will be kept secure and locked up.
+The PAWS app will store your ECG file directly on your iPhone and upload it to the research database when you have access to the internet again.
