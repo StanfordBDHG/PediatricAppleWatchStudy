@@ -4,6 +4,6 @@ Any time that you feel symptoms that feel like an arrhythmia (i.e., palpitations
 
 1. First, press the event button on your Zio® Patch Monitor.
 2. Second, initiate a recording on the Apple Watch by following these steps:
-    * Open the ECG App.
-    * Hold your finger to the Digital Crown for 30 seconds.
-    * Follow the on-screen prompts on the Apple Watch.
+    • Open the ECG App.
+    • Hold your finger to the Digital Crown for 30 seconds.
+    • Follow the on-screen prompts on the Apple Watch.

@@ -40,8 +40,6 @@
 		653A2551283387FE005D4D48 /* PAWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A2550283387FE005D4D48 /* PAWS.swift */; };
 		653A255528338800005D4D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 653A255428338800005D4D48 /* Assets.xcassets */; };
 		653A256228338800005D4D48 /* PAWSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A256128338800005D4D48 /* PAWSTests.swift */; };
-		86A7193E29B17C5700FE5E29 /* AydinSquarePhoto.png.license in Resources */ = {isa = PBXBuildFile; fileRef = 86A7193D29B17C5700FE5E29 /* AydinSquarePhoto.png.license */; };
-		86A7194029B17C8C00FE5E29 /* ScottSquarePhoto.png.license in Resources */ = {isa = PBXBuildFile; fileRef = 86A7193F29B17C8C00FE5E29 /* ScottSquarePhoto.png.license */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,8 +78,6 @@
 		653A256128338800005D4D48 /* PAWSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWSTests.swift; sourceTree = "<group>"; };
 		653A256728338800005D4D48 /* PAWSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PAWSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		653A258928339462005D4D48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		86A7193D29B17C5700FE5E29 /* AydinSquarePhoto.png.license */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AydinSquarePhoto.png.license; sourceTree = "<group>"; };
-		86A7193F29B17C8C00FE5E29 /* ScottSquarePhoto.png.license */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ScottSquarePhoto.png.license; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,8 +135,6 @@
 				2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */,
 				653A255428338800005D4D48 /* Assets.xcassets */,
 				2FC9759E2978E39600BA99FE /* Localizable.strings */,
-				86A7193D29B17C5700FE5E29 /* AydinSquarePhoto.png.license */,
-				86A7193F29B17C8C00FE5E29 /* ScottSquarePhoto.png.license */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -342,9 +336,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86A7194029B17C8C00FE5E29 /* ScottSquarePhoto.png.license in Resources */,
 				2F9056DB299E1C97003D3802 /* GoogleService-Info.plist in Resources */,
-				86A7193E29B17C5700FE5E29 /* AydinSquarePhoto.png.license in Resources */,
 				653A255528338800005D4D48 /* Assets.xcassets in Resources */,
 				2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */,
 			);

@@ -10,53 +10,15 @@ import Contact
 import Foundation
 import SwiftUI
 
-
-/// Displays the contacts for the CS342 2023 PAWS Team Application.
-struct DescriptionView: View {
-    private let backgroundGradient = LinearGradient(
-        colors: [.red, .pink, .yellow],
-        startPoint: .leading,
-        endPoint: .trailing
-    )
-    
+struct Question1234View: View {
     var body: some View {
         VStack(spacing: 1) {
-            Text("Study Description")
-                .font(.custom("Arial Bold", fixedSize: 28))
-                .padding()
-            Text(description)
-                .font(.custom("GillSans", fixedSize: 18))
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 10)
-                        .foregroundColor(Color(.systemBackground))
-                        .shadow(radius: 5)
-                        .opacity(0.9)
-                        .border(backgroundGradient, width: 5)
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 2)
-            
+            Text("FAQ")
+                .font(.custom("Gill Sans", fixedSize: 28))
         }
-    }
-    
-    private var description: String {
-        guard let descriptionPath = Bundle.module.path(forResource: "StudyDescription", ofType: "md"),
-              let description = try? String(contentsOfFile: descriptionPath) else {
-            return ""
-        }
-        
-        return description
-    }
-}
-
-struct Question12View: View {
-    var body: some View {
         VStack(spacing: 1) {
             Text("1. After pressing the event button on the Zio Patch, what do I do if I don’t get a successful recording on my Apple Watch?")
-                .font(.custom("Arial Italic", fixedSize: 20))
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
                 .padding()
             Text(question1)
                 .font(.custom("GillSans", fixedSize: 18))
@@ -67,6 +29,7 @@ struct Question12View: View {
         .background {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
                 .border(LinearGradient(
@@ -82,7 +45,7 @@ struct Question12View: View {
         
         VStack(spacing: 1) {
             Text("2. What happens if I don’t have internet access when I record the Apple Watch ECG?")
-                .font(.custom("Arial Italic", fixedSize: 20))
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
                 .padding()
             Text(question2)
                 .font(.custom("GillSans", fixedSize: 18))
@@ -93,6 +56,61 @@ struct Question12View: View {
         .background {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
+                .shadow(radius: 5)
+                .opacity(0.9)
+                .border(LinearGradient(
+                    colors: [.red, .pink, .yellow],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ), width: 5)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
+        
+        VStack(spacing: 1) {
+            Text("3. Will the research team use my Apple Watch ECG data to provide care or change my treatment plan?")
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
+                .padding()
+            Text(question3)
+                .font(.custom("GillSans", fixedSize: 18))
+                .padding()
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
+                .shadow(radius: 5)
+                .opacity(0.9)
+                .border(LinearGradient(
+                    colors: [.red, .pink, .yellow],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ), width: 5)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
+        
+        VStack(spacing: 1) {
+            Text("4. If I am experiencing symptoms that need immediate medical attention, will the PAWS app or Apple Watch call 9-1-1 for me?")
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
+                .padding()
+            Text(question4)
+                .font(.custom("GillSans", fixedSize: 18))
+                .padding()
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
                 .border(LinearGradient(
@@ -124,63 +142,6 @@ struct Question12View: View {
         
         return question2
     }
-}
-
-struct Question34View: View {
-    var body: some View {
-        VStack(spacing: 1) {
-            Text("3. Will the research team use my Apple Watch ECG data to provide care or change my treatment plan?")
-                .font(.custom("Arial Italic", fixedSize: 20))
-                .padding()
-            Text(question3)
-                .font(.custom("GillSans", fixedSize: 18))
-                .padding()
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(.systemBackground))
-                .shadow(radius: 5)
-                .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
-                .cornerRadius(10)
-                .shadow(radius: 10)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-        
-        VStack(spacing: 1) {
-            Text("4. If I am experiencing symptoms that need immediate medical attention, will the PAWS app or Apple Watch call 9-1-1 for me?")
-                .font(.custom("Arial Italic", fixedSize: 20))
-                .padding()
-            Text(question4)
-                .font(.custom("GillSans", fixedSize: 18))
-                .padding()
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(.systemBackground))
-                .shadow(radius: 5)
-                .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
-                .cornerRadius(10)
-                .shadow(radius: 10)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-        
-    }
     
     private var question3: String {
         guard let question3Path = Bundle.module.path(forResource: "Question3", ofType: "md"),
@@ -201,11 +162,11 @@ struct Question34View: View {
     }
 }
 
-struct Question56View: View {
+struct Question56789View: View {
     var body: some View {
         VStack(spacing: 1) {
             Text("5. Can anything bad happen to me by participating in this study?")
-                .font(.custom("Arial Italic", fixedSize: 20))
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
                 .padding()
             Text(question5)
                 .font(.custom("GillSans", fixedSize: 18))
@@ -216,6 +177,7 @@ struct Question56View: View {
         .background {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
                 .border(LinearGradient(
@@ -231,7 +193,7 @@ struct Question56View: View {
         
         VStack(spacing: 1) {
             Text("6. Can anything good happen to me by participating in this study?")
-                .font(.custom("Arial Italic", fixedSize: 20))
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
                 .padding()
             Text(question6)
                 .font(.custom("GillSans", fixedSize: 18))
@@ -242,6 +204,88 @@ struct Question56View: View {
         .background {
             RoundedRectangle(cornerRadius: 10)
                 .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
+                .shadow(radius: 5)
+                .opacity(0.9)
+                .border(LinearGradient(
+                    colors: [.red, .pink, .yellow],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ), width: 5)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
+        
+        VStack(spacing: 1) {
+            Text("7. Will anyone know I am in the study?")
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
+                .padding()
+            Text(question7)
+                .font(.custom("GillSans", fixedSize: 18))
+                .padding()
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
+                .shadow(radius: 5)
+                .opacity(0.9)
+                .border(LinearGradient(
+                    colors: [.red, .pink, .yellow],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ), width: 5)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
+        
+        VStack(spacing: 1) {
+            Text("8. Who can I talk to about the study?")
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
+                .padding()
+            Text(question8)
+                .font(.custom("GillSans", fixedSize: 18))
+                .padding()
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
+                .shadow(radius: 5)
+                .opacity(0.9)
+                .border(LinearGradient(
+                    colors: [.red, .pink, .yellow],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ), width: 5)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
+        
+        VStack(spacing: 1) {
+            Text("9. What if I do not want to be in the study?")
+                .font(.custom("Gill Sans SemiBold", fixedSize: 19))
+                .padding()
+            Text(question9)
+                .font(.custom("GillSans", fixedSize: 18))
+                .padding()
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 10)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
                 .border(LinearGradient(
@@ -273,62 +317,6 @@ struct Question56View: View {
         
         return question6
     }
-}
-
-struct Question78View: View {
-    var body: some View {
-        VStack(spacing: 1) {
-            Text("7. Will anyone know I am in the study?")
-                .font(.custom("Arial Italic", fixedSize: 20))
-                .padding()
-            Text(question7)
-                .font(.custom("GillSans", fixedSize: 18))
-                .padding()
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(.systemBackground))
-                .shadow(radius: 5)
-                .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
-                .cornerRadius(10)
-                .shadow(radius: 10)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-        
-        VStack(spacing: 1) {
-            Text("8. Who can I talk to about the study?")
-                .font(.custom("Arial Italic", fixedSize: 20))
-                .padding()
-            Text(question8)
-                .font(.custom("GillSans", fixedSize: 18))
-                .padding()
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(.systemBackground))
-                .shadow(radius: 5)
-                .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
-                .cornerRadius(10)
-                .shadow(radius: 10)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-    }
     
     private var question7: String {
         guard let question7Path = Bundle.module.path(forResource: "Question7", ofType: "md"),
@@ -347,36 +335,6 @@ struct Question78View: View {
         
         return question8
     }
-}
-
-struct Question9View: View {
-    var body: some View {
-        VStack(spacing: 1) {
-            Text("9. What if I do not want to be in the study?")
-                .font(.custom("Arial Italic", fixedSize: 20))
-                .padding()
-            Text(question9)
-                .font(.custom("GillSans", fixedSize: 18))
-                .padding()
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 10)
-        .background {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(Color(.systemBackground))
-                .shadow(radius: 5)
-                .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
-                .cornerRadius(10)
-                .shadow(radius: 10)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 2)
-    }
     
     private var question9: String {
         guard let question9Path = Bundle.module.path(forResource: "Question9", ofType: "md"),
@@ -388,8 +346,6 @@ struct Question9View: View {
     }
 }
 
-
-
 public struct Contacts: View {
     let contacts = [
         Contact(
@@ -397,7 +353,7 @@ public struct Contacts: View {
                 givenName: "Scott",
                 familyName: "Ceresnak"
             ),
-            image: Image("ScottSquarePhoto"),
+            image: Image(decorative: "ScottSquarePhoto"),
             title: "Professor of Pediatrics (Cardiology)",
             description: String(localized: "SCOTT_CERESNAK_BIO", bundle: .module),
             organization: "Stanford University",
@@ -428,7 +384,7 @@ public struct Contacts: View {
                 givenName: "Aydin",
                 familyName: "Zahedivash"
             ),
-            image: Image("AydinSquarePhoto"),
+            image: Image(decorative: "AydinSquarePhoto"),
             title: "Pediatric Stanford Cardiology Fellow",
             description: String(localized: "AYDIN_ZAHEDIVASH_BIO", bundle: .module),
             organization: "Stanford University",
@@ -462,27 +418,20 @@ public struct Contacts: View {
                 ScrollView(.vertical) {
                     DescriptionView()
                         .padding(.vertical, 12)
-                    Text("FAQ")
-                        .font(.custom("Arial Bold", fixedSize: 28))
-                    Question12View()
+                    Question1234View()
                         .padding(.vertical, 12)
-
-                    Question34View()
+                    Question56789View()
                         .padding(.vertical, 12)
-                    Question56View()
-                        .padding(.vertical, 12)
-                    Question78View()
-                        .padding(.vertical, 12)
-                    Question9View()
-                        .padding(.vertical, 12)
-                    Text("Contacts")
-                        .font(.custom("Arial Bold", fixedSize: 28))
+                    Text("CONTACTS")
+                        .font(.custom("Gill Sans", fixedSize: 28))
                     ForEach(contacts, id: \.name) { contact in
                         ContactView(contact: contact)
+                            .padding()
                             .padding()
                             .background {
                                 RoundedRectangle(cornerRadius: 10)
                                     .foregroundColor(Color(.systemBackground))
+                                    .frame(width: 360)
                                     .shadow(radius: 5)
                                     .opacity(0.9)
                                     .border(LinearGradient(
@@ -502,7 +451,6 @@ public struct Contacts: View {
                     .navigationTitle(String(localized: "CONTACTS_NAVIGATION_TITLE", bundle: .module))
             }
         }
-    
     
     public init() {}
 }
