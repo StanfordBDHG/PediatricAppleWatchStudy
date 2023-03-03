@@ -65,18 +65,6 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
     private var healthKit: HealthKit<FHIR> {
         HealthKit {
             CollectSample(
-                HKQuantityType(.heartRate),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-            )
-            CollectSample(
-                HKQuantityType(.heartRateVariabilitySDNN),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-            )
-            CollectSample(
-                HKQuantityType(.restingHeartRate),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-            )
-            CollectSample(
                 HKQuantityType.electrocardiogramType(),
                 deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
             )
