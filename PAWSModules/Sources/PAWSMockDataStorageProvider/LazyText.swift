@@ -6,8 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
-import HealthKitOnFHIR
+import FHIR
 import SwiftUI
+
 
 struct LazyText: View {
     private let text: String

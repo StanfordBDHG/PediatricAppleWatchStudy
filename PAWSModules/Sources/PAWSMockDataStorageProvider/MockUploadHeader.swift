@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+// swiftlint:disable all
+
 import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
@@ -15,50 +17,52 @@ import SwiftUI
 struct MockUploadHeader: View {
     let mockUpload: MockUpload
     @State var status: MockUpload.UploadStatus?
+    private let backgroundGradient = LinearGradient(
+        colors: [.red, .pink, .yellow],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
     
     var body: some View {
+        let date = "\(format(mockUpload.date))"
+        let time = date.range(of: "at")!.lowerBound
         VStack(alignment: .leading, spacing: 4) {
-            HStack(alignment: .center, spacing: 12) {
-                switch mockUpload.type {
-                case .add:
-                    Image(systemName: "arrow.up.doc.fill")
-                        .foregroundColor(.blue)
-                case .delete:
-                    Image(systemName: "trash.fill")
-                        .foregroundColor(.red)
-                }
-                Text("\(mockUpload.path)")
-            }
+                Text(date[..<time])
                 .font(.title3)
                 .bold()
-                .padding(.bottom, 12)
-            
-            statusView.onAppear(perform: checkStatus)
-            
-            Text("On \(format(mockUpload.date))")
+                .padding([.bottom], 3)
+                .padding([.leading], 8)
+            Text(date[date.index(time, offsetBy: 2)...])
                 .font(.subheadline)
-            Text("\(mockUpload.identifier)")
-                .font(.footnote)
-                .foregroundColor(.gray)
+                .padding(.bottom, 10)
+                .padding(.leading, 8)
+            Divider()
+            statusView.onAppear(perform: checkStatus)
+                .padding(8)
+                .cornerRadius(4)
         }
+        .frame(width: 350, height: 110)
+//        .border(backgroundGradient, width: 5)
+      
     }
     
     @ViewBuilder var statusView: some View {
         switch status {
         case .success:
             HStack(alignment: .center, spacing: 12) {
-                Image(systemName: "person.crop.circle.badge.plus")
+                Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(.green)
                 Text("Recording successfully uploaded!")
             }
-            .padding(.bottom, 6)
+            .background(Color.green.opacity(0.3))
         case .failure:
             HStack(alignment: .center, spacing: 12) {
-                Image(systemName: "person.crop.circle.badge.minus")
+                Image(systemName: "x.circle.fill")
                     .foregroundColor(.red)
                 Text("Recording upload is pending")
             }
-            .padding(.bottom, 6)
+            .background(Color.red.opacity(0.3))
+  
         case nil:
             Text("Loading status indicator")
         }

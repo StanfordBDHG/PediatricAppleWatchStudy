@@ -10,20 +10,33 @@ import SwiftUI
 
 
 /// Displays the recoded uploads collected by the ``MockDataStorageProvider``.
-public struct MockUploadList: View {
+public struct MockUploadListFilter: View {
     @EnvironmentObject var mockDataStorageProvider: MockDataStorageProvider
+    let button1: some View =
+        Text("Past week")
+            .fontWeight(.bold)
+            .font(.system(size: 8))
+            .padding()
+            .background(Color.purple)
+            .cornerRadius(10)
+            .foregroundColor(.white)
+            .padding(5)
     
     public var body: some View {
-        ZStack {
-            Color.white
-                .ignoresSafeArea()
-            //        VStack(alignment: .leading) {
-            //            Text("Notifications")
-            //                .font(.largeTitle)
-            //                .fontWeight(.bold)
-            //                .padding([.top, .leading, .bottom], 20)
-            //                .offset(y: -150)
-            NavigationStack {
+            VStack(alignment: .leading) {
+              Text(String(localized: "MOCK_UPLOAD_LIST_TITLE", bundle: .module))
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding([.top, .bottom], 20)
+                HStack(spacing: 3) {
+                    button1
+                    .frame(maxWidth: .infinity)
+                    button1
+                    .frame(maxWidth: .infinity)
+                    button1
+                    .frame(maxWidth: .infinity)
+                }
+               
                 Group {
                     if mockDataStorageProvider.mockUploads.isEmpty {
                         VStack(spacing: 32) {
@@ -32,7 +45,6 @@ public struct MockUploadList: View {
                                 .opacity(0.2)
                             Text(String(localized: "MOCK_UPLOAD_LIST_PLACEHOLDER", bundle: .module))
                                 .multilineTextAlignment(.center)
-                                .fontWeight(.bold)
                         }
                         .padding(32)
                     } else {
@@ -41,13 +53,12 @@ public struct MockUploadList: View {
                         }
                     }
                 }
-                .navigationTitle(String(localized: "MOCK_UPLOAD_LIST_TITLE", bundle: .module))
             }
-        }
     }
     
+    
     public init() {}
-
+    
     
     private func format(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -58,9 +69,9 @@ public struct MockUploadList: View {
 }
 
 
-struct MockUploadsList_Previews: PreviewProvider {
+struct MockUploadsListFilter_Previews: PreviewProvider {
     static var previews: some View {
-        MockUploadList()
+        MockUploadListFilter()
             .environmentObject(MockDataStorageProvider())
     }
 }

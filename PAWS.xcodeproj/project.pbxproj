@@ -34,7 +34,7 @@
 		2FABBC5929A8975900DF3BBC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5829A8975900DF3BBC /* FirebaseFirestore */; };
 		2FABBC5B29A8975900DF3BBC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
-		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
+		362F57A729AC89630087E52D /* PAWSHomeScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 362F57A629AC89630087E52D /* PAWSHomeScreen */; };
 		3637947E2992F3B000B3C006 /* PAWSLandingScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 3637947D2992F3B000B3C006 /* PAWSLandingScreen */; };
 		36379481299308AA00B3C006 /* PAWSNotificationScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 36379480299308AA00B3C006 /* PAWSNotificationScreen */; };
 		653A2551283387FE005D4D48 /* PAWS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653A2550283387FE005D4D48 /* PAWS.swift */; };
@@ -73,7 +73,6 @@
 		2FAEC07F297F583900C11C42 /* PAWS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PAWS.entitlements; sourceTree = "<group>"; };
 		2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PAWS.xctestplan; sourceTree = "<group>"; };
 		2FC9759E2978E39600BA99FE /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		2FC975A72978F11A00BA99FE /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		653A254D283387FE005D4D48 /* PAWS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PAWS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		653A2550283387FE005D4D48 /* PAWS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWS.swift; sourceTree = "<group>"; };
 		653A255428338800005D4D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -108,6 +107,7 @@
 				2F49B7802980418400BCB272 /* Onboarding in Frameworks */,
 				2F49B7762980407C00BCB272 /* CardinalKit in Frameworks */,
 				2F59B93D298C628800C5107F /* PAWSContacts in Frameworks */,
+				362F57A729AC89630087E52D /* PAWSHomeScreen in Frameworks */,
 				2F49B77C2980407C00BCB272 /* HealthKitToFHIRAdapter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -174,7 +174,6 @@
 				653A2550283387FE005D4D48 /* PAWS.swift */,
 				2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */,
 				2F4E23822989D51F0013F3D9 /* PAWSAppTestingSetup.swift */,
-				2FC975A72978F11A00BA99FE /* Home.swift */,
 				2FC9759D2978E30800BA99FE /* Supporting Files */,
 			);
 			path = PAWS;
@@ -213,10 +212,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 653A257128338800005D4D48 /* Build configuration list for PBXNativeTarget "PAWS" */;
 			buildPhases = (
-				36BB4944299C7C00005071A3 /* ShellScript */,
 				653A2549283387FE005D4D48 /* Sources */,
 				653A254A283387FE005D4D48 /* Frameworks */,
 				653A254B283387FE005D4D48 /* Resources */,
+				2FDB275429AEB6DC0084C7DF /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -243,6 +242,7 @@
 				2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */,
 				2FABBC5829A8975900DF3BBC /* FirebaseFirestore */,
 				2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */,
+				362F57A629AC89630087E52D /* PAWSHomeScreen */,
 			);
 			productName = TemplateApplication;
 			productReference = 653A254D283387FE005D4D48 /* PAWS.app */;
@@ -367,7 +367,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		36BB4944299C7C00005071A3 /* ShellScript */ = {
+		2FDB275429AEB6DC0084C7DF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -383,7 +383,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"swiftlint is not installed\"\nfi\n";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n  export PATH=\"$PATH:/opt/homebrew/bin\"\n  if which swiftlint > /dev/null; then\n    swiftlint\n  else\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n  fi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -392,7 +392,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FC975A82978F11A00BA99FE /* Home.swift in Sources */,
 				2F4E23832989D51F0013F3D9 /* PAWSAppTestingSetup.swift in Sources */,
 				2F5E32BD297E05EA003432F8 /* PAWSAppDelegate.swift in Sources */,
 				653A2551283387FE005D4D48 /* PAWS.swift in Sources */,
@@ -775,7 +774,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/CardinalKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.3.0;
+				minimumVersion = 0.3.3;
 			};
 		};
 		2F4E237F2989C5930013F3D9 /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
@@ -783,7 +782,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.3.1;
+				minimumVersion = 0.3.3;
 			};
 		};
 		2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
@@ -887,6 +886,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		362F57A629AC89630087E52D /* PAWSHomeScreen */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PAWSHomeScreen;
 		};
 		3637947D2992F3B000B3C006 /* PAWSLandingScreen */ = {
 			isa = XCSwiftPackageProductDependency;

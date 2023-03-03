@@ -7,6 +7,7 @@
 //
 
 import CardinalKit
+import PAWSHomeScreen
 import PAWSLandingScreen
 import PAWSOnboardingFlow
 import PAWSSharedContext
