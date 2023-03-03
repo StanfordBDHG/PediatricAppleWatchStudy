@@ -25,7 +25,7 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
         return encoder
     }()
     @MainActor @Published
-    private(set) var mockUploads: [MockUpload] = []
+    private (set) var mockUploads: [MockUpload] = []
     
     
     public init() { }

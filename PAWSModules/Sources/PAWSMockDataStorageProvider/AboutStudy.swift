@@ -22,40 +22,44 @@ struct AboutStudy: View {
             VStack {
                 Image(systemName: "pawprint.circle.fill")
                     .resizable()
+                    // .aspectRatio(contentMode: .fit)
                     .scaledToFill()
-                    .frame(width: 80, height: 60, alignment: .center)
+                    .frame(width: 115, height: 75)
                     .foregroundColor(.red)
-                    .padding([.top, .leading, .trailing], 20)
+                    .padding([.top], 20)
+                    // .offset(x: 8)
+                    // .offset(x:80, y:-5)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
             .padding([.top, .leading, .trailing, .bottom], 20)
-            .cornerRadius(10)
             VStack(alignment: .leading, spacing: 8) {
                 Text("Contribute to Health Research")
                     .font(.headline)
-                    .padding([.trailing], 20)
-                    .padding([.leading], 10)
-                    .padding([.bottom], 1)
                     .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 
                 Text("Find out how you're helping the Stanford Pediatric Apple Watch Study (PAWS).")
                         .font(.subheadline)
-                        .padding([.top, .bottom], 10)
-                        .padding([.leading], 10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding([.top, .bottom, .leading, .trailing], 10)
+                        // .offset(y:-10)
             }
-            .cornerRadius(10)
+            .offset(y: 10)
+            .frame(maxWidth: .infinity, alignment: .center)
             .padding([.top], 1)
             .padding([.bottom], 20)
-            AboutStudyNav()
+            AboutStudyNav().padding([.leading, .trailing], 10)
         }
-        .frame(width: 320)
-        .border(.gray, width: 1)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .frame(maxWidth: .infinity)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10).strokeBorder(.gray, lineWidth: 1)
+        )
     }
 }
 
 
 struct AboutStudy_Previews: PreviewProvider {
     static var previews: some View {
-        LatestRecording()
+        AboutStudy()
     }
 }
