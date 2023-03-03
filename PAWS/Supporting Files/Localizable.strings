@@ -11,7 +11,7 @@
 "NOTIFICATIONS_TAB_TITLE" = "Notifications";
 
 // MARK: - Contacts
-"CONTACTS_TAB_TITLE" = "Study Information";
+"CONTACTS_TAB_TITLE" = "Contacts";
 
 
 // MARK: - Mock Upload Data Storage Provider
