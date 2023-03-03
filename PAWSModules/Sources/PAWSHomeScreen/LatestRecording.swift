@@ -5,7 +5,12 @@
 //
 // SPDX-License-Identifier: MIT
 //
-
+import FirebaseAuth
+import FirebaseCore
+import FirebaseFirestore
+import FirestoreDataStorage
+import Foundation
+import PAWSMockDataStorageProvider
 import SwiftUI
 
 

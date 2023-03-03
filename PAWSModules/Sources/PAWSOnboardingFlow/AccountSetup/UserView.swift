@@ -18,7 +18,6 @@ struct UserView: View {
     @EnvironmentObject var account: Account
     @EnvironmentObject var firebaseAccountConfiguration: FirebaseAccountConfiguration<FHIR>
     
-    
     var body: some View {
         userInformation
             .padding()

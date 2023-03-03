@@ -6,7 +6,12 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Account
+import class FHIR.FHIR
+import FirebaseAccount
+import Foundation
 import SwiftUI
+import Views
 
 
 public struct HomeScreen: View {
@@ -15,6 +20,10 @@ public struct HomeScreen: View {
         startPoint: .leading,
         endPoint: .trailing
     )
+    
+    @EnvironmentObject var account: Account
+    @EnvironmentObject var firebaseAccountConfiguration: FirebaseAccountConfiguration<FHIR>
+
     public var body: some View {
         ScrollView(.vertical) {
             VStack(alignment: .leading) {
@@ -24,7 +33,7 @@ public struct HomeScreen: View {
                             .padding([.top], 10)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text("Your Name!")
+                        Text(firebaseAccountConfiguration.user?.displayName ?? "Your Name")
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.top], 0)
