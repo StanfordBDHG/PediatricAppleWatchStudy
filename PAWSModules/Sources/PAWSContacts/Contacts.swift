@@ -25,7 +25,7 @@ struct DescriptionView: View {
                 .font(.custom("Arial Bold", fixedSize: 28))
                 .padding()
             Text(description)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
                 .background {
                     RoundedRectangle(cornerRadius: 10)
@@ -59,7 +59,7 @@ struct Question12View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question1)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -85,7 +85,7 @@ struct Question12View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question2)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -133,7 +133,7 @@ struct Question34View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question3)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -159,7 +159,7 @@ struct Question34View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question4)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -208,7 +208,7 @@ struct Question56View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question5)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -234,7 +234,7 @@ struct Question56View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question6)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -282,7 +282,7 @@ struct Question78View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question7)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -308,7 +308,7 @@ struct Question78View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question8)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
@@ -356,7 +356,7 @@ struct Question9View: View {
                 .font(.custom("Arial Italic", fixedSize: 20))
                 .padding()
             Text(question9)
-                .font(.custom("GillSans", fixedSize: 17))
+                .font(.custom("GillSans", fixedSize: 18))
                 .padding()
         }
         .padding(.vertical, 20)
