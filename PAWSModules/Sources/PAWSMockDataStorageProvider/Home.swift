@@ -7,7 +7,6 @@
 //
 
 import PAWSContacts
-import PAWSMockDataStorageProvider
 import PAWSNotificationScreen
 import PAWSSharedContext
 import SwiftUI
