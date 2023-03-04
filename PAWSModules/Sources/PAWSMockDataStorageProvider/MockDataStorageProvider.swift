@@ -32,8 +32,6 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
     
     
     public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
-        let user = Auth.auth().currentUser
-        let uid = user?.uid ?? ""
         
         switch element {
         case let .addition(element):
