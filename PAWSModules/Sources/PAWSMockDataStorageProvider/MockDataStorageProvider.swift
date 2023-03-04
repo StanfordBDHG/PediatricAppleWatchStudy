@@ -31,8 +31,7 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
     public init() { }
     
     
-    public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
-        
+    public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {        
         switch element {
         case let .addition(element):
             let data = try encoder.encode(element)
