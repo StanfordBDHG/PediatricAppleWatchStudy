@@ -27,7 +27,11 @@ public struct HomeScreen: View {
 
     
     public var body: some View {
+<<<<<<< HEAD
         let name = firebaseAccountConfiguration.user?.displayName ?? "Name Needed"
+=======
+        var name = firebaseAccountConfiguration.user?.displayName ?? "Name Needed"
+>>>>>>> main
         
         ScrollView(.vertical) {
             VStack(alignment: .leading) {
@@ -37,7 +41,11 @@ public struct HomeScreen: View {
                             .padding([.top], 10)
                             .font(.title)
                             .fontWeight(.bold)
+<<<<<<< HEAD
                         Text(firstName(fullName: name))
+=======
+                        Text(firstName(fullName : name))
+>>>>>>> main
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.top], 0)
@@ -97,6 +105,12 @@ public struct HomeScreen: View {
         }
         .padding([.top, .leading, .trailing], 10)
         .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+    
+    func firstName(fullName: String) -> String {
+        var names = fullName.components(separatedBy: " ")
+        let first = names.removeFirst()
+        return first
     }
     
     public init() {}
