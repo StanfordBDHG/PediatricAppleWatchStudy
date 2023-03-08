@@ -37,6 +37,8 @@ struct MockUploadHeader: View {
                 .padding(.bottom, 10)
                 .padding(.leading, 8)
             Divider()
+            Text(mockUpload.symptoms ?? "No symptoms")
+            Divider()
             statusView.onAppear(perform: checkStatus)
                 .padding(8)
                 .cornerRadius(4)

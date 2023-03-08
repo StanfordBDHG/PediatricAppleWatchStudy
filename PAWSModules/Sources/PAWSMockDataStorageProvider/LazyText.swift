@@ -46,8 +46,6 @@ struct LazyText_Previews: PreviewProvider {
         let jsonData = (try? jsonEncoder.encode(observation)) ?? Data()
         return String(data: jsonData, encoding: .utf8) ?? ""
     }()
-    
-    
     static var previews: some View {
         ScrollView {
             LazyText(text: mappingJSONString)

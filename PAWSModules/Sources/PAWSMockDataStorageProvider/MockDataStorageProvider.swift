@@ -13,6 +13,8 @@ import FirebaseCore
 import FirebaseFirestore
 import FirestoreDataStorage
 import Foundation
+import HealthKitOnFHIR
+import HealthKitUI
 
 /// A data storage provider that collects all uploads and displays them in a user interface using the ``MockUploadList``.
 public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvider, ObservableObject {
@@ -36,13 +38,21 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
         case let .addition(element):
             let data = try encoder.encode(element)
             let json = String(decoding: data, as: UTF8.self)
+            print(json)
+            
+            let tracing = try JSONDecoder().decode(HKElectrocardiogramMapping.self, from: data)
+            print(tracing)
+            // Bundle.module.ecgTracing(withName: json)
+            let symptoms = tracing.symptomsStatus.codings.description
+
             _Concurrency.Task { @MainActor in
                 mockUploads.insert(
                     MockUpload(
                         id: element.id.description,
                         type: .add,
                         path: ResourceProxy(with: element).resourceType.description,
-                        body: json
+                        body: json,
+                        symptoms: symptoms
                     ),
                     at: 0
                 )
