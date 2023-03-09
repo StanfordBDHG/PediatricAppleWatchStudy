@@ -11,11 +11,11 @@ import FHIR
 import FHIRToFirestoreAdapter
 import FirebaseAccount
 import class FirebaseFirestore.FirestoreSettings
+import CardinalKitHealthKitToFHIRAdapter
 import FirestoreDataStorage
 import FirestoreStoragePrefixUserIdAdapter
 import HealthKit
 import HealthKitDataSource
-import HealthKitToFHIRAdapter
 import PAWSMockDataStorageProvider
 import PAWSSharedContext
 import Questionnaires
@@ -44,9 +44,9 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
     
     
     private var firestore: Firestore<FHIR> {
-        let firestoreSettings = FirestoreSettings()
+
+        let settings = FirestoreSettings()
         if FeatureFlags.useFirebaseEmulator {
-            let settings = FirestoreSettings()
             settings.host = "localhost:8080"
             settings.isPersistenceEnabled = false
             settings.isSSLEnabled = false
@@ -57,7 +57,7 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
                 FHIRToFirestoreAdapter()
                 FirestoreStoragePrefixUserIdAdapter()
             },
-            settings: firestoreSettings
+            settings: settings
         )
     }
     
@@ -68,6 +68,7 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
                 HKQuantityType.electrocardiogramType(),
                 deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
             )
+            CollectSamples(Set(HKElectrocardiogram.correlatedSymptomTypes))
         } adapter: {
             HealthKitToFHIRAdapter()
         }

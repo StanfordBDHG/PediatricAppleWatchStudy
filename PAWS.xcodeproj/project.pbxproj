@@ -12,7 +12,6 @@
 		2F49B7762980407C00BCB272 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B7752980407B00BCB272 /* CardinalKit */; };
 		2F49B7782980407C00BCB272 /* FHIR in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B7772980407C00BCB272 /* FHIR */; };
 		2F49B77A2980407C00BCB272 /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B7792980407C00BCB272 /* HealthKitDataSource */; };
-		2F49B77C2980407C00BCB272 /* HealthKitToFHIRAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B77B2980407C00BCB272 /* HealthKitToFHIRAdapter */; };
 		2F49B77E2980407C00BCB272 /* Scheduler in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B77D2980407C00BCB272 /* Scheduler */; };
 		2F49B7802980418400BCB272 /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B77F2980418400BCB272 /* Onboarding */; };
 		2F49B7822980419C00BCB272 /* Questionnaires in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B7812980419C00BCB272 /* Questionnaires */; };
@@ -31,6 +30,7 @@
 		2F9056D5299E1B9C003D3802 /* FirestoreDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D4299E1B9C003D3802 /* FirestoreDataStorage */; };
 		2F9056D7299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */; };
 		2F9056DB299E1C97003D3802 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */; };
+		2F9F4D8329B7FFAE00ABE259 /* CardinalKitHealthKitToFHIRAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9F4D8229B7FFAE00ABE259 /* CardinalKitHealthKitToFHIRAdapter */; };
 		2FABBC5929A8975900DF3BBC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5829A8975900DF3BBC /* FirebaseFirestore */; };
 		2FABBC5B29A8975900DF3BBC /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */; };
 		2FC9759F2978E39600BA99FE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9759E2978E39600BA99FE /* Localizable.strings */; };
@@ -86,6 +86,7 @@
 			files = (
 				36379481299308AA00B3C006 /* PAWSNotificationScreen in Frameworks */,
 				2F59B941298C628800C5107F /* PAWSOnboardingFlow in Frameworks */,
+				2F9F4D8329B7FFAE00ABE259 /* CardinalKitHealthKitToFHIRAdapter in Frameworks */,
 				2F49B7822980419C00BCB272 /* Questionnaires in Frameworks */,
 				2F49B77E2980407C00BCB272 /* Scheduler in Frameworks */,
 				2F9056D3299E1B9C003D3802 /* FHIRToFirestoreAdapter in Frameworks */,
@@ -102,7 +103,6 @@
 				2F49B7802980418400BCB272 /* Onboarding in Frameworks */,
 				2F49B7762980407C00BCB272 /* CardinalKit in Frameworks */,
 				2F59B93D298C628800C5107F /* PAWSContacts in Frameworks */,
-				2F49B77C2980407C00BCB272 /* HealthKitToFHIRAdapter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,7 +218,6 @@
 				2F49B7752980407B00BCB272 /* CardinalKit */,
 				2F49B7772980407C00BCB272 /* FHIR */,
 				2F49B7792980407C00BCB272 /* HealthKitDataSource */,
-				2F49B77B2980407C00BCB272 /* HealthKitToFHIRAdapter */,
 				2F49B77D2980407C00BCB272 /* Scheduler */,
 				2F49B77F2980418400BCB272 /* Onboarding */,
 				2F49B7812980419C00BCB272 /* Questionnaires */,
@@ -234,6 +233,7 @@
 				2F9056D6299E1B9C003D3802 /* FirestoreStoragePrefixUserIdAdapter */,
 				2FABBC5829A8975900DF3BBC /* FirebaseFirestore */,
 				2FABBC5A29A8975900DF3BBC /* FirebaseFirestoreSwift */,
+				2F9F4D8229B7FFAE00ABE259 /* CardinalKitHealthKitToFHIRAdapter */,
 			);
 			productName = TemplateApplication;
 			productReference = 653A254D283387FE005D4D48 /* PAWS.app */;
@@ -316,6 +316,7 @@
 				2F4E237F2989C5930013F3D9 /* XCRemoteSwiftPackageReference "XCTHealthKit" */,
 				2F36AD25299D989F00B1077C /* XCRemoteSwiftPackageReference "XCTestExtensions" */,
 				2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				2F9F4D8129B7FFAE00ABE259 /* XCRemoteSwiftPackageReference "CardinalKitHealthKitToFHIRAdapter" */,
 			);
 			productRefGroup = 653A254E283387FE005D4D48 /* Products */;
 			projectDirPath = "";
@@ -763,7 +764,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/CardinalKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.3.3;
+				minimumVersion = 0.3.5;
 			};
 		};
 		2F4E237F2989C5930013F3D9 /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
@@ -772,6 +773,14 @@
 			requirement = {
 				kind = upToNextMinorVersion;
 				minimumVersion = 0.3.3;
+			};
+		};
+		2F9F4D8129B7FFAE00ABE259 /* XCRemoteSwiftPackageReference "CardinalKitHealthKitToFHIRAdapter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/StanfordBDHG/CardinalKitHealthKitToFHIRAdapter";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.1.0;
 			};
 		};
 		2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
@@ -804,11 +813,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
 			productName = HealthKitDataSource;
-		};
-		2F49B77B2980407C00BCB272 /* HealthKitToFHIRAdapter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
-			productName = HealthKitToFHIRAdapter;
 		};
 		2F49B77D2980407C00BCB272 /* Scheduler */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -865,6 +869,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */;
 			productName = FirestoreStoragePrefixUserIdAdapter;
+		};
+		2F9F4D8229B7FFAE00ABE259 /* CardinalKitHealthKitToFHIRAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F9F4D8129B7FFAE00ABE259 /* XCRemoteSwiftPackageReference "CardinalKitHealthKitToFHIRAdapter" */;
+			productName = CardinalKitHealthKitToFHIRAdapter;
 		};
 		2FABBC5829A8975900DF3BBC /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
