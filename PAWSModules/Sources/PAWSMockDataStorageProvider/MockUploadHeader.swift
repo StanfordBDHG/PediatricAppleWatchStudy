@@ -17,6 +17,7 @@ import SwiftUI
 struct MockUploadHeader: View {
     let mockUpload: MockUpload
     @State var status: MockUpload.UploadStatus?
+
     private let backgroundGradient = LinearGradient(
         colors: [.red, .pink, .yellow],
         startPoint: .leading,
@@ -26,6 +27,8 @@ struct MockUploadHeader: View {
     var body: some View {
         let date = "\(format(mockUpload.date))"
         let time = date.range(of: "at")!.lowerBound
+        let symptomNum = seperateSymptoms(allSymptoms: mockUpload.symptoms ?? "").count
+
         VStack(alignment: .leading, spacing: 4) {
                 Text(date[..<time])
                 .font(.title3)
@@ -37,11 +40,16 @@ struct MockUploadHeader: View {
                 .padding(.bottom, 10)
                 .padding(.leading, 8)
             Divider()
+            symptomView
+                .padding(.bottom, 10)
+                .padding(.leading, 8)
+                .cornerRadius(4)
+            Divider()
             statusView.onAppear(perform: checkStatus)
                 .padding(8)
                 .cornerRadius(4)
         }
-        .frame(width: 350, height: 110)
+        .frame(width: 350, height: 110 + CGFloat(30*symptomNum))
 //        .border(backgroundGradient, width: 5)
       
     }
@@ -62,9 +70,29 @@ struct MockUploadHeader: View {
                 Text("Recording upload is pending")
             }
             .background(Color.red.opacity(0.3))
-  
         case nil:
             Text("Loading status indicator")
+        }
+    }
+    
+    @ViewBuilder var symptomView: some View {
+        let symptoms = seperateSymptoms(allSymptoms: mockUpload.symptoms ?? "")
+        if (symptoms.count == 0) {
+            Text("No symptoms reported")
+        } else {
+            Text("Symptoms Reported:")
+                .bold()
+                .padding(.top, 2)
+                .padding([.bottom], 3)
+                .padding([.leading], 2)
+            ForEach (0..<(symptoms.count - 1)){ index in
+                Text(symptoms[index])
+                    .font(.subheadline)
+                    .padding(.top, -4)
+                    .padding(.bottom, -4)
+                    .padding(.leading, 2)
+            }
+            
         }
     }
     
@@ -90,5 +118,10 @@ struct MockUploadHeader: View {
                 self.status = .failure
             }
         }
+    }
+    
+    private func seperateSymptoms(allSymptoms: String) -> [String] {
+        let symptoms = allSymptoms.components(separatedBy: "; ")
+        return symptoms
     }
 }
