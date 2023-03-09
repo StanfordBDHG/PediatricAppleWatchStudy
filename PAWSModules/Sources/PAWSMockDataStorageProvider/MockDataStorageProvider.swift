@@ -40,11 +40,8 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
             let json = String(decoding: data, as: UTF8.self)
             print(json)
             
-            let tracing = try JSONDecoder().decode(HKElectrocardiogramMapping.self, from: data)
-            print(tracing)
-            // Bundle.module.ecgTracing(withName: json)
-            let symptoms = tracing.symptomsStatus.codings.description
-
+            let symptoms = getSymptoms(tracing: json)
+            
             _Concurrency.Task { @MainActor in
                 mockUploads.insert(
                     MockUpload(
@@ -69,5 +66,36 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
                 )
             }
         }
+    }
+    
+    private func getSymptoms(tracing: String) -> String {
+        var symptoms = ""
+        
+        if tracing.contains("Fatigue") {
+            symptoms += "Fatigue; "
+        }
+        if tracing.contains("Dizziness") {
+            symptoms += "Dizziness; "
+        }
+        if tracing.contains("Rapid") {
+            symptoms += "Rapid, pounding or fluttering heartbeat; "
+        }
+        if tracing.contains("Skipped") {
+            symptoms += "Skipped heartbeat; "
+        }
+        if tracing.contains("Shortness") {
+            symptoms += "Shortness of breath; "
+        }
+        if tracing.contains("Chest tightness or pain") {
+            symptoms += "Chest tightness or pain; "
+        }
+        if tracing.contains("Fainting") {
+            symptoms += "Fainting; "
+        }
+        if tracing.contains("Other") {
+            symptoms += "Other; "
+        }
+        
+        return symptoms
     }
 }
