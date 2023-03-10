@@ -9,6 +9,8 @@
 import Account
 import class FHIR.FHIR
 import FirebaseAccount
+import FirebaseAuth
+import FirebaseFirestore
 import Onboarding
 import SwiftUI
 
@@ -42,6 +44,19 @@ struct AccountSetup: View {
             .onReceive(account.objectWillChange) {
                 if account.signedIn {
                     onboardingSteps.append(.healthKitPermissions)
+                    
+                    if let user = Auth.auth().currentUser {
+                        let uid = user.uid
+                        let name = user.displayName?.components(separatedBy: " ")
+                        let firstName = name?[0] ?? ""
+                        let lastName = name?[1] ?? ""
+                        let data: [String: Any] = ["firstName": firstName, "id": uid, "lastName": lastName]
+                        Firestore.firestore().collection("users").document(uid).setData(data) { err in
+                            if let err = err {
+                                print("Error updating document: \(err)")
+                            }
+                        }
+                    }
                     // Unfortunately, SwiftUI currently animates changes in the navigation path that do not change
                     // the current top view. Therefore we need to do the following async procedure to remove the
                     // `.login` and `.signUp` steps while disabling the animations before and re-enabling them
