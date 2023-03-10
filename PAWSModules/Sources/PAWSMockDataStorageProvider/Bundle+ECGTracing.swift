@@ -10,7 +10,6 @@ import FHIR
 import Foundation
 import HealthKitOnFHIR
 
-
 extension Foundation.Bundle {
     func ecgTracing(withName name: String) -> Observation {
         guard let resourceURL = self.url(forResource: name, withExtension: "json") else {
