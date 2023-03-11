@@ -85,8 +85,8 @@ struct MockUploadHeader: View {
                 .padding(.top, 2)
                 .padding([.bottom], 3)
                 .padding([.leading], 2)
-            ForEach (0..<(symptoms.count - 1)){ index in
-                Text(symptoms[index])
+            ForEach(symptoms) { symptom in
+                Text(symptom)
                     .font(.subheadline)
                     .padding(.top, -4)
                     .padding(.bottom, -4)
