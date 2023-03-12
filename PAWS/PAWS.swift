@@ -21,31 +21,51 @@ struct PAWS: App {
     @State var pressedStart = false
     
     init() {
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            
+            if let error = error {
+                // Handle the error here.
+            }
+            
+            // Enable or disable features based on the authorization.
+        }
+        
         let content = UNMutableNotificationContent()
-        content.title = "Your friendly reminder to Record your ECG!"
-        content.body = "Everyday at 7pm"
+        content.title = "Friendly reminder to record your ECG!"
+        content.body = "Thank you for participating in the PAWS study!"
+
         // Configure the recurring date.
+        
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current
 
-        dateComponents.hour = 19    // 19:00 hours (7PM)
-           
-        // Create the trigger as a repeating event.
-        let trigger = UNCalendarNotificationTrigger(
-                 dateMatching: dateComponents, repeats: true)
+        dateComponents.hour = 17    // 19:00 hours
+        
+        for index in 0...6 {
+            let scheduleDate = Date.now.addingTimeInterval(86400 * Double(index))
+            guard let notificationDate = Calendar.current.nextDate(after: scheduleDate, matching: dateComponents, matchingPolicy: .nextTime) else {
+                return
+            }
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: notificationDate.timeIntervalSince(.now), repeats: false)
+            
+            
+            // Create the request
+            let uuidString = UUID().uuidString
+            let request = UNNotificationRequest(identifier: uuidString,
+                        content: content, trigger: trigger)
 
-        // Create the request
-        let uuidString = UUID().uuidString
-        let request = UNNotificationRequest(identifier: uuidString,
-                    content: content, trigger: trigger)
-
-        // Schedule the request with the system.
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.add(request) { (error) in
-           if error != nil {
-              // Handle any errors.
-           }
+            // Schedule the request with the system.
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.add(request) { (error) in
+               if error != nil {
+                  // Handle any errors.
+               }
+            }
         }
+         
     }
     
     var isSheetPresented: Binding<Bool> {

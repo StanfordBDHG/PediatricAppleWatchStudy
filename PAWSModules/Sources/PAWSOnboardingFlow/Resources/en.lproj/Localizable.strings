@@ -75,3 +75,9 @@ to get started...";
 reported symptoms, and any detected abnormalities. ";
 "HEALTHKIT_PERMISSIONS_DESCRIPTION" = "On the next page you will be asked to grant access to the heart data from your Health app.";
 "HEALTHKIT_PERMISSIONS_BUTTON" = "Grant Access";
+
+// MARK: NOTIFICATIONS VIEW
+"ALLOW_NOTIFICATIONS_BUTTON" = "Allow notifications";
+"NOTIFICATION_SETUP_TITLE" = "Notifications";
+"NOTIFICATION_SETUP_SUBTITLE" = "Want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow.";
+
