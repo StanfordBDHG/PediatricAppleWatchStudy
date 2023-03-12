@@ -6,12 +6,11 @@
 // SPDX-License-Identifier: MIT
 //
 
-import PAWSMockDataStorageProvider
 import PAWSSharedContext
 import SwiftUI
 
 
-struct AboutStudyNav: View {
+struct RecordingsNav: View {
     private let backgroundGradient = LinearGradient(
         colors: [.red, .pink, .orange],
         startPoint: .leading,
@@ -23,23 +22,23 @@ struct AboutStudyNav: View {
     var body: some View {
         Button(
             action: {
-                selectedTab = Tabs.contact
+                selectedTab = Tabs.mockUpload
             }, label: {
-            Text("Learn More")
+            Text("View More Recordings                                                                             ")
                 .fontWeight(.bold)
                 .padding()
                 .foregroundColor(Color.white)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .background(backgroundGradient)
                 .cornerRadius(10)
-                .frame(width: 300)
-                .offset(y: -30)
+                .padding(.bottom, 10)
             }
         )
     }
 }
 
-struct AboutStudyNav_Previews: PreviewProvider {
+struct RecordingsNav_Previews: PreviewProvider {
     static var previews: some View {
-        AboutStudyNav()
+        RecordingsNav()
     }
 }

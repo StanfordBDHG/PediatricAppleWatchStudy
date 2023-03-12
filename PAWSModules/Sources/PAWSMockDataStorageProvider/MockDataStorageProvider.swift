@@ -13,6 +13,7 @@ import FirebaseCore
 import FirebaseFirestore
 import FirestoreDataStorage
 import Foundation
+import HealthKitUI
 
 /// A data storage provider that collects all uploads and displays them in a user interface using the ``MockUploadList``.
 public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvider, ObservableObject {
@@ -25,27 +26,29 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
         return encoder
     }()
     @MainActor @Published
-    private(set) var mockUploads: [MockUpload] = []
+    private (set) var mockUploads: [MockUpload] = []
     
     
     public init() { }
     
     
     public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
-        let user = Auth.auth().currentUser
-        let uid = user?.uid ?? ""
-        
         switch element {
         case let .addition(element):
             let data = try encoder.encode(element)
             let json = String(decoding: data, as: UTF8.self)
+            print(json)
+            
+            let symptoms = getSymptoms(tracing: json)
+            
             _Concurrency.Task { @MainActor in
                 mockUploads.insert(
                     MockUpload(
                         id: element.id.description,
                         type: .add,
                         path: ResourceProxy(with: element).resourceType.description,
-                        body: json
+                        body: json,
+                        symptoms: symptoms
                     ),
                     at: 0
                 )
@@ -62,5 +65,36 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
                 )
             }
         }
+    }
+    
+    private func getSymptoms(tracing: String) -> String {
+        var symptoms = ""
+        
+        if tracing.contains("Fatigue") {
+            symptoms += "Fatigue; "
+        }
+        if tracing.contains("Dizziness") {
+            symptoms += "Dizziness; "
+        }
+        if tracing.contains("Rapid") {
+            symptoms += "Rapid, pounding or fluttering heartbeat; "
+        }
+        if tracing.contains("Skipped") {
+            symptoms += "Skipped heartbeat; "
+        }
+        if tracing.contains("Shortness") {
+            symptoms += "Shortness of breath; "
+        }
+        if tracing.contains("Chest tightness or pain") {
+            symptoms += "Chest tightness or pain; "
+        }
+        if tracing.contains("Fainting") {
+            symptoms += "Fainting; "
+        }
+        if tracing.contains("Other") {
+            symptoms += "Other; "
+        }
+        
+        return symptoms
     }
 }
