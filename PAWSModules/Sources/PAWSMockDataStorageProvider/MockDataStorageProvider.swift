@@ -13,7 +13,6 @@ import FirebaseCore
 import FirebaseFirestore
 import FirestoreDataStorage
 import Foundation
-import HealthKitOnFHIR
 import HealthKitUI
 
 /// A data storage provider that collects all uploads and displays them in a user interface using the ``MockUploadList``.

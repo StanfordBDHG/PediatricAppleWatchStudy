@@ -65,7 +65,7 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
         HealthKit {
             CollectSample(
                 HKQuantityType.electrocardiogramType(),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
             )
             CollectSamples(Set(HKElectrocardiogram.correlatedSymptomTypes))
         } adapter: {
