@@ -1,8 +1,9 @@
 //
-//  SwiftUIView.swift
-//  
+// This source file is part of the CS342 2023 PAWS Team Application project
 //
-//  Created by Riya Karumanchi on 3/3/23.
+// SPDX-FileCopyrightText: 2023 Stanford University
+//
+// SPDX-License-Identifier: MIT
 //
 
 import Onboarding
