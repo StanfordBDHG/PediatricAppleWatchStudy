@@ -6,10 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
-import FHIR
 import Foundation
 import HealthKitOnFHIR
-
+import ModelsR4
 
 extension Foundation.Bundle {
     func ecgTracing(withName name: String) -> Observation {

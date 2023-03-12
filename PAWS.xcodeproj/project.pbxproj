@@ -780,7 +780,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/CardinalKitHealthKitToFHIRAdapter";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.1.0;
+				minimumVersion = 0.1.1;
 			};
 		};
 		2FABBC5729A8975900DF3BBC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {

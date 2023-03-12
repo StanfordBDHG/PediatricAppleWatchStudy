@@ -27,7 +27,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.5")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.5.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.5.0"),
+        .package(url: "https://github.com/apple/FHIRModels.git", .upToNextMajor(from: "0.4.0"))
     ],
     targets: [
         .target(
@@ -50,7 +51,8 @@ let package = Package(
                 .product(name: "FirestoreDataStorage", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+                .product(name: "ModelsR4", package: "fhirmodels")
             ],
             resources: [
                 .process("Resources")
