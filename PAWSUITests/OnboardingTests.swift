@@ -50,7 +50,6 @@ extension XCUIApplication {
             try navigateOnboardingFlowConsent()
         }
         try navigateOnboardingAccount()
-        try navigateOnboardingFlowHealthKitAccess(assertThatHealthKitConsentIsShown: assertThatHealthKitConsentIsShown)
     }
     
     private func navigateOnboardingGetStarted() throws {
@@ -148,14 +147,6 @@ extension XCUIApplication {
             XCTAssertTrue(scrollViews.otherElements.buttons["Next"].waitForExistence(timeout: 2))
             scrollViews.otherElements.buttons["Next"].tap()
         }
-    }
-    
-    private func navigateOnboardingFlowHealthKitAccess(assertThatHealthKitConsentIsShown: Bool = true) throws {
-        XCTAssertTrue(buttons["Grant Access"].waitForExistence(timeout: 2))
-        
-        buttons["Grant Access"].tap()
-        
-        try handleHealthKitAuthorization()
     }
     
     private func notificationPermissions() throws {
