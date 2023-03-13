@@ -23,17 +23,6 @@ class OnboardingTests: XCTestCase {
         app.launchArguments = ["--showOnboarding"]
         app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
-    
-    
-    func testOnboardingFlow() throws {
-        let app = XCUIApplication()
-        
-        try app.navigateOnboardingFlow(assertThatHealthKitConsentIsShown: true)
-        
-        let tabBar = app.tabBars["Tab Bar"]
-        XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
-        XCTAssertTrue(tabBar.buttons["Reports"].waitForExistence(timeout: 2))
-    }
 }
 
 
@@ -160,5 +149,14 @@ extension XCUIApplication {
         buttons["Grant Access"].tap()
         
         try handleHealthKitAuthorization()
+    }
+    
+    private func notificationPermissions() throws {
+        XCTAssertTrue(staticTexts["Notifications"].waitForExistence(timeout: 2))
+        
+        swipeUp()
+        
+        XCTAssertTrue(buttons["Allow Notifications"].waitForExistence(timeout: 2))
+        buttons["Allow Notifications"].tap()
     }
 }

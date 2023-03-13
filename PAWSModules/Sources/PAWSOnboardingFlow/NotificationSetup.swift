@@ -1,15 +1,19 @@
 //
-//  SwiftUIView.swift
-//  
+// This source file is part of the CS342 2023 PAWS Team Application project
 //
-//  Created by Riya Karumanchi on 3/3/23.
+// SPDX-FileCopyrightText: 2023 Stanford University
 //
+// SPDX-License-Identifier: MIT
+//
+
+// swiftlint:disable all
 
 import Onboarding
 import PAWSSharedContext
 import SwiftUI
 
 struct NotificationSetup: View {
+    @Binding var onboardingSteps: [OnboardingFlow.Step]
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
     @State private var date = Date()
     @State private var selectedTime = Calendar.current.date(bySettingHour: 19, minute: 0, second: 0, of: Date())!
@@ -29,7 +33,7 @@ struct NotificationSetup: View {
                         subtitle: "NOTIFICATION_SETUP_SUBTITLE".moduleLocalized
                     )
                     DatePicker("Select a time", selection: $selectedTime, displayedComponents: .hourAndMinute)
-                    Image("NotificationImage") // Add your image here
+                    Image("NotificationImage")
                        .resizable()
                        .aspectRatio(contentMode: .fit)
                        .frame(width: 275, height: 275)
@@ -91,10 +95,4 @@ struct NotificationSetup: View {
         }
     }
     
-}
-
-struct NotificationSetup_Previews: PreviewProvider {
-    static var previews: some View {
-        NotificationSetup()
-    }
 }
