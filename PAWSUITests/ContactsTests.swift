@@ -24,8 +24,8 @@ class ContactsTests: XCTestCase {
     func testContacts() throws {
         let app = XCUIApplication()
         
-        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Contacts"].waitForExistence(timeout: 2))
-        app.tabBars["Tab Bar"].buttons["Contacts"].tap()
+        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Study Information"].waitForExistence(timeout: 2))
+        app.tabBars["Tab Bar"].buttons["Study Information"].tap()
         
         XCTAssertTrue(app.staticTexts["Scott Ceresnak"].waitForExistence(timeout: 2))
         

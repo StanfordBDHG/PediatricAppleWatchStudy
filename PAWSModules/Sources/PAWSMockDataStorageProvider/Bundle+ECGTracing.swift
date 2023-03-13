@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import FHIR
 import Foundation
+import ModelsR4
 
 
 extension Foundation.Bundle {
