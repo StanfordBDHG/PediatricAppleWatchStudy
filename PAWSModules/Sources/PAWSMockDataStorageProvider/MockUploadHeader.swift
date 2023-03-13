@@ -87,13 +87,15 @@ struct MockUploadHeader: View {
     
     @ViewBuilder var symptomView: some View {
         let symptoms = seperateSymptoms(allSymptoms: mockUpload.symptoms ?? "")
-        if (symptoms.count == 0) {
-            Text("No symptoms reported")
+        if (symptoms.count <= 0) {
+            Text("No Symptoms Reported")
+                .bold()
+                .padding([.top, .bottom], 3)
+                .padding([.leading], 2)
         } else {
             Text("Symptoms Reported:")
                 .bold()
-                .padding(.top, 2)
-                .padding([.bottom], 3)
+                .padding([.top, .bottom], 3)
                 .padding([.leading], 2)
             ForEach(symptoms) { symptom in
                 Text(symptom)
@@ -131,7 +133,8 @@ struct MockUploadHeader: View {
     }
     
     private func seperateSymptoms(allSymptoms: String) -> [String] {
-        let symptoms = allSymptoms.components(separatedBy: "; ")
+        var symptoms = allSymptoms.components(separatedBy: "; ")
+        symptoms.removeLast()
         return symptoms
     }
 }
