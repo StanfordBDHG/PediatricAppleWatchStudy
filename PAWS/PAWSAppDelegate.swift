@@ -44,7 +44,6 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
     
     
     private var firestore: Firestore<FHIR> {
-
         let settings = FirestoreSettings()
         if FeatureFlags.useFirebaseEmulator {
             settings.host = "localhost:8080"

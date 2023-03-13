@@ -40,8 +40,8 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
             let json = String(decoding: data, as: UTF8.self)
             print(json)
             
-            //let tracing = try JSONDecoder().decode(HKElectrocardiogramMapping.self, from: data)
-            //print(tracing)
+            // let tracing = try JSONDecoder().decode(HKElectrocardiogramMapping.self, from: data)
+            // print(tracing)
             // Bundle.module.ecgTracing(withName: json)
             // let symptoms = tracing.symptomsStatus.codings.description
             let symptoms = getSymptoms(tracing: json)
