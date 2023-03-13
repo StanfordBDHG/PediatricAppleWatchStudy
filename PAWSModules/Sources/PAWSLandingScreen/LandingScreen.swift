@@ -5,9 +5,8 @@
 //
 // SPDX-License-Identifier: MIT
 //
-
+import PAWSSharedContext
 import SwiftUI
-
 
 public struct LandingScreen: View {
     private let backgroundGradient = LinearGradient(
@@ -20,21 +19,17 @@ public struct LandingScreen: View {
     
     public var body: some View {
         VStack {
-            backgroundGradient
-            .mask(
-                VStack {
-                    Image(systemName: "pawprint.circle.fill")
+            Image(uiImage: Bundle.module.image(withName: "circleLogo", fileExtension: "png"))
                         .resizable()
-                        .scaledToFill()
-                        .frame(width: 200, height: 200)
-                        .foregroundColor(.red)
+                        .frame(width: 225, height: 225)
+                        .accessibilityLabel(Text("App Icon"))
+                        .padding(.bottom)
                     Text("PAWS")
                         .font(.custom("GillSans-Bold", fixedSize: 30))
                     Text("The Pediatric Apple Watch Study")
                         .font(.custom("GillSans", fixedSize: 15))
-                        .offset(y: 50)
-                }
-            )
+                        .offset(y: 10)
+
             Button(
                 action: {
                     launchStatus = true
@@ -42,10 +37,11 @@ public struct LandingScreen: View {
                 Text("Tap to get started")
                     .fontWeight(.bold)
                     .padding()
-                    .foregroundColor(Color.red)
-                    .border(backgroundGradient, width: 3)
+                    .foregroundColor(Color.black)
+                    .border(.yellow.opacity(0.5), width: 5)
                     .cornerRadius(5)
                     .offset(y: -30)
+                    .offset(y: 150)
                 }
             )
         }

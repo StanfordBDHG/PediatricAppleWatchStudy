@@ -30,7 +30,7 @@ struct DescriptionView: View {
                         .frame(width: 360)
                         .shadow(radius: 5)
                         .opacity(0.9)
-                        .border(backgroundGradient, width: 5)
+                        .border(.yellow.opacity(0.45), width: 5)
                         .cornerRadius(10)
                         .shadow(radius: 10)
                 }

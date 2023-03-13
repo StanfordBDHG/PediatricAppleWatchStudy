@@ -20,8 +20,8 @@ struct AboutStudy: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             VStack {
-                Image(systemName: "pawprint.circle.fill")
-                    .resizable()
+                Image(uiImage: Bundle.module.image(withName: "waveLogo", fileExtension: "png"))
+                .resizable()
                     // .aspectRatio(contentMode: .fit)
                     .scaledToFill()
                     .frame(width: 115, height: 75)

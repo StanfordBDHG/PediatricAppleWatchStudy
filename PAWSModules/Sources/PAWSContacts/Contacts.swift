@@ -32,11 +32,7 @@ struct Question1234View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -59,11 +55,7 @@ struct Question1234View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -86,11 +78,7 @@ struct Question1234View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -113,11 +101,7 @@ struct Question1234View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -180,11 +164,7 @@ struct Question56789View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -207,11 +187,7 @@ struct Question56789View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -234,11 +210,7 @@ struct Question56789View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -261,11 +233,7 @@ struct Question56789View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -288,11 +256,7 @@ struct Question56789View: View {
                 .frame(width: 360)
                 .shadow(radius: 5)
                 .opacity(0.9)
-                .border(LinearGradient(
-                    colors: [.red, .pink, .yellow],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                ), width: 5)
+                .border(.yellow.opacity(0.45), width: 5)
                 .cornerRadius(10)
                 .shadow(radius: 10)
         }
@@ -434,11 +398,7 @@ public struct Contacts: View {
                                     .frame(width: 360)
                                     .shadow(radius: 5)
                                     .opacity(0.9)
-                                    .border(LinearGradient(
-                                        colors: [.red, .pink, .yellow],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    ), width: 5)
+                                    .border(.yellow.opacity(0.45), width: 5)
                                     .cornerRadius(10)
                                     .shadow(radius: 10)
                             }

@@ -22,7 +22,7 @@ struct NotificationSetup: View {
         OnboardingView(
             contentView: {
                 VStack {
-                    Image(systemName: "pawprint.circle.fill")
+                    Image(uiImage: Bundle.module.image(withName: "notifLogo", fileExtension: "png"))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 40, height: 40)

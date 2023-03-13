@@ -26,15 +26,18 @@ public struct MockUploadList: View {
             NavigationStack {
                 Group {
                     if mockDataStorageProvider.mockUploads.isEmpty {
-                        VStack(spacing: 32) {
-                            Image(systemName: "pawprint.circle")
-                                .font(.system(size: 100))
-                                .opacity(0.2)
-                            Text(String(localized: "MOCK_UPLOAD_LIST_PLACEHOLDER", bundle: .module))
-                                .multilineTextAlignment(.center)
-                                .fontWeight(.bold)
+                        VStack(spacing: 30){
+                            Image(uiImage: Bundle.module.image(withName: "notifLogo", fileExtension: "png"))
+                                        .resizable()
+                                        .frame(width: 150, height: 150, alignment: .center)
+                                        .padding(.leading, 17)
+                            VStack(spacing: 32) {
+                                Text(String(localized: "MOCK_UPLOAD_LIST_PLACEHOLDER", bundle: .module))
+                                    .multilineTextAlignment(.center)
+                                    .fontWeight(.bold)
+                            }
+                            .padding(32)
                         }
-                        .padding(32)
                     } else {
                         List(mockDataStorageProvider.mockUploads) { mockUpload in
                             MockUploadHeader(mockUpload: mockUpload)

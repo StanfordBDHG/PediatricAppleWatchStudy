@@ -27,9 +27,9 @@ struct AboutStudyNav: View {
             Text("Learn More                                                                              ")
                 .fontWeight(.bold)
                 .padding()
-                .foregroundColor(Color.white)
+                .foregroundColor(Color.black)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .background(backgroundGradient)
+                .background(.yellow.opacity(0.45))
                 .cornerRadius(10)
                 .padding(.bottom, 10)
             }

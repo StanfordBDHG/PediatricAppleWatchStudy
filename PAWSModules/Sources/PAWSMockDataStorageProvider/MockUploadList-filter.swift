@@ -40,7 +40,7 @@ public struct MockUploadListFilter: View {
                 Group {
                     if mockDataStorageProvider.mockUploads.isEmpty {
                         VStack(spacing: 32) {
-                            Image(systemName: "pawprint.circle")
+                            Image(uiImage: Bundle.module.image(withName: "waveLogo", fileExtension: "png"))
                                 .font(.system(size: 100))
                                 .opacity(0.2)
                             Text(String(localized: "MOCK_UPLOAD_LIST_PLACEHOLDER", bundle: .module))

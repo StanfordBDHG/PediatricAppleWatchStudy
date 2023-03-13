@@ -75,7 +75,13 @@ let package = Package(
             name: "PAWSSharedContext"
         ),
         .target(
-            name: "PAWSLandingScreen"
+            name: "PAWSLandingScreen",
+            dependencies: [
+                .target(name: "PAWSSharedContext")
+            ],
+            resources: [
+                .process("Resources")
+            ]
         ),
         .target(
             name: "PAWSNotificationScreen"

@@ -44,13 +44,13 @@ public struct HomeScreen: View {
                             .padding([.bottom], 10)
                     }
                     .padding()
-                    Image(systemName: "pawprint.circle.fill")
+                    Image(uiImage: Bundle.module.image(withName: "circleLogo", fileExtension: "png"))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 60, height: 60)
                         .foregroundColor(.black)
                         .padding([.top], 20)
-                        .padding([.leading], 120)
+                        .padding([.leading], 180)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.top, .leading, .trailing], 10)
