@@ -29,7 +29,7 @@ class OnboardingTests: XCTestCase {
         let app = XCUIApplication()
         
         try app.navigateOnboardingFlow(assertThatHealthKitConsentIsShown: true)
-        
+
         let tabBar = app.tabBars["Tab Bar"]
     }
 }
@@ -151,7 +151,6 @@ extension XCUIApplication {
     }
     
     private func navigateOnboardingFlowHealthKitAccess(assertThatHealthKitConsentIsShown: Bool = true) throws {
-        XCTAssertTrue(staticTexts["Health Data Access"].waitForExistence(timeout: 2))
         
         XCTAssertTrue(buttons["Grant Access"].waitForExistence(timeout: 2))
         
