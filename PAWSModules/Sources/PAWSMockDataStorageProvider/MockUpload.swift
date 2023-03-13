@@ -11,6 +11,7 @@ import FirebaseCore
 import FirebaseFirestore
 import FirestoreDataStorage
 import Foundation
+import HealthKitOnFHIR
 
 
 struct MockUpload: Identifiable, Hashable {
