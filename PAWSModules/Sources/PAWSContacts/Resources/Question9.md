@@ -1,0 +1,1 @@
+If you do not want to participate in the study, just tell the researchers or your parents. You don’t need to be a part of the study and you won’t get in trouble if you decide if you don’t want to. Your doctor will still treat you the same even if you don’t participate.

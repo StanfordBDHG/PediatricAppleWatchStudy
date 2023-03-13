@@ -23,12 +23,12 @@ let package = Package(
         .library(name: "PAWSOnboardingFlow", targets: ["PAWSOnboardingFlow"]),
         .library(name: "PAWSSharedContext", targets: ["PAWSSharedContext"]),
         .library(name: "PAWSLandingScreen", targets: ["PAWSLandingScreen"]),
-        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"]),
-        .library(name: "PAWSHomeScreen", targets: ["PAWSHomeScreen"])
+        .library(name: "PAWSNotificationScreen", targets: ["PAWSNotificationScreen"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.0")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.3.0")
+        .package(url: "https://github.com/StanfordBDHG/CardinalKit.git", .upToNextMinor(from: "0.3.5")),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.5.0"),
+        .package(url: "https://github.com/apple/FHIRModels.git", .upToNextMajor(from: "0.4.0"))
     ],
     targets: [
         .target(
@@ -47,10 +47,12 @@ let package = Package(
                 .target(name: "PAWSSharedContext"),
                 .product(name: "CardinalKit", package: "CardinalKit"),
                 .product(name: "FHIR", package: "CardinalKit"),
+                .product(name: "FirebaseAccount", package: "CardinalKit"),
                 .product(name: "FirestoreDataStorage", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+                .product(name: "ModelsR4", package: "fhirmodels")
             ],
             resources: [
                 .process("Resources")
@@ -77,15 +79,6 @@ let package = Package(
         ),
         .target(
             name: "PAWSNotificationScreen"
-        ),
-        .target(
-            name: "PAWSHomeScreen",
-            dependencies: [
-                .target(name: "PAWSMockDataStorageProvider"),
-                .target(name: "PAWSSharedContext"),
-                .target(name: "PAWSContacts"),
-                .target(name: "PAWSNotificationScreen")
-            ]
         )
     ]
 )

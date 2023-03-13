@@ -7,7 +7,6 @@
 //
 
 import PAWSContacts
-import PAWSMockDataStorageProvider
 import PAWSNotificationScreen
 import PAWSSharedContext
 import SwiftUI
@@ -37,7 +36,7 @@ public struct HomeView: View {
             Contacts()
                 .tag(Tabs.contact)
                 .tabItem {
-                    Label("CONTACTS_TAB_TITLE", systemImage: "doc.text.fill")
+                    Label("Study Information", systemImage: "doc.text.fill")
                 }
         }
     }

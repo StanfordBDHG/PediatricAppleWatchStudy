@@ -17,7 +17,7 @@ On this page, we'll walk through the app's main features. Next, you'll complete 
 "WELCOME_AREA1_TITLE" = "Home Page";
 "WELCOME_AREA1_DESCRIPTION" = "On this page you'll be able to see your patient information and a summary of the ECG recordings  uploaded from your Apple Watch ";
 
-"WELCOME_AREA2_TITLE" = "Notifications Page";
+"WELCOME_AREA2_TITLE" = "Reports";
 "WELCOME_AREA2_DESCRIPTION" = "On this page you'll be able to check if an ECG recording from your Apple Watch was successfully uploaded to the research server. ";
 
 "WELCOME_AREA3_TITLE" = "Study Information";

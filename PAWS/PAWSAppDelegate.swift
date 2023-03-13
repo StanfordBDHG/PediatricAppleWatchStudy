@@ -11,11 +11,11 @@ import FHIR
 import FHIRToFirestoreAdapter
 import FirebaseAccount
 import class FirebaseFirestore.FirestoreSettings
+import CardinalKitHealthKitToFHIRAdapter
 import FirestoreDataStorage
 import FirestoreStoragePrefixUserIdAdapter
 import HealthKit
 import HealthKitDataSource
-import HealthKitToFHIRAdapter
 import PAWSMockDataStorageProvider
 import PAWSSharedContext
 import Questionnaires
@@ -39,15 +39,13 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
             }
             QuestionnaireDataSource()
             MockDataStorageProvider()
-
         }
     }
     
     
     private var firestore: Firestore<FHIR> {
-        var firestoreSettings = FirestoreSettings()
+        let settings = FirestoreSettings()
         if FeatureFlags.useFirebaseEmulator {
-            let settings = FirestoreSettings()
             settings.host = "localhost:8080"
             settings.isPersistenceEnabled = false
             settings.isSSLEnabled = false
@@ -58,7 +56,7 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
                 FHIRToFirestoreAdapter()
                 FirestoreStoragePrefixUserIdAdapter()
             },
-            settings: firestoreSettings
+            settings: settings
         )
     }
     
@@ -66,21 +64,10 @@ class PAWSAppDelegate: CardinalKitAppDelegate {
     private var healthKit: HealthKit<FHIR> {
         HealthKit {
             CollectSample(
-                HKQuantityType(.heartRate),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-            )
-            CollectSample(
-                HKQuantityType(.heartRateVariabilitySDNN),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-            )
-            CollectSample(
-                HKQuantityType(.restingHeartRate),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-            )
-            CollectSample(
                 HKQuantityType.electrocardiogramType(),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
             )
+            CollectSamples(Set(HKElectrocardiogram.correlatedSymptomTypes))
         } adapter: {
             HealthKitToFHIRAdapter()
         }
