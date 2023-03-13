@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import HealthKitOnFHIR
 import ModelsR4
 
 extension Foundation.Bundle {
