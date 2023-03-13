@@ -151,7 +151,6 @@ extension XCUIApplication {
     }
     
     private func navigateOnboardingFlowHealthKitAccess(assertThatHealthKitConsentIsShown: Bool = true) throws {
-        
         XCTAssertTrue(buttons["Grant Access"].waitForExistence(timeout: 2))
         
         buttons["Grant Access"].tap()
