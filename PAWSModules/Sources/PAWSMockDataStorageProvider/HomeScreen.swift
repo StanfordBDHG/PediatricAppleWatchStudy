@@ -104,7 +104,7 @@ public struct HomeScreen: View {
     func firstName(fullName: String) -> String {
         var names = fullName.components(separatedBy: " ")
         let first = names.removeFirst()
-        return first
+        return first + "!"
     }
 }
 
