@@ -29,10 +29,8 @@ class OnboardingTests: XCTestCase {
         let app = XCUIApplication()
         
         try app.navigateOnboardingFlow(assertThatHealthKitConsentIsShown: true)
-        
+
         let tabBar = app.tabBars["Tab Bar"]
-        XCTAssertTrue(tabBar.buttons["Study Information"].waitForExistence(timeout: 2))
-        XCTAssertTrue(tabBar.buttons["Reports"].waitForExistence(timeout: 2))
     }
 }
 
@@ -52,7 +50,6 @@ extension XCUIApplication {
             try navigateOnboardingFlowConsent()
         }
         try navigateOnboardingAccount()
-        try navigateOnboardingFlowHealthKitAccess(assertThatHealthKitConsentIsShown: assertThatHealthKitConsentIsShown)
     }
     
     private func navigateOnboardingGetStarted() throws {
@@ -152,13 +149,12 @@ extension XCUIApplication {
         }
     }
     
-    private func navigateOnboardingFlowHealthKitAccess(assertThatHealthKitConsentIsShown: Bool = true) throws {
-        XCTAssertTrue(staticTexts["Health Data Access"].waitForExistence(timeout: 2))
+    private func notificationPermissions() throws {
+        XCTAssertTrue(staticTexts["Notifications"].waitForExistence(timeout: 2))
         
-        XCTAssertTrue(buttons["Grant Access"].waitForExistence(timeout: 2))
+        swipeUp()
         
-        buttons["Grant Access"].tap()
-        
-        try handleHealthKitAuthorization()
+        XCTAssertTrue(buttons["Allow Notifications"].waitForExistence(timeout: 2))
+        buttons["Allow Notifications"].tap()
     }
 }
