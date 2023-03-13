@@ -27,31 +27,41 @@ struct MockUploadHeader: View {
     var body: some View {
         let date = "\(format(mockUpload.date))"
         let time = date.range(of: "at")!.lowerBound
-        let symptomNum = seperateSymptoms(allSymptoms: mockUpload.symptoms ?? "").count
+        //let symptomNum = seperateSymptoms(allSymptoms: mockUpload.symptoms ?? "").count
 
-        VStack(alignment: .leading, spacing: 4) {
+        ZStack{
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(Color(.systemBackground))
+                .frame(width: 360)
+                .shadow(radius: 5)
+                .opacity(0.9)
+                .border(backgroundGradient, width: 2)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+            VStack(alignment: .leading, spacing: 4) {
                 Text(date[..<time])
-                .font(.title3)
-                .bold()
-                .padding([.bottom], 3)
-                .padding([.leading], 8)
-            Text(date[date.index(time, offsetBy: 2)...])
-                .font(.subheadline)
-                .padding(.bottom, 10)
-                .padding(.leading, 8)
-            Divider()
-            symptomView
-                .padding(.bottom, 10)
-                .padding(.leading, 8)
-                .cornerRadius(4)
-            Divider()
-            statusView.onAppear(perform: checkStatus)
-                .padding(8)
-                .cornerRadius(4)
+                    .font(.title3)
+                    .bold()
+                    .padding([.top, .bottom], 3)
+                    .padding([.leading], 10)
+                Text(date[date.index(time, offsetBy: 2)...])
+                    .font(.subheadline)
+                    .padding(.bottom, 10)
+                    .padding(.leading, 10)
+                Divider()
+                symptomView
+                    .padding(.bottom, 10)
+                    .padding(.leading, 10)
+                    .cornerRadius(4)
+                Divider()
+                statusView.onAppear(perform: checkStatus)
+                    .padding(8)
+                    .padding(.leading, 10)
+                    .cornerRadius(4)
+            }
         }
-        .frame(width: 350, height: 110 + CGFloat(30*symptomNum))
-//        .border(backgroundGradient, width: 5)
-      
+        
+        //.frame(width: 350, height: 110 + CGFloat(30*symptomNum))
     }
     
     @ViewBuilder var statusView: some View {
