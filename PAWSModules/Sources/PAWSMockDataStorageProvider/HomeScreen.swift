@@ -37,7 +37,7 @@ public struct HomeScreen: View {
                             .padding([.top], 10)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text(firstName(fullName: name))
+                        Text(firstName(fullName: name).capitalized)
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.top], 0)
@@ -50,7 +50,7 @@ public struct HomeScreen: View {
                         .frame(width: 60, height: 60)
                         .foregroundColor(.black)
                         .padding([.top], 20)
-                        .padding([.leading], 120)
+                        .padding([.leading], 150)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.top, .leading, .trailing], 10)
