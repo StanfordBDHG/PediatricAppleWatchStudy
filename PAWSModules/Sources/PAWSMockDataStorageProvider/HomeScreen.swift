@@ -50,7 +50,7 @@ public struct HomeScreen: View {
                         .frame(width: 60, height: 60)
                         .foregroundColor(.black)
                         .padding([.top], 20)
-                        .padding([.leading], 150)
+                        .padding([.leading], 190)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.top, .leading, .trailing], 10)
