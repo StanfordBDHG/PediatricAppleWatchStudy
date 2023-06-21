@@ -25,7 +25,7 @@ jobs:
     uses: CS342/.github/.github/workflows/xcodebuild-or-fastlane.yml@v1
     with:
       artifactname: PAWS.xcresult
-      runsonlabels: '["macOS", "self-hosted"]'
+      runsonlabels: '["macos-latest"]'
       setupfirebaseemulator: true
       customcommand: "firebase emulators:exec 'fastlane test'"
   uploadcoveragereport:
