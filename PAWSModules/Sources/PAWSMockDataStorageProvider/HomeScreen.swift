@@ -37,7 +37,7 @@ public struct HomeScreen: View {
                             .padding([.top], 10)
                             .font(.title)
                             .fontWeight(.bold)
-                        Text(firstName(fullName: name))
+                        Text(firstName(fullName: name).capitalized)
                             .font(.title2)
                             .fontWeight(.bold)
                             .padding([.top], 0)

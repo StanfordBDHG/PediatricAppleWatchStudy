@@ -55,42 +55,38 @@ struct NotificationSetup: View {
     func notificationTrigger() {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            
-            if let error = error {
-                // Handle the error here.
-            }
-            
-            // Enable or disable features based on the authorization.
-        }
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Friendly reminder to record your ECG!"
-        content.body = "Thank you for participating in the PAWS study!"
-
-        // Configure the recurring date.
-        
-        let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
-        
-        for index in 0...6 {
-            let scheduleDate = Date.now.addingTimeInterval(86400 * Double(index))
-            guard let notificationDate = Calendar.current.nextDate(after: scheduleDate, matching: dateComponents, matchingPolicy: .nextTime) else {
-                return
-            }
-            
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: notificationDate.timeIntervalSince(.now), repeats: false)
-            
-            
-            // Create the request
-            let uuidString = UUID().uuidString
-            let request = UNNotificationRequest(identifier: uuidString,
-                        content: content, trigger: trigger)
-
-            // Schedule the request with the system.
-            let notificationCenter = UNUserNotificationCenter.current()
-            notificationCenter.add(request) { (error) in
-               if error != nil {
-                  // Handle any errors.
-               }
+            if let error {
+                print("Error scheduling notification: \(error)")
+            } else {
+                let content = UNMutableNotificationContent()
+                content.title = "Friendly reminder to record your ECG!"
+                content.body = "Thank you for participating in the PAWS study!"
+                
+                // Configure the recurring date.
+                
+                let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+                
+                for index in 0...6 {
+                    let scheduleDate = Date.now.addingTimeInterval(86400 * Double(index))
+                    guard let notificationDate = Calendar.current.nextDate(after: scheduleDate, matching: dateComponents, matchingPolicy: .nextTime) else {
+                        continue
+                    }
+                    
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: notificationDate.timeIntervalSince(.now), repeats: false)
+                    
+                    
+                    // Create the request
+                    let uuidString = UUID().uuidString
+                    let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+                    
+                    // Schedule the request with the system.
+                    let notificationCenter = UNUserNotificationCenter.current()
+                    notificationCenter.add(request) { (error) in
+                        if error != nil {
+                            // Handle any errors.
+                        }
+                    }
+                }
             }
         }
     }

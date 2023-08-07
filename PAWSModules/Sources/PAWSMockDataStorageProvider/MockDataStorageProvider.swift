@@ -25,8 +25,7 @@ public actor MockDataStorageProvider: DataStorageProvider, ObservableObjectProvi
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
         return encoder
     }()
-    @MainActor @Published
-    private (set) var mockUploads: [MockUpload] = []
+    @MainActor @Published private (set) var mockUploads: [MockUpload] = []
     
     
     public init() { }

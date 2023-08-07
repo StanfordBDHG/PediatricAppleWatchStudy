@@ -8,6 +8,8 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Reminders to record ECG</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
