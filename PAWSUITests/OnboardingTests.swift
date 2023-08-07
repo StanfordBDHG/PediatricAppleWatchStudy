@@ -30,7 +30,8 @@ class OnboardingTests: XCTestCase {
         
         try app.navigateOnboardingFlow(assertThatHealthKitConsentIsShown: true)
 
-        let tabBar = app.tabBars["Tab Bar"]
+        XCTAssertTrue(app.tabBars["Tab Bar"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.tabBars["Tab Bar"].isHittable)
     }
 }
 
@@ -50,6 +51,8 @@ extension XCUIApplication {
             try navigateOnboardingFlowConsent()
         }
         try navigateOnboardingAccount()
+        try healthKitPermissions()
+        try notificationPermissions()
     }
     
     private func navigateOnboardingGetStarted() throws {
@@ -84,14 +87,10 @@ extension XCUIApplication {
         swipeUp(velocity: .fast)
         
         XCTAssertTrue(staticTexts["First Name"].waitForExistence(timeout: 2))
-        staticTexts["First Name"].tap()
-        textFields["Enter your first name ..."].typeText("Leland")
+        try textFields["Enter your first name ..."].enter(value: "Leland")
         
         XCTAssertTrue(staticTexts["Last Name"].waitForExistence(timeout: 2))
-        staticTexts["Last Name"].tap()
-        textFields["Enter your last name ..."].typeText("Stanford")
-        
-        textFields["Enter your last name ..."].typeText("\n")
+        try textFields["Enter your last name ..."].enter(value: "Stanford")
         swipeUp()
         
         XCTAssertTrue(staticTexts["Leland Stanford"].waitForExistence(timeout: 2))
@@ -121,11 +120,9 @@ extension XCUIApplication {
         try textFields["Enter your email ..."].enter(value: "leland@stanford.edu")
         swipeUp()
         
-        secureTextFields["Enter your password ..."].tap()
-        secureTextFields["Enter your password ..."].typeText("StanfordRocks")
+        try secureTextFields["Enter your password ..."].enter(value: "StanfordRocks")
         swipeUp()
-        secureTextFields["Repeat your password ..."].tap()
-        secureTextFields["Repeat your password ..."].typeText("StanfordRocks")
+        try secureTextFields["Repeat your password ..."].enter(value: "StanfordRocks")
         swipeUp()
         
         try textFields["Enter your first name ..."].enter(value: "Leland")
@@ -134,27 +131,34 @@ extension XCUIApplication {
         try textFields["Enter your last name ..."].enter(value: "Stanford")
         staticTexts["Repeat\nPassword"].swipeUp()
         
+        XCTAssertTrue(collectionViews.buttons["Sign Up"].waitForExistence(timeout: 2))
         collectionViews.buttons["Sign Up"].tap()
         
-        sleep(3)
+        sleep(5)
+    }
+    
+    private func healthKitPermissions() throws {
+        XCTAssertTrue(buttons["Grant Access"].waitForExistence(timeout: 2))
+        buttons["Grant Access"].tap()
         
-        if staticTexts["HealthKit Access"].waitForExistence(timeout: 5) && navigationBars.buttons["Back"].waitForExistence(timeout: 5) {
-            navigationBars.buttons["Back"].tap()
-            
-            XCTAssertTrue(staticTexts["Leland Stanford"].waitForExistence(timeout: 2))
-            XCTAssertTrue(staticTexts["leland@stanford.edu"].waitForExistence(timeout: 2))
-            
-            XCTAssertTrue(scrollViews.otherElements.buttons["Next"].waitForExistence(timeout: 2))
-            scrollViews.otherElements.buttons["Next"].tap()
-        }
+        try handleHealthKitAuthorization()
     }
     
     private func notificationPermissions() throws {
-        XCTAssertTrue(staticTexts["Notifications"].waitForExistence(timeout: 2))
+        XCTAssertTrue(staticTexts["Notifications"].waitForExistence(timeout: 5))
         
         swipeUp()
         
         XCTAssertTrue(buttons["Allow Notifications"].waitForExistence(timeout: 2))
         buttons["Allow Notifications"].tap()
+        
+        
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let alertAllowButton = springboard.buttons["Allow"]
+        if alertAllowButton.waitForExistence(timeout: 5) {
+            alertAllowButton.tap()
+        } else {
+            print("Did not observe the notification permissions alert. Permissions might have already been provided.")
+        }
     }
 }
