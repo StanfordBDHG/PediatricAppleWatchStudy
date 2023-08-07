@@ -8,6 +8,90 @@
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PAWSLandingScreen"
+               BuildableName = "PAWSLandingScreen"
+               BlueprintName = "PAWSLandingScreen"
+               ReferencedContainer = "container:PAWSModules">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PAWSMockDataStorageProvider"
+               BuildableName = "PAWSMockDataStorageProvider"
+               BlueprintName = "PAWSMockDataStorageProvider"
+               ReferencedContainer = "container:PAWSModules">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PAWSSharedContext"
+               BuildableName = "PAWSSharedContext"
+               BlueprintName = "PAWSSharedContext"
+               ReferencedContainer = "container:PAWSModules">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PAWSNotificationScreen"
+               BuildableName = "PAWSNotificationScreen"
+               BlueprintName = "PAWSNotificationScreen"
+               ReferencedContainer = "container:PAWSModules">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PAWSContacts"
+               BuildableName = "PAWSContacts"
+               BlueprintName = "PAWSContacts"
+               ReferencedContainer = "container:PAWSModules">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "PAWSOnboardingFlow"
+               BuildableName = "PAWSOnboardingFlow"
+               BlueprintName = "PAWSOnboardingFlow"
+               ReferencedContainer = "container:PAWSModules">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
             buildForArchiving = "YES"

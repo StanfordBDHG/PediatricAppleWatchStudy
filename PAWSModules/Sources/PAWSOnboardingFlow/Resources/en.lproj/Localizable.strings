@@ -77,7 +77,7 @@ reported symptoms, and any detected abnormalities. ";
 "HEALTHKIT_PERMISSIONS_BUTTON" = "Grant Access";
 
 // MARK: NOTIFICATIONS VIEW
-"ALLOW_NOTIFICATIONS_BUTTON" = "Allow notifications";
+"ALLOW_NOTIFICATIONS_BUTTON" = "Allow Notifications";
 "NOTIFICATION_SETUP_TITLE" = "Notifications";
 "NOTIFICATION_SETUP_SUBTITLE" = "Want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow.";
 

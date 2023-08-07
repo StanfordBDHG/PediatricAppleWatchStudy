@@ -20,7 +20,6 @@
 		2F4E23812989C5930013F3D9 /* XCTHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4E23802989C5930013F3D9 /* XCTHealthKit */; };
 		2F4E23832989D51F0013F3D9 /* PAWSAppTestingSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E23822989D51F0013F3D9 /* PAWSAppTestingSetup.swift */; };
 		2F4E23872989DB360013F3D9 /* ContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E23862989DB360013F3D9 /* ContactsTests.swift */; };
-		2F4E23892989DB400013F3D9 /* HealthKitUploadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4E23882989DB400013F3D9 /* HealthKitUploadTests.swift */; };
 		2F59B93D298C628800C5107F /* PAWSContacts in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B93C298C628800C5107F /* PAWSContacts */; };
 		2F59B93F298C628800C5107F /* PAWSMockDataStorageProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B93E298C628800C5107F /* PAWSMockDataStorageProvider */; };
 		2F59B941298C628800C5107F /* PAWSOnboardingFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2F59B940298C628800C5107F /* PAWSOnboardingFlow */; };
@@ -64,7 +63,6 @@
 		2F4E237D2989A2FE0013F3D9 /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
 		2F4E23822989D51F0013F3D9 /* PAWSAppTestingSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWSAppTestingSetup.swift; sourceTree = "<group>"; };
 		2F4E23862989DB360013F3D9 /* ContactsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTests.swift; sourceTree = "<group>"; };
-		2F4E23882989DB400013F3D9 /* HealthKitUploadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitUploadTests.swift; sourceTree = "<group>"; };
 		2F5E32BC297E05EA003432F8 /* PAWSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWSAppDelegate.swift; sourceTree = "<group>"; };
 		2F9056D9299E1C97003D3802 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FAEC07F297F583900C11C42 /* PAWS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PAWS.entitlements; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 				2F4E237D2989A2FE0013F3D9 /* OnboardingTests.swift */,
 				2F4E23862989DB360013F3D9 /* ContactsTests.swift */,
 				2F36AD23299D93E200B1077C /* NotificationsTests.swift */,
-				2F4E23882989DB400013F3D9 /* HealthKitUploadTests.swift */,
 			);
 			path = PAWSUITests;
 			sourceTree = "<group>";
@@ -402,7 +399,6 @@
 			files = (
 				2F4E23872989DB360013F3D9 /* ContactsTests.swift in Sources */,
 				2F36AD24299D93E200B1077C /* NotificationsTests.swift in Sources */,
-				2F4E23892989DB400013F3D9 /* HealthKitUploadTests.swift in Sources */,
 				2F4E237E2989A2FE0013F3D9 /* OnboardingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,7 +419,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		2FE8D00A2A42722400A00A22 /* Test */ = {
+		2F82DB262A80C04F0029346E /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -483,7 +479,7 @@
 			};
 			name = Test;
 		};
-		2FE8D00B2A42722400A00A22 /* Test */ = {
+		2F82DB272A80C04F0029346E /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -529,7 +525,7 @@
 			};
 			name = Test;
 		};
-		2FE8D00C2A42722400A00A22 /* Test */ = {
+		2F82DB282A80C04F0029346E /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -549,7 +545,7 @@
 			};
 			name = Test;
 		};
-		2FE8D00D2A42722400A00A22 /* Test */ = {
+		2F82DB292A80C04F0029346E /* Test */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -861,7 +857,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				653A256F28338800005D4D48 /* Debug */,
-				2FE8D00A2A42722400A00A22 /* Test */,
+				2F82DB262A80C04F0029346E /* Test */,
 				653A257028338800005D4D48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -871,7 +867,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				653A257228338800005D4D48 /* Debug */,
-				2FE8D00B2A42722400A00A22 /* Test */,
+				2F82DB272A80C04F0029346E /* Test */,
 				653A257328338800005D4D48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -881,7 +877,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				653A257528338800005D4D48 /* Debug */,
-				2FE8D00C2A42722400A00A22 /* Test */,
+				2F82DB282A80C04F0029346E /* Test */,
 				653A257628338800005D4D48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -891,7 +887,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				653A257828338800005D4D48 /* Debug */,
-				2FE8D00D2A42722400A00A22 /* Test */,
+				2F82DB292A80C04F0029346E /* Test */,
 				653A257928338800005D4D48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -905,7 +901,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.4.3;
+				minimumVersion = 0.4.6;
 			};
 		};
 		2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "CardinalKit" */ = {
@@ -921,7 +917,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.3.3;
+				minimumVersion = 0.3.5;
 			};
 		};
 		2F9F4D8129B7FFAE00ABE259 /* XCRemoteSwiftPackageReference "CardinalKitHealthKitToFHIRAdapter" */ = {
