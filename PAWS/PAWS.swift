@@ -1,48 +1,36 @@
 //
-// This source file is part of the CS342 2023 PAWS Team Application project
+// This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 //
 // SPDX-FileCopyrightText: 2023 Stanford University
 //
 // SPDX-License-Identifier: MIT
 //
 
-import CardinalKit
-import PAWSLandingScreen
-import PAWSMockDataStorageProvider
-import PAWSOnboardingFlow
-import PAWSSharedContext
+import Spezi
+import SpeziFirebaseAccount
 import SwiftUI
+
 
 @main
 struct PAWS: App {
-    @UIApplicationDelegateAdaptor(PAWSAppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(PAWSDelegate.self) var appDelegate
     @AppStorage(StorageKeys.onboardingFlowComplete) var completedOnboardingFlow = false
 
-    @State var pressedStart = false
-    
-    var isSheetPresented: Binding<Bool> {
-        Binding(
-            get: {
-                !completedOnboardingFlow && pressedStart
-            }, set: { _ in }
-        )
-    }
     
     var body: some Scene {
         WindowGroup {
-            Group {
+            ZStack {
                 if completedOnboardingFlow {
                     HomeView()
                 } else {
-                    LandingScreen(pressedStart: $pressedStart)
+                    EmptyView()
                 }
             }
-                .sheet(isPresented: isSheetPresented) {
+                .sheet(isPresented: !$completedOnboardingFlow) {
                     OnboardingFlow()
-                        .interactiveDismissDisabled(true)
                 }
                 .testingSetup()
-                .cardinalKit(appDelegate)
+                .spezi(appDelegate)
         }
     }
 }

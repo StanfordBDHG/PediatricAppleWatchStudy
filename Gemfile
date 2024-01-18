@@ -1,5 +1,5 @@
 #
-# This source file is part of the CS342 2023 PAWS Team Application project
+# This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #

@@ -1,5 +1,5 @@
 #
-# This source file is part of the CS342 2023 PAWS Team Application project
+# This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
@@ -9,10 +9,10 @@
 # Swift Package Manager
 *.xcodeproj
 .swiftpm
-.build/
+.derivedData
+.build
+.docs
 !PAWS.xcodeproj
-
-project.xcworkspace/
 
 # IDE related folders
 .idea
@@ -32,7 +32,6 @@ report.junit
 report.html
 PAWS.xcresult
 
-
 # Logs
 logs
 *.log
@@ -44,3 +43,6 @@ firebase-debug.*.log*
 
 # Firebase cache
 .firebase/
+
+# Swift Package List
+PAWS/package-list.json

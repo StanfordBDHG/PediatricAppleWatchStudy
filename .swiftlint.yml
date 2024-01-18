@@ -1,11 +1,11 @@
 #
-# This source file is part of the CS342 2023 PAWS Team Application project
+# This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
 # SPDX-License-Identifier: MIT
 #
-  
+
 # The whitelist_rules configuration also includes rules that are enabled by default to provide a good overview of all rules.
 only_rules:
   # All Images that provide context should have an accessibility label. Purely decorative images can be hidden from accessibility.
@@ -379,6 +379,7 @@ deployment_target: # Availability checks or attributes shouldn’t be using olde
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - .build
   - .swiftpm
+  - .codeql
   - .derivedData
 
 closure_body_length: # Closure bodies should not span too many lines.

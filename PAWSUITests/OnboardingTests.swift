@@ -1,5 +1,5 @@
 //
-// This source file is part of the CS342 2023 PAWS Team Application project
+// This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 //
 // SPDX-FileCopyrightText: 2023 Stanford University
 //
@@ -16,7 +16,7 @@ class OnboardingTests: XCTestCase {
         try super.setUpWithError()
         
         try disablePasswordAutofill()
-        
+
         continueAfterFailure = false
         
         let app = XCUIApplication()
@@ -27,52 +27,73 @@ class OnboardingTests: XCTestCase {
     
     func testOnboardingFlow() throws {
         let app = XCUIApplication()
+        let email = "leland@onboarding.stanford.edu"
         
-        try app.navigateOnboardingFlow(assertThatHealthKitConsentIsShown: true)
+        try app.navigateOnboardingFlow(email: email)
 
-        XCTAssertTrue(app.tabBars["Tab Bar"].waitForExistence(timeout: 2))
-        XCTAssertTrue(app.tabBars["Tab Bar"].isHittable)
+        app.assertOnboardingComplete()
+        try app.assertAccountInformation(email: email)
+    }
+    
+    func testOnboardingFlowRepeated() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["--showOnboarding", "--disableFirebase"]
+        app.terminate()
+        app.launch()
+        
+        try app.navigateOnboardingFlow()
+        app.assertOnboardingComplete()
+        
+        app.terminate()
+        
+        // Second onboarding round shouldn't display HealthKit and Notification authorizations anymore
+        app.activate()
+        
+        try app.navigateOnboardingFlow(repeated: true)
+        // Do not show HealthKit and Notification authorization view again
+        app.assertOnboardingComplete()
     }
 }
 
 
 extension XCUIApplication {
-    func conductOnboardingIfNeeded() throws {
-        if buttons["Tap to get started"].waitForExistence(timeout: 2) {
-            try navigateOnboardingFlow(assertThatHealthKitConsentIsShown: false)
+    func conductOnboardingIfNeeded(email: String = "leland@stanford.edu") throws {
+        let app = XCUIApplication()
+        
+        if app.staticTexts["Spezi\nPAWS"].waitForExistence(timeout: 5) {
+            try app.navigateOnboardingFlow(email: email)
         }
     }
     
-    func navigateOnboardingFlow(assertThatHealthKitConsentIsShown: Bool = true) throws {
-        try navigateOnboardingGetStarted()
+    fileprivate func navigateOnboardingFlow(
+        email: String = "leland@stanford.edu",
+        repeated skippedIfRepeated: Bool = false
+    ) throws {
         try navigateOnboardingFlowWelcome()
         try navigateOnboardingFlowInterestingModules()
-        if staticTexts["Consent Page"].waitForExistence(timeout: 2) {
+        if staticTexts["Your Account"].waitForExistence(timeout: 5) {
+            try navigateOnboardingAccount(email: email)
+        }
+        if staticTexts["Consent"].waitForExistence(timeout: 5) {
             try navigateOnboardingFlowConsent()
         }
-        try navigateOnboardingAccount()
-        try healthKitPermissions()
-        try notificationPermissions()
-    }
-    
-    private func navigateOnboardingGetStarted() throws {
-        XCTAssertTrue(buttons["Tap to get started"].waitForExistence(timeout: 2))
-        buttons["Tap to get started"].tap()
+        if !skippedIfRepeated {
+            try navigateOnboardingFlowHealthKitAccess()
+            try navigateOnboardingFlowNotification()
+        }
     }
     
     private func navigateOnboardingFlowWelcome() throws {
-        XCTAssertTrue(staticTexts["Welcome to PAWS!"].waitForExistence(timeout: 2))
+        XCTAssertTrue(staticTexts["Spezi\nPAWS"].waitForExistence(timeout: 5))
         
-        swipeUp()
-        
-        XCTAssertTrue(buttons["Begin onboarding"].waitForExistence(timeout: 2))
-        buttons["Begin onboarding"].tap()
+        XCTAssertTrue(buttons["Learn More"].waitForExistence(timeout: 2))
+        buttons["Learn More"].tap()
     }
     
     private func navigateOnboardingFlowInterestingModules() throws {
-        XCTAssertTrue(staticTexts["PAWS Onboarding"].waitForExistence(timeout: 2))
+        XCTAssertTrue(staticTexts["Interesting Modules"].waitForExistence(timeout: 5))
         
-        for _ in 1..<3 {
+        for _ in 1..<4 {
             XCTAssertTrue(buttons["Next"].waitForExistence(timeout: 2))
             buttons["Next"].tap()
         }
@@ -81,84 +102,126 @@ extension XCUIApplication {
         buttons["Next"].tap()
     }
     
-    private func navigateOnboardingFlowConsent() throws {
-        XCTAssertTrue(staticTexts["Consent Page"].waitForExistence(timeout: 2))
+    private func navigateOnboardingAccount(email: String) throws {
+        guard !buttons["Next"].waitForExistence(timeout: 5) else {
+            buttons["Next"].tap()
+            return
+        }
         
-        swipeUp(velocity: .fast)
+        XCTAssertTrue(buttons["Signup"].waitForExistence(timeout: 2))
+        buttons["Signup"].tap()
+
+        XCTAssertTrue(staticTexts["Create a new Account"].waitForExistence(timeout: 2))
+        
+        try collectionViews.textFields["E-Mail Address"].enter(value: email)
+        try collectionViews.secureTextFields["Password"].enter(value: "StanfordRocks")
+        try textFields["enter first name"].enter(value: "Leland")
+        try textFields["enter last name"].enter(value: "Stanford")
+
+        XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
+        collectionViews.buttons["Signup"].tap()
+
+        sleep(3)
+        
+        if staticTexts["HealthKit Access"].waitForExistence(timeout: 5) && navigationBars.buttons["Back"].waitForExistence(timeout: 5) {
+            navigationBars.buttons["Back"].tap()
+            
+            XCTAssertTrue(staticTexts["Leland Stanford"].waitForExistence(timeout: 2))
+            XCTAssertTrue(staticTexts[email].waitForExistence(timeout: 2))
+            
+            XCTAssertTrue(buttons["Next"].waitForExistence(timeout: 2))
+            buttons["Next"].tap()
+        }
+    }
+    
+    private func navigateOnboardingFlowConsent() throws {
+        XCTAssertTrue(staticTexts["Consent"].waitForExistence(timeout: 5))
         
         XCTAssertTrue(staticTexts["First Name"].waitForExistence(timeout: 2))
         try textFields["Enter your first name ..."].enter(value: "Leland")
         
         XCTAssertTrue(staticTexts["Last Name"].waitForExistence(timeout: 2))
         try textFields["Enter your last name ..."].enter(value: "Stanford")
-        swipeUp()
-        
-        XCTAssertTrue(staticTexts["Leland Stanford"].waitForExistence(timeout: 2))
-        staticTexts["Leland Stanford"].firstMatch.swipeUp()
-        
+
+        XCTAssertTrue(scrollViews["Signature Field"].waitForExistence(timeout: 2))
+        scrollViews["Signature Field"].swipeRight()
+
         XCTAssertTrue(buttons["I Consent"].waitForExistence(timeout: 2))
         buttons["I Consent"].tap()
     }
-    
-    private func navigateOnboardingAccount() throws {
-        XCTAssertTrue(staticTexts["Your PAWS Account"].waitForExistence(timeout: 2))
+
+    private func navigateOnboardingFlowHealthKitAccess() throws {
+        XCTAssertTrue(staticTexts["HealthKit Access"].waitForExistence(timeout: 5))
         
-        guard !buttons["Next"].waitForExistence(timeout: 5) else {
-            buttons["Next"].tap()
-            return
-        }
-        
-        XCTAssertTrue(buttons["Sign Up"].waitForExistence(timeout: 2))
-        buttons["Sign Up"].tap()
-        
-        XCTAssertTrue(navigationBars.staticTexts["Sign Up"].waitForExistence(timeout: 2))
-        XCTAssertTrue(images["App Icon"].waitForExistence(timeout: 2))
-        XCTAssertTrue(buttons["Email and Password"].waitForExistence(timeout: 2))
-        
-        buttons["Email and Password"].tap()
-        
-        try textFields["Enter your email ..."].enter(value: "leland@stanford.edu")
-        swipeUp()
-        
-        try secureTextFields["Enter your password ..."].enter(value: "StanfordRocks")
-        swipeUp()
-        try secureTextFields["Repeat your password ..."].enter(value: "StanfordRocks")
-        swipeUp()
-        
-        try textFields["Enter your first name ..."].enter(value: "Leland")
-        staticTexts["Repeat\nPassword"].swipeUp()
-        
-        try textFields["Enter your last name ..."].enter(value: "Stanford")
-        staticTexts["Repeat\nPassword"].swipeUp()
-        
-        XCTAssertTrue(collectionViews.buttons["Sign Up"].waitForExistence(timeout: 2))
-        collectionViews.buttons["Sign Up"].tap()
-        
-        sleep(5)
-    }
-    
-    private func healthKitPermissions() throws {
         XCTAssertTrue(buttons["Grant Access"].waitForExistence(timeout: 2))
         buttons["Grant Access"].tap()
         
         try handleHealthKitAuthorization()
     }
     
-    private func notificationPermissions() throws {
+    private func navigateOnboardingFlowNotification() throws {
         XCTAssertTrue(staticTexts["Notifications"].waitForExistence(timeout: 5))
-        
-        swipeUp()
         
         XCTAssertTrue(buttons["Allow Notifications"].waitForExistence(timeout: 2))
         buttons["Allow Notifications"].tap()
         
-        
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let alertAllowButton = springboard.buttons["Allow"]
         if alertAllowButton.waitForExistence(timeout: 5) {
-            alertAllowButton.tap()
-        } else {
-            print("Did not observe the notification permissions alert. Permissions might have already been provided.")
+           alertAllowButton.tap()
         }
+    }
+    
+    fileprivate func assertOnboardingComplete() {
+        let tabBar = tabBars["Tab Bar"]
+        XCTAssertTrue(tabBar.buttons["Schedule"].waitForExistence(timeout: 2))
+        XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
+    }
+
+    fileprivate func assertAccountInformation(email: String) throws {
+        XCTAssertTrue(navigationBars.buttons["Your Account"].waitForExistence(timeout: 2))
+        navigationBars.buttons["Your Account"].tap()
+
+        XCTAssertTrue(staticTexts["Account Overview"].waitForExistence(timeout: 5.0))
+        XCTAssertTrue(staticTexts["Leland Stanford"].exists)
+        XCTAssertTrue(staticTexts[email].exists)
+        XCTAssertTrue(staticTexts["Gender Identity, Choose not to answer"].exists)
+
+
+        XCTAssertTrue(navigationBars.buttons["Close"].waitForExistence(timeout: 0.5))
+        navigationBars.buttons["Close"].tap()
+
+        XCTAssertTrue(navigationBars.buttons["Your Account"].waitForExistence(timeout: 2))
+        navigationBars.buttons["Your Account"].tap()
+
+        XCTAssertTrue(navigationBars.buttons["Edit"].waitForExistence(timeout: 2))
+        navigationBars.buttons["Edit"].tap()
+
+        usleep(500_00)
+        XCTAssertFalse(navigationBars.buttons["Close"].exists)
+
+        XCTAssertTrue(buttons["Delete Account"].waitForExistence(timeout: 2))
+        buttons["Delete Account"].tap()
+
+        let alert = "Are you sure you want to delete your account?"
+        XCTAssertTrue(alerts[alert].waitForExistence(timeout: 6.0))
+        alerts[alert].buttons["Delete"].tap()
+
+        XCTAssertTrue(alerts["Authentication Required"].waitForExistence(timeout: 2.0))
+        XCTAssertTrue(alerts["Authentication Required"].secureTextFields["Password"].waitForExistence(timeout: 0.5))
+        typeText("StanfordRocks") // the password field has focus already
+        XCTAssertTrue(alerts["Authentication Required"].buttons["Login"].waitForExistence(timeout: 0.5))
+        alerts["Authentication Required"].buttons["Login"].tap()
+
+        sleep(2)
+
+        // Login
+        try textFields["E-Mail Address"].enter(value: email)
+        try secureTextFields["Password"].enter(value: "StanfordRocks")
+
+        XCTAssertTrue(buttons["Login"].waitForExistence(timeout: 0.5))
+        buttons["Login"].tap()
+
+        XCTAssertTrue(alerts["Invalid Credentials"].waitForExistence(timeout: 2.0))
     }
 }

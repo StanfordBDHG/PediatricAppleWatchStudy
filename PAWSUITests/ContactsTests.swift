@@ -1,5 +1,5 @@
 //
-// This source file is part of the CS342 2023 PAWS Team Application project
+// This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 //
 // SPDX-FileCopyrightText: 2023 Stanford University
 //
@@ -9,7 +9,7 @@
 import XCTest
 
 
-class StudyInformationTests: XCTestCase {
+class ContactsTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
@@ -21,10 +21,19 @@ class StudyInformationTests: XCTestCase {
     }
     
     
-    func testStudyInformation() throws {
+    func testContacts() throws {
         let app = XCUIApplication()
         
-        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Study Information"].waitForExistence(timeout: 2))
-        app.tabBars["Tab Bar"].buttons["Study Information"].tap()
+        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Contacts"].waitForExistence(timeout: 2))
+        app.tabBars["Tab Bar"].buttons["Contacts"].tap()
+
+        XCTAssertTrue(app.staticTexts["Contact: Leland Stanford"].waitForExistence(timeout: 2))
+
+        XCTAssertTrue(app.buttons["Call"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["Text"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["Email"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["Website"].waitForExistence(timeout: 2))
+
+        XCTAssertTrue(app.buttons["Address: 450 Serra Mall\nStanford CA 94305\nUSA"].waitForExistence(timeout: 2))
     }
 }
