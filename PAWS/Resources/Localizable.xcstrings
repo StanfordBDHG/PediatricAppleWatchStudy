@@ -26,7 +26,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You are already logged in with the account shown below. Continue or change your account by logging out."
+            "value" : "You are successfully signed in with the following account:"
           }
         }
       }
@@ -36,7 +36,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The PAWS demonstrates the usage of the Firebase Account Module."
+            "value" : "Sign up for a new account or sign in to an existing account"
           }
         }
       }
@@ -47,7 +47,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your Account"
+            "value" : "Your PAWS Account"
           }
         }
       }
@@ -172,16 +172,6 @@
         }
       }
     },
-    "COMPLETED_TASK_LABEL %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completed Task: %@"
-          }
-        }
-      }
-    },
     "CONSENT_LOADING_ERROR" : {
       "localizations" : {
         "en" : {
@@ -192,18 +182,10 @@
         }
       }
     },
-    "CONTACTS_NAVIGATION_TITLE" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contacts"
-          }
-        }
-      }
+    "Contacts" : {
+
     },
-    "CONTACTS_TAB_TITLE" : {
-      "comment" : "MARK: - Contacts",
+    "CONTACTS_NAVIGATION_TITLE" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -218,7 +200,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The following list contains all Swift Package dependencies of the SpeziPAWS."
+            "value" : "The following list contains all Swift Package dependencies of the PAWS Application."
           }
         }
       }
@@ -243,6 +225,12 @@
         }
       }
     },
+    "ECG Recordings" : {
+
+    },
+    "EEG Recording" : {
+
+    },
     "FAQ" : {
       "localizations" : {
         "en" : {
@@ -253,12 +241,15 @@
         }
       }
     },
+    "Friendly reminder to record your ECG!" : {
+
+    },
     "HEALTHKIT_PERMISSIONS_BUTTON" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grant Access"
+            "value" : "Health Data Access"
           }
         }
       }
@@ -268,7 +259,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This onboarding step allows you to customize the onboarding flow to explain how the application uses the HealhtKit data and allows a user to cusomize the selection."
+            "value" : "On the next page you will be asked to grant access to the heart data from your Health app."
           }
         }
       }
@@ -278,7 +269,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spezi can access data from HealthKit using the HealthKitDataSource module."
+            "value" : "PAWS requires access to your Health app data to collect ECG information including date of recording, average bpm,\nreported symptoms, and any detected abnormalities."
           }
         }
       }
@@ -302,7 +293,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The onboarding module allows you to build an onboarding flow like this one."
+            "value" : "Create an account so researchers can identify you as a patient"
           }
         }
       }
@@ -312,7 +303,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Onboarding"
+            "value" : "Create an account"
           }
         }
       }
@@ -322,7 +313,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The application uses HL7 FHIR to provide a common standard to encode data gathered by the application."
+            "value" : "Give researchers consent to use your health data as part of the PAWS study"
           }
         }
       }
@@ -332,7 +323,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "HL7 FHIR"
+            "value" : "Consent"
           }
         }
       }
@@ -342,7 +333,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The contact module allows you to display contact information in your application."
+            "value" : "Allow the PAWS app to access the health data recorded on your Apple Watch and iPhone"
           }
         }
       }
@@ -352,27 +343,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Contact"
-          }
-        }
-      }
-    },
-    "INTERESTING_MODULES_AREA4_DESCRIPTION" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The HealthKit data source module allows you to fetch data from HealthKit and e.g. transform it to FHIR resources."
-          }
-        }
-      }
-    },
-    "INTERESTING_MODULES_AREA4_TITLE" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "HealthKit Data Source"
+            "value" : "Grant access to health data"
           }
         }
       }
@@ -392,7 +363,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Here are a few Spezi modules that are interesting to know about ..."
+            "value" : "You'll need to complete a few more steps\nto get started..."
           }
         }
       }
@@ -418,16 +389,14 @@
         }
       }
     },
-    "MOCK_WEB_SERVICE_TAB_TITLE" : {
-      "comment" : "MARK: - Mock Upload Data Storage Provider",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mock Web Service"
-          }
-        }
-      }
+    "Mock Web Service" : {
+
+    },
+    "New ECG Recordings will be displayed here." : {
+
+    },
+    "No Recordings" : {
+
     },
     "NOTIFICATION_PERMISSIONS_BUTTON" : {
       "localizations" : {
@@ -440,32 +409,55 @@
       }
     },
     "NOTIFICATION_PERMISSIONS_DESCRIPTION" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Spezi Scheduler module enables to send out local notifications when a new event of a task is scheduled."
+            "value" : "Do you want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow."
           }
         }
       }
     },
     "NOTIFICATION_PERMISSIONS_SUBTITLE" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spezi Scheduler Notifications."
+            "value" : "PAWS Study Reminder"
           }
         }
       }
     },
     "NOTIFICATION_PERMISSIONS_TITLE" : {
       "comment" : "MARK: Notifications",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notifications"
+          }
+        }
+      }
+    },
+    "NOTIFICATIONS_SUBTITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow."
+          }
+        }
+      }
+    },
+    "NOTIFICATIONS_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PAWS Reminders"
           }
         }
       }
@@ -579,33 +571,18 @@
         }
       }
     },
+    "Recorded %lld symptoms." : {
+
+    },
+    "Recorded no symptoms" : {
+
+    },
     "Repository Link" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Repository Link"
-          }
-        }
-      }
-    },
-    "SCHEDULE_LIST_TITLE" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schedule"
-          }
-        }
-      }
-    },
-    "SCHEDULE_TAB_TITLE" : {
-      "comment" : "MARK: - Schedule",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schedule"
           }
         }
       }
@@ -619,6 +596,9 @@
           }
         }
       }
+    },
+    "Select a time" : {
+
     },
     "Study Information" : {
       "localizations" : {
@@ -640,57 +620,7 @@
         }
       }
     },
-    "TASK_CONTEXT_ACTION_QUESTIONNAIRE" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start Questionnaire"
-          }
-        }
-      }
-    },
-    "TASK_CONTEXT_ACTION_TEST" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start Test"
-          }
-        }
-      }
-    },
-    "TASK_LABEL %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Task: %@"
-          }
-        }
-      }
-    },
-    "TASK_SOCIAL_SUPPORT_QUESTIONNAIRE_DESCRIPTION" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please fill out the Social Support Questionnaire every day."
-          }
-        }
-      }
-    },
-    "TASK_SOCIAL_SUPPORT_QUESTIONNAIRE_TITLE" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Social Support Questionnaire"
-          }
-        }
-      }
-    },
-    "Test ..." : {
+    "Thank you for participating in the PAWS study!" : {
 
     },
     "WELCOME_AREA1_DESCRIPTION" : {
@@ -698,7 +628,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Spezi Framework builds the foundation of this application."
+            "value" : "You'll be able to see your patient information and a summary of the ECG recordings  uploaded from your Apple Watch."
           }
         }
       }
@@ -708,7 +638,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Spezi Framework"
+            "value" : "Your ECG Recordings"
           }
         }
       }
@@ -718,7 +648,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spezi uses the Swift Package Manager to import it as a dependency."
+            "value" : "Check if an ECG recording from your Apple Watch was successfully uploaded to the research server. "
           }
         }
       }
@@ -728,7 +658,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Swift Package Manager"
+            "value" : "Study Status"
           }
         }
       }
@@ -738,7 +668,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spezi offers several modules including HealthKit integration, questionnaires, and more ..."
+            "value" : "Learn more about the PAWS study and contact the lead researchers if you have any questions or concerns."
           }
         }
       }
@@ -748,7 +678,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spezi Modules"
+            "value" : "Study Information"
           }
         }
       }
@@ -768,7 +698,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This application demonstrates several Spezi features & modules."
+            "value" : "We are excited to have you join the Pediatric Apple Watch Study (PAWS) to improve diagnosis of arrhythmias in patients like you!"
           }
         }
       }
@@ -779,7 +709,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spezi\nPAWS"
+            "value" : "Welcome to PAWS!"
           }
         }
       }

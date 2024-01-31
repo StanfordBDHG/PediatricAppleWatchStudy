@@ -30,10 +30,10 @@ struct HomeView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ScheduleView(presentingAccount: $presentingAccount)
+            ECGRecordingsList(presentingAccount: $presentingAccount)
                 .tag(Tabs.schedule)
                 .tabItem {
-                    Label("SCHEDULE_TAB_TITLE", systemImage: "list.clipboard")
+                    Label("ECG Recordings", systemImage: "waveform.path.ecg")
                 }
             StudyInformation(presentingAccount: $presentingAccount)
                 .tag(Tabs.studyInformation)
@@ -43,13 +43,13 @@ struct HomeView: View {
             Contacts(presentingAccount: $presentingAccount)
                 .tag(Tabs.contact)
                 .tabItem {
-                    Label("CONTACTS_TAB_TITLE", systemImage: "person.fill")
+                    Label("Contacts", systemImage: "person.fill")
                 }
             if FeatureFlags.disableFirebase {
                 MockUpload(presentingAccount: $presentingAccount)
                     .tag(Tabs.mockUpload)
                     .tabItem {
-                        Label("MOCK_WEB_SERVICE_TAB_TITLE", systemImage: "server.rack")
+                        Label("Mock Web Service", systemImage: "server.rack")
                     }
             }
         }

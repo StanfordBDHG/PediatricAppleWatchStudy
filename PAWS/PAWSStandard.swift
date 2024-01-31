@@ -33,6 +33,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
     @Dependency var mockWebService: MockWebService?
     @Dependency var accountStorage: FirestoreAccountStorage?
+    @Dependency var ecgStorage: ECGModule
 
     @AccountReference var account: Account
 
@@ -68,6 +69,10 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
 
     func add(sample: HKSample) async {
+        if let hkElectrocardiogram = sample as? HKElectrocardiogram {
+            ecgStorage.hkElectrocardiograms.append(hkElectrocardiogram)
+        }
+        
         if let mockWebService {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
@@ -84,6 +89,8 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     }
     
     func remove(sample: HKDeletedObject) async {
+        ecgStorage.hkElectrocardiograms.removeAll(where: { $0.id == sample.uuid })
+        
         if let mockWebService {
             try? await mockWebService.remove(path: "healthkit/\(sample.uuid.uuidString)")
             return
@@ -93,25 +100,6 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             try await healthKitDocument(id: sample.uuid).delete()
         } catch {
             logger.error("Could not remove HealthKit sample: \(error)")
-        }
-    }
-    
-    func add(response: ModelsR4.QuestionnaireResponse) async {
-        let id = response.identifier?.value?.value?.string ?? UUID().uuidString
-        
-        if let mockWebService {
-            let jsonRepresentation = (try? String(data: JSONEncoder().encode(response), encoding: .utf8)) ?? ""
-            try? await mockWebService.upload(path: "questionnaireResponse/\(id)", body: jsonRepresentation)
-            return
-        }
-        
-        do {
-            try await userDocumentReference
-                .collection("QuestionnaireResponse") // Add all HealthKit sources in a /QuestionnaireResponse collection.
-                .document(id) // Set the document identifier to the id of the response.
-                .setData(from: response)
-        } catch {
-            logger.error("Could not store questionnaire response: \(error)")
         }
     }
     

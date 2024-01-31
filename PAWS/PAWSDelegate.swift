@@ -25,10 +25,8 @@ class PAWSDelegate: SpeziAppDelegate {
                 AccountConfiguration(configuration: [
                     .requires(\.userId),
                     .requires(\.name),
-
-                    // additional values stored using the `FirestoreAccountStorage` within our Standard implementation
-                    .collects(\.genderIdentity),
-                    .collects(\.dateOfBirth)
+                    .requires(\.dateOfBirth),
+                    .collects(\.genderIdentity)
                 ])
 
                 if FeatureFlags.useFirebaseEmulator {
@@ -74,10 +72,25 @@ class PAWSDelegate: SpeziAppDelegate {
     
     
     private var healthKit: HealthKit {
-        HealthKit {
+        @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date = .now
+        
+        // Collection starts at the time the user consents and lasts for 1 month.
+        let sharedPredicate = HKQuery.predicateForSamples(
+            withStart: healthKitStartDate,
+            end: Calendar.current.date(byAdding: DateComponents(month: 1), to: healthKitStartDate),
+            options: .strictEndDate
+        )
+        
+        return HealthKit {
             CollectSample(
-                HKQuantityType(.stepCount),
-                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+                HKQuantityType.electrocardiogramType(),
+                predicate: sharedPredicate,
+                deliverySetting: .background(saveAnchor: false)
+            )
+            CollectSamples(
+                Set(HKElectrocardiogram.correlatedSymptomTypes),
+                predicate: sharedPredicate,
+                deliverySetting: .background(saveAnchor: false)
             )
         }
     }

@@ -16,25 +16,31 @@ struct NotificationPermissions: View {
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
     
     @State private var notificationProcessing = false
+    @State private var selectedTime = Calendar.current.date(bySettingHour: 19, minute: 0, second: 0, of: .now) ?? .now
     
     
     var body: some View {
         OnboardingView(
             contentView: {
                 VStack {
-                    OnboardingTitleView(
-                        title: "NOTIFICATION_PERMISSIONS_TITLE",
-                        subtitle: "NOTIFICATION_PERMISSIONS_SUBTITLE"
-                    )
-                    Spacer()
-                    Image(systemName: "bell.square.fill")
-                        .font(.system(size: 150))
-                        .foregroundColor(.accentColor)
+                    Image(systemName: "pawprint.circle.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .foregroundStyle(Color.accentColor)
+                        .offset(y: 20)
                         .accessibilityHidden(true)
-                    Text("NOTIFICATION_PERMISSIONS_DESCRIPTION")
-                        .multilineTextAlignment(.center)
-                        .padding(.vertical, 16)
-                    Spacer()
+                    OnboardingTitleView(
+                        title: "NOTIFICATIONS_TITLE",
+                        subtitle: "NOTIFICATIONS_SUBTITLE"
+                    )
+                    DatePicker("Select a time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                    Image("NotificationImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 275, height: 275)
+                        .padding(.vertical)
+                        .accessibilityHidden(true)
                 }
             }, actionView: {
                 OnboardingActionsView(
@@ -42,6 +48,10 @@ struct NotificationPermissions: View {
                     action: {
                         do {
                             notificationProcessing = true
+                            
+                            let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+                            try await scheduler.scheduleReminders(time: dateComponents)
+                            
                             // Notification Authorization is not available in the preview simulator.
                             if ProcessInfo.processInfo.isPreviewSimulator {
                                 try await _Concurrency.Task.sleep(for: .seconds(5))

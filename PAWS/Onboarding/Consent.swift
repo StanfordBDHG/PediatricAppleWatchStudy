@@ -13,6 +13,7 @@ import SwiftUI
 /// - Note: The `OnboardingConsentView` exports the signed consent form as PDF to the Spezi `Standard`, necessitating the conformance of the `Standard` to the `OnboardingConstraint`.
 struct Consent: View {
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     
     private var consentDocument: Data {
@@ -30,6 +31,7 @@ struct Consent: View {
                 consentDocument
             },
             action: {
+                healthKitStartDate = Date.now
                 onboardingNavigationPath.nextStep()
             }
         )

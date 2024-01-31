@@ -18,4 +18,9 @@ enum StorageKeys {
     // MARK: - Home
     /// The currently selected home tab.
     static let homeTabSelection = "home.tabselection"
+    
+    
+    // MARK: - HealthKit
+    /// Start date of the HealthKit data collection
+    static let healthKitStartDate = "healthkit.startdate"
 }

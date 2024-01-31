@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		27FA29902A388E9B009CAC45 /* ModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FA298F2A388E9B009CAC45 /* ModalView.swift */; };
 		2F1B52CE2A4F5CCE003AE151 /* MockUploadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B52CD2A4F5CCE003AE151 /* MockUploadTests.swift */; };
 		2F3D4ABC2A4E7C290068FB2F /* SpeziScheduler in Frameworks */ = {isa = PBXBuildFile; productRef = 2F3D4ABB2A4E7C290068FB2F /* SpeziScheduler */; };
 		2F49B7762980407C00BCB272 /* Spezi in Frameworks */ = {isa = PBXBuildFile; productRef = 2F49B7752980407B00BCB272 /* Spezi */; };
@@ -27,6 +26,11 @@
 		2FC3439029EE6346002D773C /* SocialSupportQuestionnaire.json in Resources */ = {isa = PBXBuildFile; fileRef = 2FE5DC5529EDD811004B9AB4 /* SocialSupportQuestionnaire.json */; };
 		2FC3439229EE634B002D773C /* ConsentDocument.md in Resources */ = {isa = PBXBuildFile; fileRef = 2FE5DC2C29EDD78E004B9AB4 /* ConsentDocument.md */; };
 		2FC975A82978F11A00BA99FE /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC975A72978F11A00BA99FE /* Home.swift */; };
+		2FCC1DBE2B6A1C9000C686BE /* ECGRecordingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1DBD2B6A1C9000C686BE /* ECGRecordingsList.swift */; };
+		2FCC1DC12B6A1D4C00C686BE /* ECGModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1DC02B6A1D4C00C686BE /* ECGModule.swift */; };
+		2FCC1DC52B6A1F0600C686BE /* ECGRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1DC42B6A1F0600C686BE /* ECGRecording.swift */; };
+		2FCC1DC92B6A258A00C686BE /* PAWSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1DC82B6A258A00C686BE /* PAWSScheduler.swift */; };
+		2FCC1DCB2B6A2B2700C686BE /* Date+RawRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1DCA2B6A2B2700C686BE /* Date+RawRepresentable.swift */; };
 		2FE5DC2629EDD38A004B9AB4 /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC2529EDD38A004B9AB4 /* Contacts.swift */; };
 		2FE5DC3529EDD7CA004B9AB4 /* Consent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC2F29EDD7CA004B9AB4 /* Consent.swift */; };
 		2FE5DC3629EDD7CA004B9AB4 /* HealthKitPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC3029EDD7CA004B9AB4 /* HealthKitPermissions.swift */; };
@@ -38,12 +42,7 @@
 		2FE5DC4529EDD7F2004B9AB4 /* Binding+Negate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4229EDD7F2004B9AB4 /* Binding+Negate.swift */; };
 		2FE5DC4629EDD7F2004B9AB4 /* Bundle+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4329EDD7F2004B9AB4 /* Bundle+Image.swift */; };
 		2FE5DC4729EDD7F2004B9AB4 /* CodableArray+RawRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4429EDD7F2004B9AB4 /* CodableArray+RawRepresentable.swift */; };
-		2FE5DC4E29EDD7FA004B9AB4 /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4829EDD7FA004B9AB4 /* ScheduleView.swift */; };
-		2FE5DC4F29EDD7FA004B9AB4 /* EventContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4929EDD7FA004B9AB4 /* EventContext.swift */; };
-		2FE5DC5029EDD7FA004B9AB4 /* EventContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4A29EDD7FA004B9AB4 /* EventContextView.swift */; };
 		2FE5DC5129EDD7FA004B9AB4 /* PAWSTaskContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4B29EDD7FA004B9AB4 /* PAWSTaskContext.swift */; };
-		2FE5DC5229EDD7FA004B9AB4 /* PAWSScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4C29EDD7FA004B9AB4 /* PAWSScheduler.swift */; };
-		2FE5DC5329EDD7FA004B9AB4 /* Bundle+Questionnaire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE5DC4D29EDD7FA004B9AB4 /* Bundle+Questionnaire.swift */; };
 		2FE5DC6429EDD883004B9AB4 /* SpeziAccount in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE5DC6329EDD883004B9AB4 /* SpeziAccount */; };
 		2FE5DC6729EDD894004B9AB4 /* SpeziContact in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE5DC6629EDD894004B9AB4 /* SpeziContact */; };
 		2FE5DC7229EDD8D3004B9AB4 /* SpeziHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FE5DC7129EDD8D3004B9AB4 /* SpeziHealthKit */; };
@@ -100,7 +99,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		27FA298F2A388E9B009CAC45 /* ModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalView.swift; sourceTree = "<group>"; };
 		2F1B52CD2A4F5CCE003AE151 /* MockUploadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUploadTests.swift; sourceTree = "<group>"; };
 		2F4E237D2989A2FE0013F3D9 /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
 		2F4E23822989D51F0013F3D9 /* PAWSTestingSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWSTestingSetup.swift; sourceTree = "<group>"; };
@@ -113,6 +111,11 @@
 		2FAEC07F297F583900C11C42 /* PAWS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PAWS.entitlements; sourceTree = "<group>"; };
 		2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PAWS.xctestplan; sourceTree = "<group>"; };
 		2FC975A72978F11A00BA99FE /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		2FCC1DBD2B6A1C9000C686BE /* ECGRecordingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECGRecordingsList.swift; sourceTree = "<group>"; };
+		2FCC1DC02B6A1D4C00C686BE /* ECGModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECGModule.swift; sourceTree = "<group>"; };
+		2FCC1DC42B6A1F0600C686BE /* ECGRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECGRecording.swift; sourceTree = "<group>"; };
+		2FCC1DC82B6A258A00C686BE /* PAWSScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PAWSScheduler.swift; sourceTree = "<group>"; };
+		2FCC1DCA2B6A2B2700C686BE /* Date+RawRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+RawRepresentable.swift"; sourceTree = "<group>"; };
 		2FE5DC2529EDD38A004B9AB4 /* Contacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
 		2FE5DC2C29EDD78E004B9AB4 /* ConsentDocument.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConsentDocument.md; sourceTree = "<group>"; };
 		2FE5DC2F29EDD7CA004B9AB4 /* Consent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consent.swift; sourceTree = "<group>"; };
@@ -125,12 +128,7 @@
 		2FE5DC4229EDD7F2004B9AB4 /* Binding+Negate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Binding+Negate.swift"; sourceTree = "<group>"; };
 		2FE5DC4329EDD7F2004B9AB4 /* Bundle+Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Image.swift"; sourceTree = "<group>"; };
 		2FE5DC4429EDD7F2004B9AB4 /* CodableArray+RawRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CodableArray+RawRepresentable.swift"; sourceTree = "<group>"; };
-		2FE5DC4829EDD7FA004B9AB4 /* ScheduleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
-		2FE5DC4929EDD7FA004B9AB4 /* EventContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventContext.swift; sourceTree = "<group>"; };
-		2FE5DC4A29EDD7FA004B9AB4 /* EventContextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventContextView.swift; sourceTree = "<group>"; };
 		2FE5DC4B29EDD7FA004B9AB4 /* PAWSTaskContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PAWSTaskContext.swift; sourceTree = "<group>"; };
-		2FE5DC4C29EDD7FA004B9AB4 /* PAWSScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PAWSScheduler.swift; sourceTree = "<group>"; };
-		2FE5DC4D29EDD7FA004B9AB4 /* Bundle+Questionnaire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Questionnaire.swift"; sourceTree = "<group>"; };
 		2FE5DC5529EDD811004B9AB4 /* SocialSupportQuestionnaire.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SocialSupportQuestionnaire.json; sourceTree = "<group>"; };
 		2FE5DCAC29EE6107004B9AB4 /* AccountOnboarding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountOnboarding.swift; sourceTree = "<group>"; };
 		2FF53D8C2A8729D600042B76 /* PAWSStandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PAWSStandard.swift; sourceTree = "<group>"; };
@@ -224,6 +222,16 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		2FCC1DBC2B6A1C7400C686BE /* ECGRecordings */ = {
+			isa = PBXGroup;
+			children = (
+				2FCC1DBD2B6A1C9000C686BE /* ECGRecordingsList.swift */,
+				2FCC1DC42B6A1F0600C686BE /* ECGRecording.swift */,
+				2FCC1DC02B6A1D4C00C686BE /* ECGModule.swift */,
+			);
+			path = ECGRecordings;
+			sourceTree = "<group>";
+		};
 		2FE5DC2729EDD38D004B9AB4 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
@@ -257,18 +265,13 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		2FE5DC3B29EDD7D0004B9AB4 /* Schedule */ = {
+		2FE5DC3B29EDD7D0004B9AB4 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
-				2FE5DC4D29EDD7FA004B9AB4 /* Bundle+Questionnaire.swift */,
-				2FE5DC4929EDD7FA004B9AB4 /* EventContext.swift */,
-				2FE5DC4A29EDD7FA004B9AB4 /* EventContextView.swift */,
-				2FE5DC4829EDD7FA004B9AB4 /* ScheduleView.swift */,
-				2FE5DC4C29EDD7FA004B9AB4 /* PAWSScheduler.swift */,
 				2FE5DC4B29EDD7FA004B9AB4 /* PAWSTaskContext.swift */,
-				27FA298F2A388E9B009CAC45 /* ModalView.swift */,
+				2FCC1DC82B6A258A00C686BE /* PAWSScheduler.swift */,
 			);
-			path = Schedule;
+			path = Reminders;
 			sourceTree = "<group>";
 		};
 		2FE5DC3C29EDD7DA004B9AB4 /* SharedContext */ = {
@@ -285,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				2FE5DC4229EDD7F2004B9AB4 /* Binding+Negate.swift */,
+				2FCC1DCA2B6A2B2700C686BE /* Date+RawRepresentable.swift */,
 				2FE5DC4329EDD7F2004B9AB4 /* Bundle+Image.swift */,
 				2FE5DC4429EDD7F2004B9AB4 /* CodableArray+RawRepresentable.swift */,
 			);
@@ -344,7 +348,8 @@
 				2FC975A72978F11A00BA99FE /* Home.swift */,
 				A9720E412ABB68B300872D23 /* Account */,
 				2FE5DC2829EDD398004B9AB4 /* Onboarding */,
-				2FE5DC3B29EDD7D0004B9AB4 /* Schedule */,
+				2FCC1DBC2B6A1C7400C686BE /* ECGRecordings */,
+				2FE5DC3B29EDD7D0004B9AB4 /* Reminders */,
 				2FFD22F82B59AECC005DD268 /* Study Information */,
 				2FE5DC2729EDD38D004B9AB4 /* Contacts */,
 				56F6F29E2AB441640022FE5A /* Contributions */,
@@ -404,11 +409,11 @@
 				653A2549283387FE005D4D48 /* Sources */,
 				653A254A283387FE005D4D48 /* Frameworks */,
 				653A254B283387FE005D4D48 /* Resources */,
-				2F5B528D29BD237B002020B7 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2FCC1DD02B6A2CF000C686BE /* PBXTargetDependency */,
 				566155222AB83CF200209B80 /* PBXTargetDependency */,
 			);
 			name = PAWS;
@@ -530,6 +535,7 @@
 				2FE750CA2A87240100723EAE /* XCRemoteSwiftPackageReference "SpeziMockWebService" */,
 				2FB099B42A875E2B00B20952 /* XCRemoteSwiftPackageReference "HealthKitOnFHIR" */,
 				5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */,
+				2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */,
 			);
 			productRefGroup = 653A254E283387FE005D4D48 /* Products */;
 			projectDirPath = "";
@@ -571,27 +577,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		2F5B528D29BD237B002020B7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\n  export PATH=\"$PATH:/opt/homebrew/bin\"\n  if which swiftlint > /dev/null; then\n    swiftlint\n  else\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n  fi\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		653A2549283387FE005D4D48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -605,8 +590,10 @@
 				2FE5DC3529EDD7CA004B9AB4 /* Consent.swift in Sources */,
 				2FE5DC4529EDD7F2004B9AB4 /* Binding+Negate.swift in Sources */,
 				2FFD23022B59B22C005DD268 /* StudyInformation.swift in Sources */,
+				2FCC1DBE2B6A1C9000C686BE /* ECGRecordingsList.swift in Sources */,
+				2FCC1DCB2B6A2B2700C686BE /* Date+RawRepresentable.swift in Sources */,
+				2FCC1DC12B6A1D4C00C686BE /* ECGModule.swift in Sources */,
 				2FC975A82978F11A00BA99FE /* Home.swift in Sources */,
-				2FE5DC4E29EDD7FA004B9AB4 /* ScheduleView.swift in Sources */,
 				A9DFE8A92ABE551400428242 /* AccountButton.swift in Sources */,
 				2FE5DC3729EDD7CA004B9AB4 /* OnboardingFlow.swift in Sources */,
 				2FF53D8D2A8729D600042B76 /* PAWSStandard.swift in Sources */,
@@ -614,25 +601,22 @@
 				A9720E432ABB68CC00872D23 /* AccountSetupHeader.swift in Sources */,
 				2FE5DC4029EDD7EE004B9AB4 /* FeatureFlags.swift in Sources */,
 				2FE5DC4629EDD7F2004B9AB4 /* Bundle+Image.swift in Sources */,
-				2FE5DC4F29EDD7FA004B9AB4 /* EventContext.swift in Sources */,
-				2FE5DC5029EDD7FA004B9AB4 /* EventContextView.swift in Sources */,
 				2FFD22FC2B59AED8005DD268 /* FAQ.swift in Sources */,
 				2F4E23832989D51F0013F3D9 /* PAWSTestingSetup.swift in Sources */,
-				2FE5DC5329EDD7FA004B9AB4 /* Bundle+Questionnaire.swift in Sources */,
 				2FE5DC5129EDD7FA004B9AB4 /* PAWSTaskContext.swift in Sources */,
+				2FCC1DC92B6A258A00C686BE /* PAWSScheduler.swift in Sources */,
 				56F6F2A02AB441930022FE5A /* ContributionsList.swift in Sources */,
 				566155292AB8447C00209B80 /* Package+LicenseType.swift in Sources */,
 				2FFD22FF2B59B158005DD268 /* StudyDescription.swift in Sources */,
 				5680DD392AB8983D004E6D4A /* PackageCell.swift in Sources */,
+				2FCC1DC52B6A1F0600C686BE /* ECGRecording.swift in Sources */,
 				2F5E32BD297E05EA003432F8 /* PAWSDelegate.swift in Sources */,
-				2FE5DC5229EDD7FA004B9AB4 /* PAWSScheduler.swift in Sources */,
 				A9FE7AD02AA39BAB0077B045 /* AccountSheet.swift in Sources */,
 				653A2551283387FE005D4D48 /* PAWS.swift in Sources */,
 				2FFD22F62B59ABE2005DD268 /* PAWSCard.swift in Sources */,
 				2FE5DC3629EDD7CA004B9AB4 /* HealthKitPermissions.swift in Sources */,
 				2F65B44E2A3B8B0600A36932 /* NotificationPermissions.swift in Sources */,
 				5661552E2AB854C000209B80 /* PackageHelper.swift in Sources */,
-				27FA29902A388E9B009CAC45 /* ModalView.swift in Sources */,
 				2FE5DC2629EDD38A004B9AB4 /* Contacts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -660,6 +644,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2FCC1DD02B6A2CF000C686BE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 2FCC1DCF2B6A2CF000C686BE /* SwiftLintPlugin */;
+		};
 		566155222AB83CF200209B80 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 566155212AB83CF200209B80 /* SwiftPackageListJSONPlugin */;
@@ -1188,6 +1176,14 @@
 				minimumVersion = 0.2.4;
 			};
 		};
+		2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/SwiftLint.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.54.0;
+			};
+		};
 		2FE5DC6229EDD883004B9AB4 /* XCRemoteSwiftPackageReference "SpeziAccount" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordSpezi/SpeziAccount.git";
@@ -1328,6 +1324,11 @@
 		2FBD738B2A3BD150004228E7 /* SpeziScheduler */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SpeziScheduler;
+		};
+		2FCC1DCF2B6A2CF000C686BE /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
 		};
 		2FE5DC6329EDD883004B9AB4 /* SpeziAccount */ = {
 			isa = XCSwiftPackageProductDependency;

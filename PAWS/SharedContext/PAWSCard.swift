@@ -47,6 +47,6 @@ struct PAWSCard<Content: View>: View {
 
 #Preview {
     PAWSCard {
-        Text("Test ...")
+        Text(verbatim: "This is an example content ...")
     }
 }
