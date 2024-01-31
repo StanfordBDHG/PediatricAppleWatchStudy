@@ -1,5 +1,5 @@
 #
-# This source file is part of the CS342 2023 PAWS Team Application project
+# This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
@@ -17,17 +17,41 @@ platform :ios do
   desc "Build and test"
   lane :test do
     run_tests(
-      code_coverage: true,
+      skip_build: true,
       derived_data_path: ".derivedData",
+      code_coverage: true,
+      devices: ["iPhone 15 Pro"],
+      force_quit_simulator: true,
+      reset_simulator: true,
+      prelaunch_simulator: false,
+      concurrent_workers: 1,
+      max_concurrent_simulators: 1,
       result_bundle: true,
-      output_directory: "."
+      output_directory: ".",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+    )
+  end
+
+  desc "CodeQL"
+  lane :codeql do
+    build_app(
+      skip_archive: true,
+      skip_codesigning: true,
+      derived_data_path: ".derivedData",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
     )
   end
 
   desc "Build app"
   lane :build do
     build_app(
-      derived_data_path: ".derivedData"
+      derived_data_path: ".derivedData",
+      xcargs: "-skipPackagePluginValidation",
+      export_options: {
+        provisioningProfiles: {
+          "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS Team Application"
+        }
+      }
     )
   end
 
@@ -44,16 +68,17 @@ platform :ios do
   desc "Publish a beta release to internal TestFlight testers"
   lane :beta do
     signin
-    increment_build_number({
-      build_number: latest_testflight_build_number + 1,
-      xcodeproj: "PAWS.xcodeproj"
-    })
+    increment_build_number(
+      {
+        build_number: latest_testflight_build_number + 1
+      }
+    )
     build
     commit = last_git_commit
     upload_to_testflight(
       distribute_external: true,
       groups: [
-        "CS342 2023"
+        "External Testers"
       ],
       submit_beta_review: true,
       notify_external_testers: true,

@@ -1,0 +1,719 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "ACCOUNT_NEXT" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "ACCOUNT_SETUP_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You may login to your existing account. Or create a new one if you don't have one already."
+          }
+        }
+      }
+    },
+    "ACCOUNT_SIGNED_IN_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are successfully signed in with the following account:"
+          }
+        }
+      }
+    },
+    "ACCOUNT_SUBTITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign up for a new account or sign in to an existing account"
+          }
+        }
+      }
+    },
+    "ACCOUNT_TITLE" : {
+      "comment" : "MARK: Account",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your PAWS Account"
+          }
+        }
+      }
+    },
+    "ANSWER_1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don’t be concerned, simply start another ECG recording on the Apple Watch as soon as you can."
+          }
+        }
+      }
+    },
+    "ANSWER_2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The PAWS app will store your ECG file directly on your iPhone and upload it to the research database when you have access to the internet again."
+          }
+        }
+      }
+    },
+    "ANSWER_3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The research team will review your Apple Watch ECG data periodically but will not use it in place of traditional diagnostic methods to change the course of your care plan."
+          }
+        }
+      }
+    },
+    "ANSWER_4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you are experiencing symptoms that require immediate attention, please call 9-1-1. Neither the PAWS app nor the Apple Watch will call the emergency services for you."
+          }
+        }
+      }
+    },
+    "ANSWER_5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You will not get sick or hurt because of anything in this study. We will be studying your health information and all of your information will be kept secure."
+          }
+        }
+      }
+    },
+    "ANSWER_6" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing good will directly happen to you but, by participating in this study, you will help us understand if the Apple Watch can be used to monitor heart problems in other kids. We hope that someday we can just give an Apple Watch to kids needing to have their heart tested."
+          }
+        }
+      }
+    },
+    "ANSWER_7" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only the researchers in charge of the study will know that you are in it. No one else will know, and your information will be kept secure."
+          }
+        }
+      }
+    },
+    "ANSWER_8" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have any questions about the study or any problems to do with the study you can contact the Protocol Director Dr. Scott Ceresnak. You can call him at (650)-723-7913.\n\nIf you have questions about the study but want to talk to someone else who is not a part of the study, you can call the Stanford Institutional Review Board (IRB) at (650)-723-5244 or toll free at 1-866-680-2906."
+          }
+        }
+      }
+    },
+    "ANSWER_9" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you do not want to participate in the study, just tell the researchers or your parents. You don’t need to be a part of the study and you won’t get in trouble if you decide if you don’t want to. Your doctor will still treat you the same even if you don’t participate."
+          }
+        }
+      }
+    },
+    "AYDIN_ZAHEDIVASH_BIO" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dr. Zahedivash is a resident physician in the Stanford Department of Pediatrics and will serve as a chief resident during the 2023-2024 academic year. His academic interests focus on the development and translation of innovative technologies and services to address diagnostic and health equity challenges. During his educational career as an engineer and budding physician, he has co-invented a series of computational techniques and devices. Previous inventions include diagnostic deep-learning algorithms to detect unstable coronary artery plaque on intravascular imaging and a surgical probe for intraoperative margin detection during cancer resection. He is passionate about using his medical, technical, and business backgrounds to develop digital health solutions and equitable technology translation strategies for children."
+          }
+        }
+      }
+    },
+    "CLOSE" : {
+      "comment" : "MARK: General",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
+    },
+    "CONSENT_LOADING_ERROR" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please include a markdown based document named \"ConsentDocument\" in your module Bundle."
+          }
+        }
+      }
+    },
+    "Contacts" : {
+
+    },
+    "CONTACTS_NAVIGATION_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacts"
+          }
+        }
+      }
+    },
+    "CONTRIBUTIONS_LIST_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The following list contains all Swift Package dependencies of the PAWS Application."
+          }
+        }
+      }
+    },
+    "CONTRIBUTIONS_LIST_FOOTER" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please refer to the individual repository links for packages without license labels."
+          }
+        }
+      }
+    },
+    "CONTRIBUTIONS_LIST_HEADER" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Packages"
+          }
+        }
+      }
+    },
+    "ECG Recordings" : {
+
+    },
+    "EEG Recording" : {
+
+    },
+    "FAQ" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FAQ"
+          }
+        }
+      }
+    },
+    "Friendly reminder to record your ECG!" : {
+
+    },
+    "HEALTHKIT_PERMISSIONS_BUTTON" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health Data Access"
+          }
+        }
+      }
+    },
+    "HEALTHKIT_PERMISSIONS_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the next page you will be asked to grant access to the heart data from your Health app."
+          }
+        }
+      }
+    },
+    "HEALTHKIT_PERMISSIONS_SUBTITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PAWS requires access to your Health app data to collect ECG information including date of recording, average bpm,\nreported symptoms, and any detected abnormalities."
+          }
+        }
+      }
+    },
+    "HEALTHKIT_PERMISSIONS_TITLE" : {
+      "comment" : "MARK: HealthKit",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit Access"
+          }
+        }
+      }
+    },
+    "Infos" : {
+
+    },
+    "INTERESTING_MODULES_AREA1_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create an account so researchers can identify you as a patient"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_AREA1_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create an account"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_AREA2_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Give researchers consent to use your health data as part of the PAWS study"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_AREA2_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consent"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_AREA3_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow the PAWS app to access the health data recorded on your Apple Watch and iPhone"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_AREA3_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grant access to health data"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_BUTTON" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_SUBTITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You'll need to complete a few more steps\nto get started..."
+          }
+        }
+      }
+    },
+    "INTERESTING_MODULES_TITLE" : {
+      "comment" : "MARK: Interesting Modules",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interesting Modules"
+          }
+        }
+      }
+    },
+    "LICENSE_INFO_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "License Information"
+          }
+        }
+      }
+    },
+    "Mock Web Service" : {
+
+    },
+    "New ECG Recordings will be displayed here." : {
+
+    },
+    "No Recordings" : {
+
+    },
+    "NOTIFICATION_PERMISSIONS_BUTTON" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow Notifications"
+          }
+        }
+      }
+    },
+    "NOTIFICATION_PERMISSIONS_DESCRIPTION" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow."
+          }
+        }
+      }
+    },
+    "NOTIFICATION_PERMISSIONS_SUBTITLE" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PAWS Study Reminder"
+          }
+        }
+      }
+    },
+    "NOTIFICATION_PERMISSIONS_TITLE" : {
+      "comment" : "MARK: Notifications",
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
+          }
+        }
+      }
+    },
+    "NOTIFICATIONS_SUBTITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow."
+          }
+        }
+      }
+    },
+    "NOTIFICATIONS_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PAWS Reminders"
+          }
+        }
+      }
+    },
+    "PROJECT_LICENSE_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This project is licensed under the MIT License."
+          }
+        }
+      }
+    },
+    "QUESTION_1" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1. After pressing the event button on the Zio Patch, what do I do if I don’t get a successful recording on my Apple Watch?"
+          }
+        }
+      }
+    },
+    "QUESTION_2" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2. What happens if I don’t have internet access when I record the Apple Watch ECG?"
+          }
+        }
+      }
+    },
+    "QUESTION_3" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3. Will the research team use my Apple Watch ECG data to provide care or change my treatment plan?"
+          }
+        }
+      }
+    },
+    "QUESTION_4" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4. If I am experiencing symptoms that need immediate medical attention, will the PAWS app or Apple Watch call 9-1-1 for me?"
+          }
+        }
+      }
+    },
+    "QUESTION_5" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5. Can anything bad happen to me by participating in this study?"
+          }
+        }
+      }
+    },
+    "QUESTION_6" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6. Can anything good happen to me by participating in this study?"
+          }
+        }
+      }
+    },
+    "QUESTION_7" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7. Will anyone know I am in the study?"
+          }
+        }
+      }
+    },
+    "QUESTION_8" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "8. Who can I talk to about the study?"
+          }
+        }
+      }
+    },
+    "QUESTION_9" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9. What if I do not want to be in the study?"
+          }
+        }
+      }
+    },
+    "Recorded %lld symptoms." : {
+
+    },
+    "Recorded no symptoms" : {
+
+    },
+    "Repository Link" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repository Link"
+          }
+        }
+      }
+    },
+    "SCOTT_CERESNAK_BIO" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dr. Ceresnak is a Professor of Pediatrics at Stanford University in the Division of Pediatric Cardiology. He is Director of the Pediatric Electrophysiology and Arrhythmia Program at Lucile Packard Children’s Hospital. His primary clinical and research interests involve the care of children and adults with congenital heart disease, with special attention to patients with arrhythmia disorders and inherited arrhythmia syndromes. He has special research interest and experience in advancing technological growth with the goal of creating improved diagnostic and therapeutic options for children with arrhythmia disorders."
+          }
+        }
+      }
+    },
+    "Select a time" : {
+
+    },
+    "Study Information" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Study Information"
+          }
+        }
+      }
+    },
+    "STUDY_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This study will explore how the Apple Watch® can work as a heart monitor for kids. As a part of the study, you will wear the Apple Watch for as long as 6 months, and any time you feel like your heart is beating fast or differently, you will record an ECG on the watch using the instructions below. Other than the fact that you are using an Apple Watch, there is no difference between being a part of the study and everything else about seeing your doctor.\n\nAny time that you feel symptoms that feel like an arrhythmia (i.e., palpitations, skipped beats, fast heart rate):\n\n1. First, press the event button on your Zio® Patch Monitor.\n2. Second, initiate a recording on the Apple Watch by following these steps:\n    • Open the ECG App.\n    • Hold your finger to the Digital Crown for 30 seconds.\n    • Follow the on-screen prompts on the Apple Watch."
+          }
+        }
+      }
+    },
+    "Thank you for participating in the PAWS study!" : {
+
+    },
+    "WELCOME_AREA1_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You'll be able to see your patient information and a summary of the ECG recordings  uploaded from your Apple Watch."
+          }
+        }
+      }
+    },
+    "WELCOME_AREA1_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your ECG Recordings"
+          }
+        }
+      }
+    },
+    "WELCOME_AREA2_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check if an ECG recording from your Apple Watch was successfully uploaded to the research server. "
+          }
+        }
+      }
+    },
+    "WELCOME_AREA2_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Study Status"
+          }
+        }
+      }
+    },
+    "WELCOME_AREA3_DESCRIPTION" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn more about the PAWS study and contact the lead researchers if you have any questions or concerns."
+          }
+        }
+      }
+    },
+    "WELCOME_AREA3_TITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Study Information"
+          }
+        }
+      }
+    },
+    "WELCOME_BUTTON" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn More"
+          }
+        }
+      }
+    },
+    "WELCOME_SUBTITLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We are excited to have you join the Pediatric Apple Watch Study (PAWS) to improve diagnosis of arrhythmias in patients like you!"
+          }
+        }
+      }
+    },
+    "WELCOME_TITLE" : {
+      "comment" : "MARK: Welcome",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to PAWS!"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

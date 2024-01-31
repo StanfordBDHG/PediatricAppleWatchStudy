@@ -9,45 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : {
-      "targets" : [
-        {
-          "containerPath" : "container:PAWS.xcodeproj",
-          "identifier" : "653A254C283387FE005D4D48",
-          "name" : "PAWS"
-        },
-        {
-          "containerPath" : "container:PAWSModules",
-          "identifier" : "PAWSContacts",
-          "name" : "PAWSContacts"
-        },
-        {
-          "containerPath" : "container:PAWSModules",
-          "identifier" : "PAWSLandingScreen",
-          "name" : "PAWSLandingScreen"
-        },
-        {
-          "containerPath" : "container:PAWSModules",
-          "identifier" : "PAWSMockDataStorageProvider",
-          "name" : "PAWSMockDataStorageProvider"
-        },
-        {
-          "containerPath" : "container:PAWSModules",
-          "identifier" : "PAWSNotificationScreen",
-          "name" : "PAWSNotificationScreen"
-        },
-        {
-          "containerPath" : "container:PAWSModules",
-          "identifier" : "PAWSOnboardingFlow",
-          "name" : "PAWSOnboardingFlow"
-        },
-        {
-          "containerPath" : "container:PAWSModules",
-          "identifier" : "PAWSSharedContext",
-          "name" : "PAWSSharedContext"
-        }
-      ]
-    },
     "targetForVariableExpansion" : {
       "containerPath" : "container:PAWS.xcodeproj",
       "identifier" : "653A254C283387FE005D4D48",
