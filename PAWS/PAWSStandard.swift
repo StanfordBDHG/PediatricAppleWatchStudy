@@ -18,7 +18,6 @@ import SpeziFirestore
 import SpeziHealthKit
 import SpeziMockWebService
 import SpeziOnboarding
-import SpeziQuestionnaire
 import SwiftUI
 
 

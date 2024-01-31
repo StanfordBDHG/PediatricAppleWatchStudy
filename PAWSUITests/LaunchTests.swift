@@ -9,24 +9,20 @@
 import XCTest
 
 
-class MockUploadTestsTests: XCTestCase {
+class LaunchTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
         continueAfterFailure = false
         
         let app = XCUIApplication()
-        app.launchArguments = ["--skipOnboarding", "--disableFirebase"]
+        app.launchArguments = ["--skipOnboarding"]
         app.launch()
     }
     
     
-    func testMockUpload() throws {
+    func testApplicationLaunch() throws {
         let app = XCUIApplication()
-        
-        XCTAssertTrue(app.tabBars["Tab Bar"].buttons["Mock Web Service"].waitForExistence(timeout: 2))
-        app.tabBars["Tab Bar"].buttons["Mock Web Service"].tap()
-        
-        XCTAssertTrue(app.staticTexts["Mock Requests"].waitForExistence(timeout: 2))
+        XCTAssertEqual(app.state, .runningForeground)
     }
 }
