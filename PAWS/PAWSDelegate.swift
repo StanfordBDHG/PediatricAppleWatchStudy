@@ -92,6 +92,16 @@ class PAWSDelegate: SpeziAppDelegate {
                 predicate: sharedPredicate,
                 deliverySetting: .background(saveAnchor: false)
             )
+            CollectSample(
+                HKQuantityType(.heartRate),
+                predicate: sharedPredicate,
+                deliverySetting: .background(saveAnchor: false)
+            )
+            CollectSample(
+                HKQuantityType(.vo2Max),
+                predicate: sharedPredicate,
+                deliverySetting: .background(saveAnchor: false)
+            )
         }
     }
 }
