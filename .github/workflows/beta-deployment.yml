@@ -28,7 +28,6 @@ jobs:
     permissions:
       contents: read
     with:
-      runsonlabels: '["macOS", "self-hosted"]'
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
       fastlanelane: beta
