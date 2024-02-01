@@ -49,7 +49,7 @@ platform :ios do
       xcargs: "-skipPackagePluginValidation",
       export_options: {
         provisioningProfiles: {
-          "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS Team Application"
+          "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS"
         }
       }
     )
