@@ -10,8 +10,8 @@ SPDX-License-Identifier: MIT
 
 # Pediatric Apple Watch Study Application
 
-[![Beta Deployment](https://github.com/CS342/2023-PAWS/actions/workflows/beta-deployment.yml/badge.svg)](https://github.com/CS342/2023-PAWS/actions/workflows/beta-deployment.yml)
-[![codecov](https://codecov.io/gh/CS342/2023-PAWS/graph/badge.svg?token=0SNRhbC0wi)](https://codecov.io/gh/CS342/2023-PAWS)
+[![Beta Deployment](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/actions/workflows/beta-deployment.yml/badge.svg)](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/actions/workflows/beta-deployment.yml)
+[![codecov](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy/graph/badge.svg?token=0SNRhbC0wi)](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10602852.svg)](https://doi.org/10.5281/zenodo.10602852)
 
 This repository contains the Pediatric Apple Watch Study Application application.
@@ -40,7 +40,7 @@ Contributions to this project are welcome. Please make sure to read the [contrib
 
 ## License
 
-This project is licensed under the MIT License. See [Licenses](https://github.com/CS342/2023-PAWS/tree/main/LICENSES) for more information.
+This project is licensed under the MIT License. See [Licenses](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/tree/main/LICENSES) for more information.
 
 
 ## Our Research
