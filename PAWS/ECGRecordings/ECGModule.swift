@@ -13,6 +13,7 @@ import Spezi
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     var hkElectrocardiograms: [HKElectrocardiogram] = []
+    var vo2Samples: [HKQuantitySample] = []
     
     
     /// Creates an instance of a ``MockWebService``.

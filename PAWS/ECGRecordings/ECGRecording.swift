@@ -12,6 +12,7 @@ import SwiftUI
 
 struct ECGRecording: View {
     let hkElectrocardiogram: HKElectrocardiogram
+    // let vo2Samples: [HKQuantitySample]
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
     
     

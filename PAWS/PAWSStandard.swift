@@ -70,6 +70,9 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     func add(sample: HKSample) async {
         if let hkElectrocardiogram = sample as? HKElectrocardiogram {
             ecgStorage.hkElectrocardiograms.append(hkElectrocardiogram)
+        } else if let vo2Sample = sample as? HKQuantitySample,
+                  vo2Sample.quantityType.identifier == HKQuantityTypeIdentifier.vo2Max.rawValue {
+            ecgStorage.vo2Samples.append(vo2Sample)
         }
         
         if let mockWebService {
