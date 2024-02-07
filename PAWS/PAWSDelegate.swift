@@ -77,7 +77,7 @@ class PAWSDelegate: SpeziAppDelegate {
         // Collection starts at the time the user consents and lasts for 1 month.
         let sharedPredicate = HKQuery.predicateForSamples(
             withStart: healthKitStartDate,
-            end: Calendar.current.date(byAdding: DateComponents(month: 1), to: healthKitStartDate),
+            end: Calendar.current.date(byAdding: DateComponents(month: 6), to: healthKitStartDate),
             options: .strictEndDate
         )
         
@@ -90,17 +90,32 @@ class PAWSDelegate: SpeziAppDelegate {
             CollectSamples(
                 Set(HKElectrocardiogram.correlatedSymptomTypes),
                 predicate: sharedPredicate,
-                deliverySetting: .background(saveAnchor: false)
+                deliverySetting: .background(saveAnchor: true)
             )
             CollectSample(
                 HKQuantityType(.heartRate),
                 predicate: sharedPredicate,
-                deliverySetting: .background(saveAnchor: false)
+                deliverySetting: .background(saveAnchor: true)
             )
             CollectSample(
                 HKQuantityType(.vo2Max),
                 predicate: sharedPredicate,
-                deliverySetting: .background(saveAnchor: false)
+                deliverySetting: .manual(safeAnchor: false)
+            )
+            CollectSample(
+                HKQuantityType(.physicalEffort),
+                predicate: sharedPredicate,
+                deliverySetting: .manual(safeAnchor: false)
+            )
+            CollectSample(
+                HKQuantityType(.stepCount),
+                predicate: sharedPredicate,
+                deliverySetting: .manual(safeAnchor: false)
+            )
+            CollectSample(
+                HKQuantityType(.activeEnergyBurned),
+                predicate: sharedPredicate,
+                deliverySetting: .manual(safeAnchor: false)
             )
         }
     }

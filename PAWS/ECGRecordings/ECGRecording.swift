@@ -12,7 +12,6 @@ import SwiftUI
 
 struct ECGRecording: View {
     let hkElectrocardiogram: HKElectrocardiogram
-    // let vo2Samples: [HKQuantitySample]
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
     
     
@@ -38,6 +37,48 @@ struct ECGRecording: View {
             }
             
             self.symptoms = symptoms
+            // manually query for active calories
         }
+    }
+}
+
+extension HKElectrocardiogram {
+    var fiveMinutesBefore: Date? {
+        Calendar.current.date(byAdding: .minute, value: -5, to: self.startDate)
+    }
+    
+    /// To actually get the heart rate (BPM) from one of the samples:
+    /// ```
+    /// let heartRate = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
+    /// ```
+    var precedingPulseRates: [HKSample] {
+        precedingSamples(forType: HKQuantityType(.heartRate))
+    }
+    
+    var precedingVo2Max: HKSample? {
+        precedingSamples(forType: HKQuantityType(.vo2Max), limit: 1, ascending: false).first
+    }
+    
+    func precedingSamples(forType type: HKSampleType, limit: Int? = nil, ascending: Bool = true) -> [HKSample] {
+        let healthStore = HKHealthStore()
+        let predicate = HKQuery.predicateForSamples(withStart: fiveMinutesBefore, end: self.startDate, options: .strictStartDate)
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: ascending)
+        var quantitySamples: [HKSample] = []
+        let queryLimit = limit ?? HKObjectQueryNoLimit
+        
+        let query = HKSampleQuery(
+            sampleType: type,
+            predicate: predicate,
+            limit: queryLimit,
+            sortDescriptors: [sortDescriptor]
+        ) { _, samples, error in
+            if error == nil, let samples {
+                quantitySamples.append(contentsOf: samples)
+            }
+        }
+        
+        healthStore.execute(query)
+                
+        return quantitySamples
     }
 }
