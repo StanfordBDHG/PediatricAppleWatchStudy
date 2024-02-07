@@ -37,7 +37,6 @@ struct ECGRecording: View {
             }
             
             self.symptoms = symptoms
-            // manually query for active calories
         }
     }
 }
