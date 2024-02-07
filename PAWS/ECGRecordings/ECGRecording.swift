@@ -43,8 +43,12 @@ struct ECGRecording: View {
 }
 
 extension HKElectrocardiogram {
-    var fiveMinutesBefore: Date? {
+    private var fiveMinutesBefore: Date? {
         Calendar.current.date(byAdding: .minute, value: -5, to: self.startDate)
+    }
+    
+    private var fiveMinutePredicate: NSPredicate {
+        HKQuery.predicateForSamples(withStart: self.fiveMinutesBefore, end: self.startDate, options: .strictStartDate)
     }
     
     /// To actually get the heart rate (BPM) from one of the samples:
@@ -58,27 +62,56 @@ extension HKElectrocardiogram {
     var precedingVo2Max: HKSample? {
         precedingSamples(forType: HKQuantityType(.vo2Max), limit: 1, ascending: false).first
     }
+
+    var precedingPhysicalEffort: HKQuantity? {
+        fiveMinuteSum(forType: HKQuantityType(.physicalEffort))
+    }
     
-    func precedingSamples(forType type: HKSampleType, limit: Int? = nil, ascending: Bool = true) -> [HKSample] {
+    var precedingStepCount: HKQuantity? {
+        fiveMinuteSum(forType: HKQuantityType(.stepCount))
+    }
+    
+    var precedingActiveEnergy: HKQuantity? {
+        fiveMinuteSum(forType: HKQuantityType(.activeEnergyBurned))
+    }
+    
+    private func precedingSamples(forType type: HKSampleType, limit: Int? = nil, ascending: Bool = true) -> [HKSample] {
         let healthStore = HKHealthStore()
-        let predicate = HKQuery.predicateForSamples(withStart: fiveMinutesBefore, end: self.startDate, options: .strictStartDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: ascending)
-        var quantitySamples: [HKSample] = []
         let queryLimit = limit ?? HKObjectQueryNoLimit
+        var result: [HKSample] = []
         
         let query = HKSampleQuery(
             sampleType: type,
-            predicate: predicate,
+            predicate: self.fiveMinutePredicate,
             limit: queryLimit,
             sortDescriptors: [sortDescriptor]
         ) { _, samples, error in
             if error == nil, let samples {
-                quantitySamples.append(contentsOf: samples)
+                result.append(contentsOf: samples)
             }
         }
         
         healthStore.execute(query)
                 
-        return quantitySamples
+        return result
+    }
+    
+    private func fiveMinuteSum(forType type: HKQuantityType) -> HKQuantity? {
+        let healthStore = HKHealthStore()
+        var result: HKQuantity?
+        
+        let query = HKStatisticsQuery(
+            quantityType: type,
+            quantitySamplePredicate: self.fiveMinutePredicate
+        ) { _, statistics, error in
+            if error != nil {
+                result = statistics?.sumQuantity()
+            }
+        }
+        
+        healthStore.execute(query)
+        
+        return result
     }
 }
