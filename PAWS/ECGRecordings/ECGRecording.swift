@@ -8,12 +8,13 @@
 
 import HealthKit
 import SwiftUI
+import Foundation
 
 
 struct ECGRecording: View {
     let hkElectrocardiogram: HKElectrocardiogram
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
-    
+    @State var precedingPulseRates: [HKSample] = []
     
     var body: some View {
         PAWSCard {
@@ -30,6 +31,13 @@ struct ECGRecording: View {
                     Text("Recorded \(symptoms.count) symptoms.")
                 }
             }
+            
+            ForEach(precedingPulseRates) { sample in
+                //Text(sample.sampleType.identifier)
+                if let sample = sample as? HKQuantitySample {
+                    Text("\(60 * sample.quantity.doubleValue(for: .hertz())) beats per minute")
+                }
+            }
         }
         .task {
             guard let symptoms = try? await hkElectrocardiogram.symptoms(from: HKHealthStore()) else {
@@ -37,6 +45,10 @@ struct ECGRecording: View {
             }
             
             self.symptoms = symptoms
+            hkElectrocardiogram.precedingPulseRates { samples in
+                print(samples)
+                precedingPulseRates = samples
+            }
         }
     }
 }
@@ -54,27 +66,34 @@ extension HKElectrocardiogram {
     /// ```
     /// let heartRate = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
     /// ```
-    var precedingPulseRates: [HKSample] {
-        precedingSamples(forType: HKQuantityType(.heartRate))
+    func precedingPulseRates(completion: @escaping (_ samples: [HKSample]) -> Void) {
+        precedingSamples(forType: HKQuantityType(.heartRate)) { samples in
+            completion(samples)
+        }
     }
     
-    var precedingVo2Max: HKSample? {
-        precedingSamples(forType: HKQuantityType(.vo2Max), limit: 1, ascending: false).first
-    }
-
-    var precedingPhysicalEffort: HKQuantity? {
-        fiveMinuteSum(forType: HKQuantityType(.physicalEffort))
-    }
+//    var precedingVo2Max: HKSample? {
+//        precedingSamples(forType: HKQuantityType(.vo2Max), limit: 1, ascending: false).first
+//    }
+//
+//    var precedingPhysicalEffort: HKQuantity? {
+//        fiveMinuteSum(forType: HKQuantityType(.physicalEffort))
+//    }
+//    
+//    var precedingStepCount: HKQuantity? {
+//        fiveMinuteSum(forType: HKQuantityType(.stepCount))
+//    }
+//    
+//    var precedingActiveEnergy: HKQuantity? {
+//        fiveMinuteSum(forType: HKQuantityType(.activeEnergyBurned))
+//    }
     
-    var precedingStepCount: HKQuantity? {
-        fiveMinuteSum(forType: HKQuantityType(.stepCount))
-    }
-    
-    var precedingActiveEnergy: HKQuantity? {
-        fiveMinuteSum(forType: HKQuantityType(.activeEnergyBurned))
-    }
-    
-    private func precedingSamples(forType type: HKSampleType, limit: Int? = nil, ascending: Bool = true) -> [HKSample] {
+    private func precedingSamples(
+        forType type: HKSampleType,
+        limit: Int? = nil,
+        ascending: Bool = true,
+        completion: @escaping (_ samples: [HKSample]) -> Void
+    ) -> [HKSample] {
         let healthStore = HKHealthStore()
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: ascending)
         let queryLimit = limit ?? HKObjectQueryNoLimit
@@ -87,7 +106,7 @@ extension HKElectrocardiogram {
             sortDescriptors: [sortDescriptor]
         ) { _, samples, error in
             if error == nil, let samples {
-                result.append(contentsOf: samples)
+                completion(samples)
             }
         }
         
