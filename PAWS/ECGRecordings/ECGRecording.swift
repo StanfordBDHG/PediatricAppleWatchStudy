@@ -8,7 +8,6 @@
 
 import HealthKit
 import SwiftUI
-import HealthKitOnFHIR
 
 
 struct ECGRecording: View {
