@@ -68,21 +68,23 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
 
     func add(sample: HKSample) async {
-        var precedingPulseRates: [HKSample] = []
-        var precedingVo2Max: HKSample?
-        var precedingPhysicalEffort: HKQuantity?
-        var precedingStepCount: HKQuantity?
-        var precedingActiveEnergy: HKQuantity?
-        
+        var supplementalMetrics: [HKSample] = []
+                
         if let hkElectrocardiogram = sample as? HKElectrocardiogram {
             ecgStorage.hkElectrocardiograms.append(hkElectrocardiogram)
-            if let pulseRates = try? await hkElectrocardiogram.precedingPulseRates {
-                precedingPulseRates.append(contentsOf: pulseRates)
+            
+            do {
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingPulseRates)
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingPhysicalEffort)
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingStepCount)
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingActiveEnergy)
+                
+                if let precedingVo2Max = try await hkElectrocardiogram.precedingVo2Max {
+                    supplementalMetrics.append(precedingVo2Max)
+                }
+            } catch {
+                logger.log("Could not access HealthKit sample: \(error)")
             }
-            precedingPhysicalEffort = await hkElectrocardiogram.precedingPhysicalEffort
-            precedingStepCount = await hkElectrocardiogram.precedingStepCount
-            precedingActiveEnergy = await hkElectrocardiogram.precedingActiveEnergy
-            precedingVo2Max = await hkElectrocardiogram.precedingVo2Max
         }
         
         if let mockWebService {
@@ -90,37 +92,19 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let jsonRepresentation = (try? String(data: encoder.encode(sample.resource), encoding: .utf8)) ?? ""
             try? await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
-            guard let hkElectrocardiogram = sample as? HKElectrocardiogram else {
-                return
+
+            for metric in supplementalMetrics {
+                try? await mockWebService.upload(path: "healthkit/\(metric.uuid.uuidString)", body: (try? String(data: encoder.encode(metric.resource), encoding: .utf8)) ?? "")
             }
-            
-            // Upload supplemental metrics.
-            let supplementalPath = "healthkit/\(sample.uuid.uuidString)/supplemental"
-            try? await mockWebService.upload(path: "\(supplementalPath)/precedingPulseRates", body: String(data: encoder.encode(precedingPulseRates.compactMap { try? $0.resource }), encoding: .utf8) ?? "")
-            let precedingVo2MaxRepresentation = (try? String(data: encoder.encode(precedingVo2Max?.resource), encoding: .utf8)) ?? ""
-            try? await mockWebService.upload(path: "\(supplementalPath)/precedingVo2Max", body: precedingVo2MaxRepresentation)
-            let wattsPerSquareMeter: HKUnit = .watt().unitDivided(by: .meter().unitRaised(toPower: 2))
-            let precedingPhysicalEffortRepresentation = (try? String(
-                data: encoder.encode(precedingPhysicalEffort?.doubleValue(for: wattsPerSquareMeter)),
-                encoding: .utf8
-            )) ?? ""
-            try? await mockWebService.upload(path: "\(supplementalPath)/precedingPhysicalEffort", body: precedingPhysicalEffortRepresentation)
-            let precedingStepCountRepresentation =
-            (try? String(data: encoder.encode(precedingStepCount?.doubleValue(for: .count())), encoding: .utf8)) ?? ""
-            try? await mockWebService.upload(path: "\(supplementalPath)/precedingStepCount", body: precedingStepCountRepresentation)
-            let precedingActiveEnergyRepresentation =
-            (try? String(data: encoder.encode(precedingActiveEnergy?.doubleValue(for: .smallCalorie())), encoding: .utf8)) ?? ""
-            try? await mockWebService.upload(path: "\(supplementalPath)/precedingActiveEnergy", body: precedingActiveEnergyRepresentation)
             
             return
         }
         
         do {
             try await healthKitDocument(id: sample.id).setData(from: sample.resource)
-            let supplementalMetrics: [String: Any] = [
-                "precedingPulseRates": precedingPulseRates
-            ]
-            try await healthKitDocument(id: sample.id).setData(supplementalMetrics, merge: true)
+            for metric in supplementalMetrics {
+                try await healthKitDocument(id: sample.id).setData(from: metric.resource)
+            }
         } catch {
             logger.error("Could not store HealthKit sample: \(error)")
         }

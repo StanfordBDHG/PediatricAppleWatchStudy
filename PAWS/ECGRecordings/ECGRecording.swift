@@ -8,6 +8,7 @@
 
 import HealthKit
 import SwiftUI
+import HealthKitOnFHIR
 
 
 struct ECGRecording: View {
@@ -42,91 +43,108 @@ struct ECGRecording: View {
 }
 
 extension HKElectrocardiogram {
-    private var fiveMinutesBefore: Date? {
-        Calendar.current.date(byAdding: .minute, value: -5, to: self.startDate)
+    private var oneDayPredicate: NSPredicate {
+        HKQuery.predicateForSamples(
+            withStart: Calendar.current.date(byAdding: .day, value: -1, to: self.startDate), // 24 hours before recording.
+            end: self.startDate,
+            options: .strictStartDate
+        )
     }
     
     private var fiveMinutePredicate: NSPredicate {
-        HKQuery.predicateForSamples(withStart: self.fiveMinutesBefore, end: self.startDate, options: .strictStartDate)
+        HKQuery.predicateForSamples(
+            withStart: Calendar.current.date(byAdding: .minute, value: -5, to: self.startDate), // 5 minutes before recording.
+            end: self.startDate,
+            options: .strictStartDate
+        )
     }
     
-    var precedingPulseRates: [HKSample] {
+    var precedingPulseRates: [HKQuantitySample] {
         get async throws {
             try await precedingSamples(forType: HKQuantityType(.heartRate))
         }
     }
     
-    var precedingVo2Max: HKSample? {
-        get async {
-            try? await precedingSamples(forType: HKQuantityType(.vo2Max), limit: 1, ascending: false).first
+    var precedingVo2Max: HKQuantitySample? {
+        get async throws {
+            try await precedingSamples(
+                forType: HKQuantityType(.vo2Max),
+                sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+                limit: 1
+            )
+            .first
         }
     }
 
-    var precedingPhysicalEffort: HKQuantity? {
-        get async {
-            try? await fiveMinuteSum(forType: HKQuantityType(.physicalEffort))
+    var precedingPhysicalEffort: [HKQuantitySample] {
+        get async throws {
+            try await precedingSamples(forType: HKQuantityType(.physicalEffort))
         }
     }
     
-    var precedingStepCount: HKQuantity? {
-        get async {
-            try? await fiveMinuteSum(forType: HKQuantityType(.stepCount))
+    var precedingStepCount: [HKQuantitySample] {
+        get async throws {
+            try await precedingSamples(forType: HKQuantityType(.stepCount))
         }
     }
     
-    var precedingActiveEnergy: HKQuantity? {
-        get async {
-            try? await fiveMinuteSum(forType: HKQuantityType(.activeEnergyBurned))
+    var precedingActiveEnergy: [HKQuantitySample] {
+        get async throws {
+            try await precedingSamples(forType: HKQuantityType(.activeEnergyBurned))
         }
     }
-    
-    /// To actually get the heart rate (BPM) from one of the samples:
-    /// ```
-    /// let heartRate = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
-    /// ```
-    func precedingSamples(
+
+    private func precedingSamples(
         forType type: HKSampleType,
-        limit: Int? = nil,
-        ascending: Bool = true
+        sortDescriptors: [SortDescriptor<HKSample>] = [SortDescriptor(\.startDate)],
+        limit: Int? = nil
     ) async throws -> [HKSample] {
-        let healthStore = HKHealthStore()
-        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: ascending)
-        let queryLimit = limit ?? HKObjectQueryNoLimit
+        let store = HKHealthStore()
+        let queryDescriptor = HKSampleQueryDescriptor(
+            predicates: [.sample(type: type, predicate: self.fiveMinutePredicate)],
+            sortDescriptors: sortDescriptors,
+            limit: limit
+        )
         
-        return try await withCheckedThrowingContinuation { continuation in
-            let query = HKSampleQuery(
-                sampleType: type,
-                predicate: self.fiveMinutePredicate,
-                limit: queryLimit,
-                sortDescriptors: [sortDescriptor]
-            ) { _, samples, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: samples ?? [])
-                }
-            }
-            
-            healthStore.execute(query)
+        // If something is available in last 5 minutes since recording, return those samples.
+        if let result = try? await queryDescriptor.result(for: store), !result.isEmpty {
+            return result
         }
+        
+        // Otherwise, request the last 24 hours of samples.
+        let extendedQueryDescriptor = HKSampleQueryDescriptor(
+            predicates: [.sample(type: type, predicate: self.oneDayPredicate)],
+            sortDescriptors: sortDescriptors,
+            limit: limit
+        )
+        
+        return try await extendedQueryDescriptor.result(for: store)
     }
     
-    private func fiveMinuteSum(forType type: HKQuantityType) async throws -> HKQuantity? {
-        let healthStore = HKHealthStore()
+    private func precedingSamples(
+        forType type: HKQuantityType,
+        sortDescriptors: [SortDescriptor<HKQuantitySample>] = [SortDescriptor(\.startDate)],
+        limit: Int? = nil
+    ) async throws -> [HKQuantitySample] {
+        let store = HKHealthStore()
+        let queryDescriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: type, predicate: self.fiveMinutePredicate)],
+            sortDescriptors: sortDescriptors,
+            limit: limit
+        )
         
-        return try await withCheckedThrowingContinuation { continuation in
-            let query = HKStatisticsQuery(
-                quantityType: type,
-                quantitySamplePredicate: self.fiveMinutePredicate
-            ) { _, statistics, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: statistics?.sumQuantity())
-                }
-            }
-            
-            healthStore.execute(query)
+        // If something is available in last 5 minutes since recording, return those samples.
+        if let result = try? await queryDescriptor.result(for: store), !result.isEmpty {
+            return result
         }
+        
+        // Otherwise, request the last 24 hours of samples.
+        let extendedQueryDescriptor = HKSampleQueryDescriptor(
+            predicates: [.quantitySample(type: type, predicate: self.oneDayPredicate)],
+            sortDescriptors: sortDescriptors,
+            limit: limit
+        )
+        
+        return try await extendedQueryDescriptor.result(for: store)
     }
 }
