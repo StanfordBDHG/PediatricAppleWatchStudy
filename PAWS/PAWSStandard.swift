@@ -68,8 +68,23 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
 
     func add(sample: HKSample) async {
+        var supplementalMetrics: [HKSample] = []
+                
         if let hkElectrocardiogram = sample as? HKElectrocardiogram {
             ecgStorage.hkElectrocardiograms.append(hkElectrocardiogram)
+            
+            do {
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingPulseRates)
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingPhysicalEffort)
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingStepCount)
+                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingActiveEnergy)
+                
+                if let precedingVo2Max = try await hkElectrocardiogram.precedingVo2Max {
+                    supplementalMetrics.append(precedingVo2Max)
+                }
+            } catch {
+                logger.log("Could not access HealthKit sample: \(error)")
+            }
         }
         
         if let mockWebService {
@@ -77,11 +92,19 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let jsonRepresentation = (try? String(data: encoder.encode(sample.resource), encoding: .utf8)) ?? ""
             try? await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
+
+            for metric in supplementalMetrics {
+                try? await mockWebService.upload(path: "healthkit/\(metric.uuid.uuidString)", body: (try? String(data: encoder.encode(metric.resource), encoding: .utf8)) ?? "")
+            }
+            
             return
         }
         
         do {
             try await healthKitDocument(id: sample.id).setData(from: sample.resource)
+            for metric in supplementalMetrics {
+                try await healthKitDocument(id: sample.id).setData(from: metric.resource)
+            }
         } catch {
             logger.error("Could not store HealthKit sample: \(error)")
         }
