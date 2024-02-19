@@ -21,7 +21,7 @@ struct StudyDescription: View {
                 .padding()
                 .frame(maxWidth: .infinity)
         }
-            .padding(.vertical, 8)
+            .padding(.bottom, 8)
     }
 }
 

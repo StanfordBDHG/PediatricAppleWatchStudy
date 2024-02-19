@@ -20,6 +20,7 @@ struct StudyInformation: View {
                     StudyDescription()
                     FAQ()
                 }
+                    .padding(.vertical)
             }
                 .toolbar {
                     if AccountButton.shouldDisplay {

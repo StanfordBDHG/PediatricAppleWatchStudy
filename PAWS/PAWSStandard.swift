@@ -9,6 +9,7 @@
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKitOnFHIR
+import enum ModelsR4.ResourceProxy
 import OSLog
 import PDFKit
 import Spezi
@@ -36,6 +37,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
     @AccountReference var account: Account
 
+    private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "Standard")
     
     
@@ -68,50 +70,88 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
 
     func add(sample: HKSample) async {
+        if let electrocardiogram = sample as? HKElectrocardiogram {
+            await upload(electrocardiogram: electrocardiogram)
+        } else if let categorySample = sample as? HKCategorySample {
+            await updateElectrocardiogram(basedOn: categorySample)
+        } else {
+            logger.log("Request to upload unidentified HealthKit Sample: \(sample)")
+        }
+    }
+    
+    private func upload(electrocardiogram: HKElectrocardiogram) async {
         var supplementalMetrics: [HKSample] = []
-                
-        if let hkElectrocardiogram = sample as? HKElectrocardiogram {
-            ecgStorage.hkElectrocardiograms.append(hkElectrocardiogram)
+        
+        do {
+            try await upload(sample: electrocardiogram)
             
-            do {
-                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingPulseRates)
-                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingPhysicalEffort)
-                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingStepCount)
-                supplementalMetrics.append(contentsOf: try await hkElectrocardiogram.precedingActiveEnergy)
-                
-                if let precedingVo2Max = try await hkElectrocardiogram.precedingVo2Max {
-                    supplementalMetrics.append(precedingVo2Max)
-                }
-            } catch {
-                logger.log("Could not access HealthKit sample: \(error)")
+            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingPulseRates)
+            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingPhysicalEffort)
+            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingStepCount)
+            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingActiveEnergy)
+            
+            if let precedingVo2Max = try await electrocardiogram.precedingVo2Max {
+                supplementalMetrics.append(precedingVo2Max)
             }
+            
+            for supplementalMetric in supplementalMetrics {
+                try await upload(sample: supplementalMetric)
+            }
+        } catch {
+            logger.log("Could not access HealthKit sample: \(error)")
+        }
+    }
+    
+    private func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
+        do {
+            guard let updatedElectrocardiogram = try await ecgStorage.electrocardiogram(
+                correlatedWith: categorySample,
+                from: healthStore
+            ) else {
+                return
+            }
+            
+            try await upload(sample: updatedElectrocardiogram)
+        } catch {
+            logger.log("Could not corrolate category sample with ECG: \(categorySample)")
+        }
+    }
+    
+    private func upload(sample: HKSample) async throws {
+        let resource: ResourceProxy
+        if let electrocardiogram = sample as? HKElectrocardiogram {
+            ecgStorage.insert(electrocardiogram: electrocardiogram)
+            
+            async let symptoms = try electrocardiogram.symptoms(from: healthStore)
+            async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
+            
+            resource = ResourceProxy(
+                with: try await electrocardiogram.observation(
+                    symptoms: symptoms,
+                    voltageMeasurements: voltageMeasurements
+                )
+            )
+        } else {
+            resource = try sample.resource
         }
         
         if let mockWebService {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-            let jsonRepresentation = (try? String(data: encoder.encode(sample.resource), encoding: .utf8)) ?? ""
+            let jsonRepresentation = (try? String(data: encoder.encode(resource), encoding: .utf8)) ?? ""
             try? await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
-
-            for metric in supplementalMetrics {
-                try? await mockWebService.upload(path: "healthkit/\(metric.uuid.uuidString)", body: (try? String(data: encoder.encode(metric.resource), encoding: .utf8)) ?? "")
-            }
-            
             return
         }
         
         do {
-            try await healthKitDocument(id: sample.id).setData(from: sample.resource)
-            for metric in supplementalMetrics {
-                try await healthKitDocument(id: sample.id).setData(from: metric.resource)
-            }
+            try await healthKitDocument(id: sample.id).setData(from: resource)
         } catch {
             logger.error("Could not store HealthKit sample: \(error)")
         }
     }
     
     func remove(sample: HKDeletedObject) async {
-        ecgStorage.hkElectrocardiograms.removeAll(where: { $0.id == sample.uuid })
+        ecgStorage.remove(electrocardiogram: sample.uuid)
         
         if let mockWebService {
             try? await mockWebService.remove(path: "healthkit/\(sample.uuid.uuidString)")
