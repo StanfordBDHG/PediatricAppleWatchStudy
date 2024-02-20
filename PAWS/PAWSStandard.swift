@@ -111,16 +111,20 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
                 return
             }
             
-            try await upload(sample: updatedElectrocardiogram)
+            try await upload(sample: updatedElectrocardiogram, force: true)
         } catch {
             logger.log("Could not corrolate category sample with ECG: \(categorySample)")
         }
     }
     
-    private func upload(sample: HKSample) async throws {
+    private func upload(sample: HKSample, force: Bool = false) async throws {
         let resource: ResourceProxy
         if let electrocardiogram = sample as? HKElectrocardiogram {
             ecgStorage.insert(electrocardiogram: electrocardiogram)
+            
+            guard !ecgStorage.isUploaded(electrocardiogram) || force else {
+                return
+            }
             
             async let symptoms = try electrocardiogram.symptoms(from: healthStore)
             async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
@@ -140,13 +144,16 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let jsonRepresentation = (try? String(data: encoder.encode(resource), encoding: .utf8)) ?? ""
             try? await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
-            return
+        } else {
+            do {
+                try await healthKitDocument(id: sample.id).setData(from: resource)
+            } catch {
+                logger.error("Could not store HealthKit sample: \(error)")
+            }
         }
         
-        do {
-            try await healthKitDocument(id: sample.id).setData(from: resource)
-        } catch {
-            logger.error("Could not store HealthKit sample: \(error)")
+        if let electrocardiogram = sample as? HKElectrocardiogram {
+            ecgStorage.markAsUploaded(electrocardiogram)
         }
     }
     

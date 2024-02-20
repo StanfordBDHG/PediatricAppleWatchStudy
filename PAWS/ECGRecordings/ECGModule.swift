@@ -8,52 +8,56 @@
 
 import HealthKit
 import Spezi
-import SpeziFHIR
+import SpeziLocalStorage
 
 
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
-    private(set) var electrocardiograms: [FHIRResource] = []
+    enum StorageKey {
+        static let uploadedElectrocardiograms = "ECGModule.uploadedElectrocardiograms"
+    }
+    
+    
+    @ObservationIgnored @Dependency var localStorage: LocalStorage
+    
+    private(set) var electrocardiograms: [HKElectrocardiogram] = []
+    private var uploadedElectrocardiograms: Set<HKElectrocardiogram.ID> = []
     
     
     /// Creates an instance of a ``MockWebService``.
     required init() { }
     
     
-    func contains(electrocardiogram: HKElectrocardiogram) -> Bool {
-        electrocardiograms.contains(where: { $0.id == electrocardiogram.uuid.uuidString })
+    func configure() {
+        uploadedElectrocardiograms = (try? localStorage.read(storageKey: StorageKey.uploadedElectrocardiograms)) ?? []
     }
     
-    @discardableResult
-    func insert(electrocardiogram: HKElectrocardiogram) async throws -> FHIRResource {
-        let healthStore = HKHealthStore()
-        async let symptoms = try electrocardiogram.symptoms(from: healthStore)
-        async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
-        
-        let resource = FHIRResource(
-            resource: try await electrocardiogram.observation(
-                symptoms: symptoms,
-                voltageMeasurements: voltageMeasurements
-            ),
-            displayName: ""
-        )
-        
-        remove(electrocardiogram: electrocardiogram.uuid)
-        electrocardiograms.append(resource)
-        electrocardiograms.sort(by: { ($0.date ?? .distantPast) > ($1.date ?? .distantPast) })
-        
-        return resource
+    
+    func isUploaded(_ electrocardiogram: HKElectrocardiogram) -> Bool {
+        uploadedElectrocardiograms.contains(where: { $0 == electrocardiogram.uuid })
+    }
+    
+    func markAsUploaded(_ electrocardiogram: HKElectrocardiogram) {
+        uploadedElectrocardiograms.insert(electrocardiogram.uuid)
+        try? localStorage.store(uploadedElectrocardiograms, storageKey: StorageKey.uploadedElectrocardiograms)
+    }
+    
+    func insert(electrocardiogram: HKElectrocardiogram) {
+        electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
+        electrocardiograms.append(electrocardiogram)
+        electrocardiograms.sort(by: { $0.endDate > $1.endDate })
     }
     
     func remove(electrocardiogram id: HKElectrocardiogram.ID) {
-        electrocardiograms.removeAll(where: { $0.id == id.uuidString })
+        electrocardiograms.removeAll(where: { $0.uuid == id })
+        uploadedElectrocardiograms.remove(id)
+        try? localStorage.store(uploadedElectrocardiograms, storageKey: StorageKey.uploadedElectrocardiograms)
     }
     
     func electrocardiogram(
         correlatedWith correlatedCategorySample: HKCategorySample,
         from healthStore: HKHealthStore
     ) async throws -> HKElectrocardiogram? {
-        fatalError()
         electrocardiogramLoop: for electrocardiogram in electrocardiograms {
             guard electrocardiogram.symptomsStatus == .present else {
                 continue electrocardiogramLoop

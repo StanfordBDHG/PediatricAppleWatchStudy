@@ -7,12 +7,11 @@
 //
 
 import HealthKit
-import SpeziFHIR
 import SwiftUI
 
 
 struct ECGRecording: View {
-    let electrocardiogram: FHIRResource
+    let electrocardiogram: HKElectrocardiogram
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
     
     
@@ -21,11 +20,9 @@ struct ECGRecording: View {
             VStack(alignment: .leading) {
                 Text("EEG Recording")
                     .font(.title)
-                if let date = electrocardiogram.date {
-                    Text(date.formatted())
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+                Text(electrocardiogram.endDate.formatted())
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                 Divider()
                 if symptoms.isEmpty {
                     Text("Recorded no symptoms")
@@ -36,10 +33,9 @@ struct ECGRecording: View {
                 .padding()
         }
             .task {
-                #warning("Implement ...")
-//                guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
-//                    return
-//                }
+                guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
+                    return
+                }
                 
                 self.symptoms = symptoms
             }
