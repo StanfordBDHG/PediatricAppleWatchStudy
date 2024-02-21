@@ -83,7 +83,18 @@ struct Contacts: View {
     
     var body: some View {
         NavigationStack {
-            ContactsList(contacts: contacts)
+            ScrollView {
+                VStack(spacing: 16) {
+                    ForEach(contacts, id: \.name) { contact in
+                        PAWSCard {
+                            ContactView(contact: contact)
+                                .buttonStyle(.plain) // ensure the whole list row doesn't render as a button
+                                .padding()
+                        }
+                    }
+                }
+                    .padding(.vertical)
+            }
                 .navigationTitle(String(localized: "CONTACTS_NAVIGATION_TITLE"))
                 .toolbar {
                     if AccountButton.shouldDisplay {

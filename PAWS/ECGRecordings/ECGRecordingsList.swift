@@ -18,7 +18,7 @@ struct ECGRecordingsList: View {
         NavigationStack {
             GeometryReader { geometry in
                 ScrollView {
-                    if ecgModule.hkElectrocardiograms.isEmpty {
+                    if ecgModule.electrocardiograms.isEmpty {
                         ContentUnavailableView {
                             Label("No Recordings", systemImage: "waveform.path.ecg")
                         } description: {
@@ -26,9 +26,12 @@ struct ECGRecordingsList: View {
                         }
                             .frame(minHeight: geometry.size.height)
                     }
-                    ForEach(ecgModule.hkElectrocardiograms) { hkElectrocardiogram in
-                        ECGRecording(hkElectrocardiogram: hkElectrocardiogram)
+                    VStack(spacing: 16) {
+                        ForEach(ecgModule.electrocardiograms) { electrocardiogram in
+                            ECGRecording(electrocardiogram: electrocardiogram)
+                        }
                     }
+                        .padding(.vertical)
                 }
                     .scrollBounceBehavior(.basedOnSize)
             }
