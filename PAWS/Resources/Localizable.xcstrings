@@ -42,7 +42,6 @@
       }
     },
     "ACCOUNT_TITLE" : {
-      "comment" : "MARK: Account",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -162,7 +161,6 @@
       }
     },
     "CLOSE" : {
-      "comment" : "MARK: General",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -275,7 +273,6 @@
       }
     },
     "HEALTHKIT_PERMISSIONS_TITLE" : {
-      "comment" : "MARK: HealthKit",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -369,7 +366,6 @@
       }
     },
     "INTERESTING_MODULES_TITLE" : {
-      "comment" : "MARK: Interesting Modules",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -670,7 +666,6 @@
       }
     },
     "WELCOME_TITLE" : {
-      "comment" : "MARK: Welcome",
       "localizations" : {
         "en" : {
           "stringUnit" : {
