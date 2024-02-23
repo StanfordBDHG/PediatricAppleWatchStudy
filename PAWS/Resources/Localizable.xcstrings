@@ -16,7 +16,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You may login to your existing account. Or create a new one if you don't have one already."
+            "value" : "You may log in to your existing account. Or create a new one if you don't have one already."
           }
         }
       }
@@ -36,7 +36,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign up for a new account or sign in to an existing account"
+            "value" : "Sign up for a new account or sign in to an existing account."
           }
         }
       }
@@ -58,7 +58,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Don’t be concerned, simply start another ECG recording on the Apple Watch as soon as you can."
+            "value" : "Don’t be concerned; simply start another ECG recording on the Apple Watch as soon as you can."
           }
         }
       }
@@ -102,7 +102,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You will not get sick or hurt because of anything in this study. We will be studying your health information and all of your information will be kept secure."
+            "value" : "You will not get sick or hurt because of anything in this study. We will be studying your health information, and all of your information will be kept secure."
           }
         }
       }
@@ -113,7 +113,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nothing good will directly happen to you but, by participating in this study, you will help us understand if the Apple Watch can be used to monitor heart problems in other kids. We hope that someday we can just give an Apple Watch to kids needing to have their heart tested."
+            "value" : "Nothing good will directly happen to you, but by participating in this study, you will help us understand if the Apple Watch can be used to monitor heart problems in other kids. We hope that someday we can just give an Apple Watch to kids needing to have their heart tested."
           }
         }
       }
@@ -135,7 +135,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "If you have any questions about the study or any problems to do with the study you can contact the Protocol Director Dr. Scott Ceresnak. You can call him at (650)-723-7913.\n\nIf you have questions about the study but want to talk to someone else who is not a part of the study, you can call the Stanford Institutional Review Board (IRB) at (650)-723-5244 or toll free at 1-866-680-2906."
+            "value" : "If you have any questions about the study or any problems with the study, you can contact the Protocol Director, Dr. Scott Ceresnak. You can call him at (650)-723-7913.\n\nIf you have questions about the study but want to talk to someone else who is not a part of the study, you can call the Stanford Institutional Review Board (IRB) at (650)-723-5244 or toll-free at 1-866-680-2906."
           }
         }
       }
@@ -146,7 +146,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "If you do not want to participate in the study, just tell the researchers or your parents. You don’t need to be a part of the study and you won’t get in trouble if you decide if you don’t want to. Your doctor will still treat you the same even if you don’t participate."
+            "value" : "If you do not want to participate in the study, just tell the researchers or your parents. You don’t need to be a part of the study, and you won’t get in trouble if you decide you don’t want to. Your doctor will still treat you the same even if you don’t participate."
           }
         }
       }
@@ -177,7 +177,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Please include a markdown based document named \"ConsentDocument\" in your module Bundle."
+            "value" : "Please include a markdown-based document named \"ConsentDocument\" in your module Bundle."
           }
         }
       }
@@ -259,7 +259,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "On the next page you will be asked to grant access to the heart data from your Health app."
+            "value" : "On the next page, you will be asked to grant access to the heart data from your Health app."
           }
         }
       }
@@ -293,7 +293,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Create an account so researchers can identify you as a patient"
+            "value" : "Create an account so researchers can identify you as a patient."
           }
         }
       }
@@ -313,7 +313,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Give researchers consent to use your health data as part of the PAWS study"
+            "value" : "Give researchers consent to use your health data as part of the PAWS study."
           }
         }
       }
@@ -333,7 +333,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allow the PAWS app to access the health data recorded on your Apple Watch and iPhone"
+            "value" : "Allow the PAWS app to access the health data recorded on your Apple Watch and iPhone."
           }
         }
       }
@@ -404,40 +404,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow Notifications"
-          }
-        }
-      }
-    },
-    "NOTIFICATION_PERMISSIONS_DESCRIPTION" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do you want to receive friendly reminders for the first week of the PAWS study? Choose your preferred time of day to receive notifications below and click allow."
-          }
-        }
-      }
-    },
-    "NOTIFICATION_PERMISSIONS_SUBTITLE" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "PAWS Study Reminder"
-          }
-        }
-      }
-    },
-    "NOTIFICATION_PERMISSIONS_TITLE" : {
-      "comment" : "MARK: Notifications",
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications"
           }
         }
       }
@@ -592,7 +558,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dr. Ceresnak is a Professor of Pediatrics at Stanford University in the Division of Pediatric Cardiology. He is Director of the Pediatric Electrophysiology and Arrhythmia Program at Lucile Packard Children’s Hospital. His primary clinical and research interests involve the care of children and adults with congenital heart disease, with special attention to patients with arrhythmia disorders and inherited arrhythmia syndromes. He has special research interest and experience in advancing technological growth with the goal of creating improved diagnostic and therapeutic options for children with arrhythmia disorders."
+            "value" : "Dr. Ceresnak is a Professor of Pediatrics at Stanford University in the Division of Pediatric Cardiology. He is the Director of the Pediatric Electrophysiology and Arrhythmia Program at Lucile Packard Children’s Hospital. His primary clinical and research interests involve the care of children and adults with congenital heart disease, with special attention to patients with arrhythmia disorders and inherited arrhythmia syndromes. He has special research interest and experience in advancing technological growth with the goal of creating improved diagnostic and therapeutic options for children with arrhythmia disorders."
           }
         }
       }
@@ -615,7 +581,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This study will explore how the Apple Watch® can work as a heart monitor for kids. As a part of the study, you will wear the Apple Watch for as long as 6 months, and any time you feel like your heart is beating fast or differently, you will record an ECG on the watch using the instructions below. Other than the fact that you are using an Apple Watch, there is no difference between being a part of the study and everything else about seeing your doctor.\n\nAny time that you feel symptoms that feel like an arrhythmia (i.e., palpitations, skipped beats, fast heart rate):\n\n1. First, press the event button on your Zio® Patch Monitor.\n2. Second, initiate a recording on the Apple Watch by following these steps:\n    • Open the ECG App.\n    • Hold your finger to the Digital Crown for 30 seconds.\n    • Follow the on-screen prompts on the Apple Watch."
+            "value" : "This study will explore how the Apple Watch® can work as a heart monitor for kids. As a part of the study, you will wear the Apple Watch for as long as six months, and any time you feel like your heart is beating fast or differently, you will record an ECG on the watch using the instructions below. Other than the fact that you are using an Apple Watch, there is no difference between being a part of the study and everything else about seeing your doctor.\n\nAny time that you feel symptoms that feel like an arrhythmia (i.e., palpitations, skipped beats, fast heart rate):\n\n1. First, press the event button on your Zio® Patch Monitor.\n2. Second, initiate a recording on the Apple Watch by following these steps:\n    • Open the ECG App.\n    • Hold your finger to the Digital Crown for 30 seconds.\n    • Follow the on-screen prompts on the Apple Watch."
           }
         }
       }
@@ -698,7 +664,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "We are excited to have you join the Pediatric Apple Watch Study (PAWS) to improve diagnosis of arrhythmias in patients like you!"
+            "value" : "We are excited to have you join the Pediatric Apple Watch Study (PAWS) to improve the diagnosis of arrhythmias in patients like you!"
           }
         }
       }
