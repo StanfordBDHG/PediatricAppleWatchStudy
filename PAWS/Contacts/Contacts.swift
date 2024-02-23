@@ -38,7 +38,7 @@ struct Contacts: View {
                     image: Image(systemName: "safari.fill"), // swiftlint:disable:this accessibility_label_for_image
                     title: "Website",
                     action: {
-                        if let url = URL(string: "https://profiles.stanford.edu/intranet/scott-ceresnak?tab=bio") {
+                        if let url = URL(string: "https://profiles.stanford.edu/scott-ceresnak?tab=bio") {
                            UIApplication.shared.open(url)
                         }
                     }
@@ -69,7 +69,7 @@ struct Contacts: View {
                     image: Image(systemName: "safari.fill"), // swiftlint:disable:this accessibility_label_for_image
                     title: "Website",
                     action: {
-                        if let url = URL(string: "https://profiles.stanford.edu/intranet/scott-ceresnak?tab=bio") {
+                        if let url = URL(string: "https://profiles.stanford.edu/aydin-zahedivash?tab=bio") {
                            UIApplication.shared.open(url)
                         }
                     }
