@@ -81,24 +81,38 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     
     private func upload(electrocardiogram: HKElectrocardiogram) async {
         var supplementalMetrics: [HKSample] = []
+        var precedingPulseRates: [HKQuantitySample] = []
+        var precedingPhysicalEffort: [HKQuantitySample] = []
+        var precedingStepCount: [HKQuantitySample] = []
+        var precedingActiveEnergy: [HKQuantitySample] = []
+        var precedingVo2Max: HKQuantitySample?
         
         do {
             try await upload(sample: electrocardiogram)
-            
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingPulseRates)
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingPhysicalEffort)
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingStepCount)
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingActiveEnergy)
-            
-            if let precedingVo2Max = try await electrocardiogram.precedingVo2Max {
-                supplementalMetrics.append(precedingVo2Max)
-            }
-            
-            for supplementalMetric in supplementalMetrics {
-                try await upload(sample: supplementalMetric)
-            }
+            precedingPulseRates = try await electrocardiogram.precedingPulseRates
+            precedingPhysicalEffort = try await electrocardiogram.precedingPhysicalEffort
+            precedingStepCount = try await electrocardiogram.precedingStepCount
+            precedingActiveEnergy = try await electrocardiogram.precedingActiveEnergy
+            precedingVo2Max = try await electrocardiogram.precedingVo2Max
         } catch {
             logger.log("Could not access HealthKit sample: \(error)")
+        }
+        
+        supplementalMetrics.append(contentsOf: precedingPulseRates)
+        supplementalMetrics.append(contentsOf: precedingPhysicalEffort)
+        supplementalMetrics.append(contentsOf: precedingStepCount)
+        supplementalMetrics.append(contentsOf: precedingActiveEnergy)
+        
+        if let precedingVo2Max {
+            supplementalMetrics.append(precedingVo2Max)
+        }
+
+        for supplementalMetric in supplementalMetrics {
+            do {
+                try await upload(sample: supplementalMetric)
+            } catch {
+                logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
+            }
         }
     }
     
