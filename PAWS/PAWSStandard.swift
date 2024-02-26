@@ -95,7 +95,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             }
             
             for supplementalMetric in supplementalMetrics {
-                try await upload(sample: supplementalMetric)
+                try? await upload(sample: supplementalMetric)
             }
         } catch {
             logger.log("Could not access HealthKit sample: \(error)")
