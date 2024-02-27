@@ -85,17 +85,21 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
         do {
             try await upload(sample: electrocardiogram)
             
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingPulseRates)
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingPhysicalEffort)
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingStepCount)
-            supplementalMetrics.append(contentsOf: try await electrocardiogram.precedingActiveEnergy)
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPulseRates) ?? [])
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPhysicalEffort) ?? [])
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingStepCount) ?? [])
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingActiveEnergy) ?? [])
             
-            if let precedingVo2Max = try await electrocardiogram.precedingVo2Max {
+            if let precedingVo2Max = try? await electrocardiogram.precedingVo2Max {
                 supplementalMetrics.append(precedingVo2Max)
             }
             
             for supplementalMetric in supplementalMetrics {
-                try await upload(sample: supplementalMetric)
+                do {
+                    try await upload(sample: supplementalMetric)
+                } catch {
+                    logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
+                }
             }
         } catch {
             logger.log("Could not access HealthKit sample: \(error)")
