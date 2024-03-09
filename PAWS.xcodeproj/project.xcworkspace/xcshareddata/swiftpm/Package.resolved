@@ -1,4 +1,5 @@
 {
+  "originHash" : "4215a748079614ed67aab303326e024c420507be5020eb9239ee1daf68db0025",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -104,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/HealthKitOnFHIR.git",
       "state" : {
-        "revision" : "825e96007d83ed83f81ee49eb3ebab29d7b7ba2f",
-        "version" : "0.2.5"
+        "revision" : "00d64d38a8f0d826ee9e27b6f3ce32314a29fd3e",
+        "version" : "0.2.6"
       }
     },
     {
@@ -361,5 +362,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
