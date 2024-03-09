@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 
 # Spezi ECG Data Pipeline
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[YourGitHub]/SpeziECGDataAnalysisPipeline/blob/main/SpeziECGDataInteractiveTool.ipynbhttps://colab.research.google.com/github/StanfordBDHG/PediatricAppleWatchStudy/blob/main/ECGDataPipeline/SpeziECGDataIteractiveTool.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[YourGitHub]/SpeziECGDataAnalysisPipeline/blob/main/SpeziECGDataInteractiveTool.ipynbhttps://colab.research.google.com/github/StanfordBDHG/PediatricAppleWatchStudy/blob/main/ECGDataPipelineTemplate/ECGDataPipelineTemplate.ipynb)
 <!-- [![Build Status](https://github.com/[YourGitHub]/SpeziECGDataAnalysisPipeline/actions/workflows/main.yml/badge.svg)](https://github.com/[YourGitHub]/SpeziECGDataAnalysisPipeline/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/[YourGitHub]/SpeziECGDataAnalysisPipeline/graph/badge.svg?token=[YourToken])](https://codecov.io/gh/[YourGitHub]/SpeziECGDataInteractiveTool.)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.0000000.svg)](https://doi.org/10.5281/zenodo.0000000) -->
@@ -26,11 +26,11 @@ The Spezi ECG Data Pipeline adopts a modular structure, comprising several Pytho
 - `data_preparation.py`: Prepares and processes raw ECG data.
 - `utils.py`: Provides utility functions for data processing.
 - `visualization.py`: Contains functions for data visualization.
-- `SpeziECGDataIteractiveTool.ipynb`: An interactive notebook for analyzing and reviewing ECG data.
+- `SpeziECGDataIteractECGDataPipelineTemplateiveTool.ipynb`: An interactive notebook for analyzing and reviewing ECG data.
 
 ## Running the Notebook in Google Colab
 
-You can open the `SpeziECGDataIteractiveTool.ipynb` notebook in Google Colab by clicking the "Open In Colab" badge above.
+You can open the `ECGDataPipelineTemplate.ipynb` notebook in Google Colab by clicking the "Open In Colab" badge above.
 
 ### Setup Instructions in Colab
 
