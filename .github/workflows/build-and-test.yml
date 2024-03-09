@@ -86,7 +86,7 @@ jobs:
         echo "GCLOUD_PROJECT=spezidatapipelinetemplate" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
-        firebase emulators:exec --import=./sample_data "jupyter nbconvert --to pdf --execute ECGDataPipelineTemplate.ipynb"
+        firebase emulators:exec --import=./ECGDataPipelineTemplate/sample_data "jupyter nbconvert --to pdf --execute ECGDataPipelineTemplate.ipynb"
       env:
         CI: true
     - uses: actions/upload-artifact@v4
