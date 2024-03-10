@@ -60,6 +60,12 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             return Storage.storage().reference().child("users/\(details.accountId)")
         }
     }
+    
+    private var invitationBucketReference: StorageReference {
+        get async throws {
+            Storage.storage().reference().child("invitations")
+        }
+    }
 
 
     init() {
@@ -181,6 +187,20 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
         try await userDocumentReference
             .collection("HealthKit") // Add all HealthKit sources in a /HealthKit collection.
             .document(uuid.uuidString) // Set the document identifier to the UUID of the document.
+    }
+    
+    private func invitationCodeIsValid(_ invitationCode: String) async -> Bool {
+        guard let validInvitationCodes = try? await invitationBucketReference.listAll() else {
+            return false
+        }
+        
+        for item in validInvitationCodes.items {
+            if (try? await item.data(maxSize: 128).base64EncodedString()) == invitationCode {
+                return true
+            }
+        }
+        
+        return false
     }
 
     func deletedAccount() async throws {
