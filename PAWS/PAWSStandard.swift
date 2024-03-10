@@ -194,13 +194,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             return false
         }
         
-        for item in validInvitationCodes.items {
-            if (try? await item.data(maxSize: 128).base64EncodedString()) == invitationCode {
-                return true
-            }
-        }
-        
-        return false
+        return validInvitationCodes.items.contains { $0.name == invitationCode }
     }
 
     func deletedAccount() async throws {
