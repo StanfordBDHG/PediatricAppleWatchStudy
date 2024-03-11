@@ -234,9 +234,8 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
         if let dob = details.dateOfBrith {
             let ageComponents = Calendar.current.dateComponents([.year], from: dob, to: .now)
             // Store whether the participant is older or younger than 18.
-            if let age = ageComponents.year,
-               let ageGroupData = try? JSONEncoder().encode(age >= 18) {
-                _ = try await userBucketReference.child("ageGroup/isAdult").putDataAsync(ageGroupData)
+            if let age = ageComponents.year {
+                try await userDocumentReference.getDocument().setValue(age >= 18, forKey: "ageGroupIsAdult")
             }
         }
         
