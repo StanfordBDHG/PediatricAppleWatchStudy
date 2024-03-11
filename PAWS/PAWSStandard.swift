@@ -244,12 +244,12 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     ///
     /// - Parameter invitationCode: The (valid) invitation code to be used in signing up.
     func store(invitationCode: String) async {
-        guard !FeatureFlags.disableFirebase, let invitationData = invitationCode.data(using: .utf8) else {
+        guard !FeatureFlags.disableFirebase else {
             return
         }
         
         do {
-            _ = try await userBucketReference.child("invitations").putDataAsync(invitationData)
+            try await userDocumentReference.getDocument().setValue(invitationCode, forKey: "invitationCode")
             try await invitationBucketReference.child(invitationCode).delete()
         } catch {
             logger.error("Could not store invitation code.")
