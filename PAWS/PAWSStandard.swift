@@ -239,6 +239,22 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             logger.error("Could not store consent form: \(error)")
         }
     }
+    
+    /// Assigns a valid invitation code to a user's document directory and removes said invitation code from list of unused codes.
+    ///
+    /// - Parameter invitationCode: The (valid) invitation code to be used in signing up.
+    func store(invitationCode: String) async {
+        guard !FeatureFlags.disableFirebase, let invitationData = invitationCode.data(using: .utf8) else {
+            return
+        }
+        
+        do {
+            _ = try await userBucketReference.child("invitations").putDataAsync(invitationData)
+            try await invitationBucketReference.child(invitationCode).delete()
+        } catch {
+            logger.error("Could not store invitation code.")
+        }
+    }
 
 
     func create(_ identifier: AdditionalRecordId, _ details: SignupDetails) async throws {
