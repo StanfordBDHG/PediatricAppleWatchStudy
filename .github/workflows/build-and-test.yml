@@ -83,7 +83,7 @@ jobs:
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
-        echo "GCLOUD_PROJECT=spezidatapipelinetemplate" >> $GITHUB_ENV
+        echo "GCLOUD_PROJECT=ecgdatapipelinetemplate" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
         firebase emulators:exec --import=./ECGDataPipelineTemplate/sample_data "jupyter nbconvert --to pdf --execute ./ECGDataPipelineTemplate/ECGDataPipelineTemplate.ipynb"
