@@ -28,9 +28,9 @@ The Spezi ECG Data Pipeline adopts a modular structure, comprising several Pytho
 - `visualization.py`: Contains functions for data visualization.
 - `SpeziECGDataIteractECGDataPipelineTemplateiveTool.ipynb`: An interactive notebook for analyzing and reviewing ECG data.
 
-## Running the Notebook in Google Colab
+## Run the Notebook in Google Colab
 
-You can open the `ECGDataPipelineTemplate.ipynb` notebook in Google Colab by clicking the "Open In Colab" badge above.
+You can open and run the `ECGDataPipelineTemplate.ipynb` notebook in Google Colab by clicking the "Open In Colab" badge above.
 
 ### Setup Instructions in Colab
 
@@ -44,7 +44,7 @@ Once the notebook is open in Colab, execute the following cell to clone the Spez
 
 Remember to upload the `serviceAccountKey_file.json` to the Colab workspace directory to enable Firebase access. This file is necessary for authentication and should be securely handled.
 
-### Using the Interactive ECG Reviewing Tool
+### Use the Interactive ECG Reviewing Tool
 
 To start reviewing ECG data, execute the following cells in your notebook:
 
