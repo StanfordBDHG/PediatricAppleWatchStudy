@@ -13,7 +13,7 @@ SPDX-License-Identifier: MIT
 [![Beta Deployment](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/actions/workflows/beta-deployment.yml/badge.svg)](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/actions/workflows/beta-deployment.yml)
 [![codecov](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy/graph/badge.svg?token=0SNRhbC0wi)](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10602852.svg)](https://doi.org/10.5281/zenodo.10602852)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[YourGitHub]/SpeziECGDataAnalysisPipeline/blob/main/SpeziECGDataInteractiveTool.ipynbhttps://colab.research.google.com/github/StanfordBDHG/PediatricAppleWatchStudy/blob/main/ECGDataPipelineTemplate/ECGDataPipelineTemplate.ipynb)
+[![Open Data Pipeline In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[YourGitHub]/SpeziECGDataAnalysisPipeline/blob/main/SpeziECGDataInteractiveTool.ipynbhttps://colab.research.google.com/github/StanfordBDHG/PediatricAppleWatchStudy/blob/main/ECGDataPipelineTemplate/ECGDataPipelineTemplate.ipynb)
 
 This repository contains the Pediatric Apple Watch Study Application application.
 The Pediatric Apple Watch Study Application is using the [Spezi](https://github.com/StanfordSpezi/Spezi) ecosystem and builds on top of the [Stanford Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication).
