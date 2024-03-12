@@ -87,7 +87,7 @@ viewer = ECGDataViewer(ecg_data, db)
 
 This interactive tool allows you to plot ECG data, add diagnoses, evaluate the trace quality, and add notes.
 
-![ecg_data_interactive_tool_snapshot.png](Figures/ecg_data_interactive_tool_snapshot.png)
+![ecg_data_interactive_tool_snapshot.png](ECGDataPipelineTemplate/Figures/ecg_data_interactive_tool_snapshot.png)
 
 
 ## Contributing
