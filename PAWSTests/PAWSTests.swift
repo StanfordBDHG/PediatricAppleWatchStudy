@@ -11,7 +11,7 @@ import XCTest
 
 
 class PAWSTests: XCTestCase {
-    func testAgeGroupIsAdultTrue() async throws {
+    func testAgeGroupIsAdultTrue() throws {
         var components = DateComponents()
         components.year = 1970
         components.month = 1
@@ -33,7 +33,7 @@ class PAWSTests: XCTestCase {
         XCTAssertTrue(ageYears >= 18, "Age is below 18 years.")
     }
 
-    func testAgeGroupIsAdultFalse() async throws {
+    func testAgeGroupIsAdultFalse() throws {
         guard let dateOfBirth = Calendar.current.date(byAdding: .year, value: -12, to: .now) else {
             XCTFail("Could not initialize date of birth.")
             return
