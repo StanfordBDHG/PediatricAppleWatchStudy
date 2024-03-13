@@ -21,18 +21,31 @@ class PAWSTests: XCTestCase {
         components.hour = 0
         components.minute = 0
         components.second = 0
-        let dateOfBirth = Calendar.current.date(from: components)
-        XCTAssertNotNil(dateOfBirth)
-        let ageYears = Calendar.current.dateComponents([.year], from: dateOfBirth!, to: .now).year
-        XCTAssertNotNil(ageYears)
-        XCTAssertTrue(ageYears! >= 18)
+
+        guard let dateOfBirth = Calendar.current.date(from: components) else {
+            XCTFail("Could not initialize date of birth.")
+            return
+        }
+        
+        guard let ageYears = Calendar.current.dateComponents([.year], from: dateOfBirth, to: .now).year else {
+            XCTFail("Could not calculate age.")
+            return
+        }
+        
+        XCTAssertTrue(ageYears >= 18, "Age is below 18 years.")
     }
 
     func testAgeGroupIsAdultFalse() async throws {
-        let dateOfBirth = Calendar.current.date(byAdding: .year, value: -12, to: .now)
-        XCTAssertNotNil(dateOfBirth)
-        let ageYears = Calendar.current.dateComponents([.year], from: dateOfBirth!, to: .now).year
-        XCTAssertNotNil(ageYears)
-        XCTAssertFalse(ageYears! >= 18)
+        guard let dateOfBirth = Calendar.current.date(byAdding: .year, value: -12, to: .now) else {
+            XCTFail("Could not initialize date of birth.")
+            return
+        }
+        
+        guard let ageYears = Calendar.current.dateComponents([.year], from: dateOfBirth, to: .now).year else {
+            XCTFail("Could not calculate age.")
+            return
+        }
+        
+        XCTAssertFalse(ageYears >= 18, "Age is 18 years or older; expected younger.")
     }
 }
