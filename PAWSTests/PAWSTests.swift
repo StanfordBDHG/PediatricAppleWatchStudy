@@ -8,8 +8,6 @@
 
 @testable import PAWS
 import XCTest
-import Firebase
-import SpeziAccount
 
 
 class PAWSTests: XCTestCase {
