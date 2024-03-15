@@ -232,11 +232,8 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             preconditionFailure("Account Storage was requested although not enabled in current configuration.")
         }
         if let dob = details.dateOfBrith {
-            let ageComponents = Calendar.current.dateComponents([.year], from: dob, to: .now)
             // Store whether the participant is older or younger than 18.
-            if let age = ageComponents.year {
-                try await userDocumentReference.getDocument().setValue(age >= 18, forKey: "ageGroupIsAdult")
-            }
+            try await userDocumentReference.getDocument().setValue(dob.isAdultDateOfBirth, forKey: "ageGroupIsAdult")
         }
         
         try await accountStorage.create(identifier, details)
