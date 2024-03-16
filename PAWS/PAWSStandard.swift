@@ -60,12 +60,6 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             return Storage.storage().reference().child("users/\(details.accountId)")
         }
     }
-    
-    private var invitationBucketReference: StorageReference {
-        get async throws {
-            Storage.storage().reference().child("invitations")
-        }
-    }
 
 
     init() {
@@ -188,14 +182,6 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             .collection("HealthKit") // Add all HealthKit sources in a /HealthKit collection.
             .document(uuid.uuidString) // Set the document identifier to the UUID of the document.
     }
-    
-    private func invitationCodeIsValid(_ invitationCode: String) async -> Bool {
-        guard let validInvitationCodes = try? await invitationBucketReference.listAll() else {
-            return false
-        }
-        
-        return validInvitationCodes.items.contains { $0.name == invitationCode }
-    }
 
     func deletedAccount() async throws {
         // delete all user associated data
@@ -237,22 +223,6 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             _ = try await userBucketReference.child("consent/\(dateString).pdf").putDataAsync(consentData, metadata: metadata)
         } catch {
             logger.error("Could not store consent form: \(error)")
-        }
-    }
-    
-    /// Assigns a valid invitation code to a user's document directory and removes said invitation code from list of unused codes.
-    ///
-    /// - Parameter invitationCode: The (valid) invitation code to be used in signing up.
-    func store(invitationCode: String) async {
-        guard !FeatureFlags.disableFirebase else {
-            return
-        }
-        
-        do {
-            try await userDocumentReference.getDocument().setValue(invitationCode, forKey: "invitationCode")
-            try await invitationBucketReference.child(invitationCode).delete()
-        } catch {
-            logger.error("Could not store invitation code.")
         }
     }
 

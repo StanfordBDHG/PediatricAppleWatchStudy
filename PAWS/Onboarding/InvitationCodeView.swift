@@ -116,12 +116,11 @@ struct InvitationCodeView: View {
                         ]
                     )
                 } catch {
-                    print(error)
+                    throw InvitationCodeError.invitationCodeInvalid
                 }
             }
             
             // try await studyModule.enrollInStudy(study: study)
-            
             await onboardingNavigationPath.nextStep()
         } catch let error as LocalizedError {
             viewState = .error(error)
