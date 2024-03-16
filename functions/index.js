@@ -68,24 +68,24 @@ exports.checkInvitationCode = onCall(async (request) => {
   }
 });
 
-export const beforecreated = beforeUserCreated(async (event) => {
-    const firestore = admin.firestore();
+exports.beforecreated = beforeUserCreated(async (event) => {
+  const firestore = admin.firestore();
 
-    try {
-      // Check Firestore to confirm whether an invitation code has been associated with a user.
-      const invitationQuerySnapshot = await firestore.collection("invitationCodes")
+  try {
+    // Check Firestore to confirm whether an invitation code has been associated with a user.
+    const invitationQuerySnapshot = await firestore.collection("invitationCodes")
         .where("usedBy", "==", event.data.user.uid)
         .limit(1)
         .get();
 
-      if (invitationQuerySnapshot.empty) {
-        throw new https.HttpsError("no-match", "No valid invitation code found for this user.");
-      }
-    } catch (error) {
-      logger.error(`Error processing request: ${error.message}`);
-      if (!error.code) {
-        throw new https.HttpsError("internal", "Internal server error.");
-      }
-      throw error;
+    if (invitationQuerySnapshot.empty) {
+      throw new https.HttpsError("no-match", "No valid invitation code found for this user.");
     }
-})
+  } catch (error) {
+    logger.error(`Error processing request: ${error.message}`);
+    if (!error.code) {
+      throw new https.HttpsError("internal", "Internal server error.");
+    }
+    throw error;
+  }
+});
