@@ -381,6 +381,9 @@
     "Invitation Code" : {
 
     },
+    "Invitation code was invalid." : {
+
+    },
     "LICENSE_INFO_TITLE" : {
       "localizations" : {
         "en" : {
@@ -548,7 +551,7 @@
     "Recorded no symptoms" : {
 
     },
-    "Redeem Inviation Code" : {
+    "Redeem Invitation Code" : {
 
     },
     "Repository Link" : {

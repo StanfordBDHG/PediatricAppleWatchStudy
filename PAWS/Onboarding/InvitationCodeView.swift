@@ -33,7 +33,7 @@ struct InvitationCodeView: View {
                     .padding(.bottom, -12)
                 Divider()
                 OnboardingActionsView(
-                    "Redeem Inviation Code",
+                    "Redeem Invitation Code",
                     action: {
                         guard validation.validateSubviews() else {
                             return
@@ -90,6 +90,10 @@ struct InvitationCodeView: View {
         )
     }
     
+    init() {
+        Functions.functions().useEmulator(withHost: "localhost", port: 5001)
+    }
+    
     private func verifyOnboardingCode() async {
         do {
             if FeatureFlags.disableFirebase {
@@ -125,12 +129,4 @@ struct InvitationCodeView: View {
             print(error)
         }
     }
-    
-    init() {
-        Functions.functions().useEmulator(withHost: "localhost", port: 5001)
-    }
-}
-
-enum InvitationCodeError: Error {
-    case invitationCodeInvalid
 }
