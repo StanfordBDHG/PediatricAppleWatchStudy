@@ -51,6 +51,9 @@
         }
       }
     },
+    "An invitation code is at least 8 characters long." : {
+
+    },
     "ANSWER_1" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -375,6 +378,9 @@
         }
       }
     },
+    "Invitation Code" : {
+
+    },
     "LICENSE_INFO_TITLE" : {
       "localizations" : {
         "en" : {
@@ -423,6 +429,9 @@
           }
         }
       }
+    },
+    "Plase enter your invitation code to join the PAWS study." : {
+
     },
     "PROJECT_LICENSE_DESCRIPTION" : {
       "localizations" : {
@@ -537,6 +546,9 @@
 
     },
     "Recorded no symptoms" : {
+
+    },
+    "Redeem Inviation Code" : {
 
     },
     "Repository Link" : {
