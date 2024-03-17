@@ -91,7 +91,9 @@ struct InvitationCodeView: View {
     }
     
     init() {
-        Functions.functions().useEmulator(withHost: "localhost", port: 5001)
+        if FeatureFlags.useFirebaseEmulator {
+            Functions.functions().useEmulator(withHost: "localhost", port: 5001)
+        }
     }
     
     private func verifyOnboardingCode() async {
