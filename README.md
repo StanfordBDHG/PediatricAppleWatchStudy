@@ -56,8 +56,8 @@ Once the notebook is open in Colab, execute the following cell to clone the Spez
 
 ```python
 # Clone GitHub repository for Spezi ECG Data Pipeline
-!git clone https://github.com/StanfordBDHG/PediatricAppleWatchStudy.git
-%cd PediatricAppleWatchStudy/ECGDataPipeline
+git clone https://github.com/StanfordBDHG/PediatricAppleWatchStudy.git
+cd PediatricAppleWatchStudy/ECGDataPipeline
 ```
 
 Remember to upload the `serviceAccountKey_file.json` to the Colab workspace directory to enable Firebase access. This file is necessary for authentication and should be securely handled.
