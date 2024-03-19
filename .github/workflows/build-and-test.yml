@@ -65,7 +65,12 @@ jobs:
         java-version: '17'
     - name: Setup LaTex
       run: |
-        sudo apt-get install pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
+        sudo apt-get update -y
+        sudo apt-get install -y --no-install-recommends pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic || true
+        if ! dpkg -l pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic; then
+          sudo apt-get update --fix-missing
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
+        fi
     - name: Cache Firebase Emulators
       uses: actions/cache@v3
       with:
