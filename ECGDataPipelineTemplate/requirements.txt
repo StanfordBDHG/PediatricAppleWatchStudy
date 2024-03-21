@@ -1,0 +1,5 @@
+firebase_admin
+pandas
+numpy
+matplotlib
+ipywidgets
