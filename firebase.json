@@ -7,16 +7,10 @@
   },
   "functions": [
     {
-      "codebase": "callable-functions",
+      "codebase": "paws",
       "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" install",
         "npm --prefix \"$RESOURCE_DIR\" run lint"
-      ],
-      "source": "functions",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
       ]
     }
   ],

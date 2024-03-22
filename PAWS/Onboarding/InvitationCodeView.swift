@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Firebase
 import FirebaseAuth
 import FirebaseFunctions
 import SpeziOnboarding
@@ -129,5 +130,14 @@ struct InvitationCodeView: View {
         } catch {
             print(error)
         }
+    }
+}
+
+
+#Preview {
+    FirebaseApp.configure()
+    
+    return OnboardingStack {
+        InvitationCodeView()
     }
 }
