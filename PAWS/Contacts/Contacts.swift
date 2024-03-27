@@ -6,13 +6,17 @@
 // SPDX-License-Identifier: MIT
 //
 
+import FirebaseStorage
 import Foundation
+import SpeziAccount
 import SpeziContact
 import SwiftUI
 
 
 /// Displays the contacts for the PAWS.
 struct Contacts: View {
+    @Environment(Account.self) var account
+    
     let contacts = [
         Contact(
             name: PersonNameComponents(
@@ -79,7 +83,7 @@ struct Contacts: View {
     ]
     
     @Binding var presentingAccount: Bool
-    
+    @State private var ageGroupIsAdult = false
     
     var body: some View {
         NavigationStack {
@@ -101,6 +105,14 @@ struct Contacts: View {
                         AccountButton(isPresented: $presentingAccount)
                     }
                 }
+        }
+        .task {
+            guard let accountId = account.details?.accountId else {
+                return
+            }
+            let userBucketReference = Storage.storage().reference().child("users/\(accountId)")
+            let result = userBucketReference.value(forKey: "ageGroupIsAdult") as? Bool
+            ageGroupIsAdult = result ?? false
         }
     }
     
