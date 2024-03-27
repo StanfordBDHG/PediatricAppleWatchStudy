@@ -33,7 +33,7 @@ exports.checkInvitationCode = onCall(async (request) => {
     const invitationCodeRef = firestore.doc(`invitationCodes/${invitationCode}`);
     const invitationCodeDoc = await invitationCodeRef.get();
 
-    if (!invitationCodeDoc.exists || invitationCodeDoc.data().used) {
+    if (!invitationCodeDoc.exists || (invitationCodeDoc.data().used && invitationCodeDoc.data().usedBy !== userId)) {
       throw new https.HttpsError("not-found", "Invitation code not found or already used.");
     }
 
