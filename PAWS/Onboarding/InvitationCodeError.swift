@@ -21,7 +21,7 @@ enum InvitationCodeError: LocalizedError {
         case .userNotAuthenticated:
             NSLocalizedString("User authentication failed. Please try to sign in again.", comment: "User Not Authenticated")
         case .generalError(let message):
-            String(localized: ...)
+            String(localized: "An error occurred: \(message)", comment: "General Error")
         }
     }
 }
