@@ -68,16 +68,14 @@ exports.checkInvitationCode = onCall(async (request) => {
   }
 });
 
-// so the error was coming from here
-// still need to assign email address, right
-/*
 exports.beforecreated = beforeUserCreated(async (event) => {
   const firestore = admin.firestore();
+  const userId = event.data.uid;
 
   try {
     // Check Firestore to confirm whether an invitation code has been associated with a user.
     const invitationQuerySnapshot = await firestore.collection("invitationCodes")
-        .where("usedBy", "==", event.data.user.uid)
+        .where("usedBy", "==", userId)
         .limit(1)
         .get();
 
@@ -85,12 +83,12 @@ exports.beforecreated = beforeUserCreated(async (event) => {
       throw new https.HttpsError("not-found", "No valid invitation code found for this user.");
     }
 
-    // const userDoc = await firestore.doc(`users/${event.data.user.uid}`).get();
+    const userDoc = await firestore.doc(`users/${userId}`).get();
 
-    // // Check if the user document exists and contains the correct invitation code.
-    // if (!userDoc.exists || userDoc.data()?.invitationCode !== invitationQuerySnapshot.docs[0]?.data().invitationCode) {
-    //   throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
-    // }
+    // Check if the user document exists and contains the correct invitation code.
+    if (!userDoc.exists || userDoc.data()?.invitationCode !== invitationQuerySnapshot.docs[0]?.data().invitationCode) {
+      throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
+    }
   } catch (error) {
     logger.error(`Error processing request: ${error.message}`);
     if (!error.code) {
@@ -99,6 +97,3 @@ exports.beforecreated = beforeUserCreated(async (event) => {
     throw error;
   }
 });
-*/
-// what the user enters the code but then closes the app before signing up?
-// hopefully that doesn't happen, but they could contact us and we'll just generate a new code
