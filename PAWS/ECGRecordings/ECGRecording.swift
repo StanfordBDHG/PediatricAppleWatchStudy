@@ -18,7 +18,7 @@ struct ECGRecording: View {
     var body: some View {
         PAWSCard {
             VStack(alignment: .leading) {
-                Text("EEG Recording")
+                Text("ECG Recording")
                     .font(.title)
                 Text(electrocardiogram.endDate.formatted())
                     .font(.subheadline)
