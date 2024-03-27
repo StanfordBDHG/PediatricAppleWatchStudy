@@ -19,10 +19,6 @@ final class AccountCreationTests: XCTestCase {
         app.launch()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    
     func testAccountCreationFlow() {
         let app = XCUIApplication()
         app.launch()
@@ -44,7 +40,7 @@ final class AccountCreationTests: XCTestCase {
         // Submit the form.
         app.buttons["Submit"].tap()
 
-        // Add assertions to verify the account was created successfully
+        // Verify that the account was created successfully.
         // Verify that the sheet is dismissed, thereby navigating to ECG list view.
     }
 }
