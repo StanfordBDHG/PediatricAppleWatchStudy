@@ -123,13 +123,23 @@ struct InvitationCodeView: View {
                 }
             }
             
-            // try await studyModule.enrollInStudy(study: study)
             await onboardingNavigationPath.nextStep()
-        } catch let error as LocalizedError {
-            viewState = .error(error)
-        } catch {
-            print(error)
-        }
+        } catch let error as NSError {
+                if let errorCode = FunctionsErrorCode(rawValue: error.code) {
+                    // Handle Firebase-specific errors.
+                    switch errorCode {
+                    case .unauthenticated:
+                        viewState = .error(InvitationCodeError.userNotAuthenticated)
+                    case .notFound:
+                        viewState = .error(InvitationCodeError.invitationCodeInvalid)
+                    default:
+                        viewState = .error(InvitationCodeError.generalError(error.localizedDescription))
+                    }
+                } else {
+                    // Handle other errors, such as network issues or unexpected behavior.
+                    viewState = .error(InvitationCodeError.generalError(error.localizedDescription))
+                }
+            }
     }
 }
 

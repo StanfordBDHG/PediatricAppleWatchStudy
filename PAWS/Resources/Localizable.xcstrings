@@ -51,6 +51,9 @@
         }
       }
     },
+    "An error occurred: %@" : {
+      "comment" : "General Error"
+    },
     "An invitation code is at least 8 characters long." : {
 
     },
@@ -381,9 +384,6 @@
     "Invitation Code" : {
 
     },
-    "Invitation code was invalid." : {
-
-    },
     "LICENSE_INFO_TITLE" : {
       "localizations" : {
         "en" : {
@@ -599,6 +599,12 @@
     },
     "Thank you for participating in the PAWS study!" : {
 
+    },
+    "The invitation code is invalid or has already been used." : {
+      "comment" : "Invitation Code Invalid"
+    },
+    "User authentication failed. Please try to sign in again." : {
+      "comment" : "User Not Authenticated"
     },
     "WELCOME_AREA1_DESCRIPTION" : {
       "localizations" : {
