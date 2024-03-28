@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import FirebaseStorage
+import FirebaseFirestore
 import Foundation
 import SpeziAccount
 import SpeziContact
@@ -110,7 +110,7 @@ struct Contacts: View {
             guard let accountId = account.details?.accountId else {
                 return
             }
-            let userDocument = try? await userCollection.document(accountId).getDocument()
+            let userDocument = try? await Firestore.firestore().collection("users").document(accountId).getDocument()
             let result = userDocument?.value(forKey: "ageGroupIsAdult") as? Bool
             ageGroupIsAdult = result ?? false
         }
