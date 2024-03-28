@@ -110,8 +110,8 @@ struct Contacts: View {
             guard let accountId = account.details?.accountId else {
                 return
             }
-            let userBucketReference = Storage.storage().reference().child("users/\(accountId)")
-            let result = userBucketReference.value(forKey: "ageGroupIsAdult") as? Bool
+            let userDocument = try? await userCollection.document(accountId).getDocument()
+            let result = userDocument?.value(forKey: "ageGroupIsAdult") as? Bool
             ageGroupIsAdult = result ?? false
         }
     }
