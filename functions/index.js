@@ -15,15 +15,21 @@ const {beforeUserCreated} = require("firebase-functions/v2/identity");
 admin.initializeApp();
 
 exports.checkInvitationCode = onCall(async (request) => {
-  if (!request.auth || !request.auth.uid) {
-    throw new https.HttpsError(
-        "unauthenticated",
-        "User is not properly authenticated.",
-    );
-  }
+  // const auth = getAuth();
+  // try {
+  //   await signInAnonymously(auth);
+  // } catch (error) {
+  //   throw new https.HttpsError("internal", "Internal server error.");
+  // }
 
-  const {invitationCode} = request.data;
-  const userId = request.auth.uid;
+  // if (!request.auth || !request.auth.uid) {
+  //   throw new https.HttpsError(
+  //       "unauthenticated",
+  //       "User is not properly authenticated.",
+  //   );
+  // }
+
+  const {invitationCode, userId} = request.data;
   const firestore = admin.firestore();
 
   logger.debug(`User (${userId}) -> PAWS, InvitationCode ${invitationCode}`);

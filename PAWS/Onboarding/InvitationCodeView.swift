@@ -40,6 +40,10 @@ struct InvitationCodeView: View {
                             return
                         }
                         
+                        /*if Auth.auth().currentUser == nil {
+                            async let authResult =  Auth.auth().signInAnonymously()
+                            print("Auth result: ", try await authResult)
+                        }*/
                         await verifyOnboardingCode()
                     }
                 )
@@ -107,19 +111,21 @@ struct InvitationCodeView: View {
                 try? await Task.sleep(for: .seconds(0.25))
             } else {
                 if Auth.auth().currentUser == nil {
-                    try await Auth.auth().signInAnonymously()
-                }
-                
-                let checkInvitationCode = Functions.functions().httpsCallable("checkInvitationCode")
-                
-                do {
-                    _ = try await checkInvitationCode.call(
-                        [
-                            "invitationCode": invitationCode
-                        ]
-                    )
-                } catch {
-                    throw InvitationCodeError.invitationCodeInvalid
+                    async let authResult = Auth.auth().signInAnonymously()
+                    print("Auth result: ", try await authResult.user.uid)
+                    
+                    let checkInvitationCode = Functions.functions().httpsCallable("checkInvitationCode")
+                    
+                    do {
+                        _ = try await checkInvitationCode.call(
+                            [
+                                "invitationCode": invitationCode,
+                                "userId": authResult.user.uid
+                            ]
+                        )
+                    } catch {
+                        throw InvitationCodeError.invitationCodeInvalid
+                    }
                 }
             }
             
