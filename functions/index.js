@@ -15,23 +15,16 @@ const {beforeUserCreated} = require("firebase-functions/v2/identity");
 admin.initializeApp();
 
 exports.checkInvitationCode = onCall(async (request) => {
-  // const auth = getAuth();
-  // try {
-  //   await signInAnonymously(auth);
-  // } catch (error) {
-  //   throw new https.HttpsError("internal", "Internal server error.");
-  // }
-
-  // if (!request.auth || !request.auth.uid) {
-  //   throw new https.HttpsError(
-  //       "unauthenticated",
-  //       "User is not properly authenticated.",
-  //   );
-  // }
-
   const {invitationCode, userId} = request.data;
-  const firestore = admin.firestore();
 
+  if (!userId) {
+    throw new https.HttpsError(
+        "unauthenticated",
+        "User is not properly authenticated.",
+    );
+  }
+
+  const firestore = admin.firestore();
   logger.debug(`User (${userId}) -> PAWS, InvitationCode ${invitationCode}`);
 
   try {
@@ -39,7 +32,7 @@ exports.checkInvitationCode = onCall(async (request) => {
     const invitationCodeRef = firestore.doc(`invitationCodes/${invitationCode}`);
     const invitationCodeDoc = await invitationCodeRef.get();
 
-    if (!invitationCodeDoc.exists || (invitationCodeDoc.data().used && invitationCodeDoc.data().usedBy !== userId)) {
+    if (!invitationCodeDoc.exists || (invitationCodeDoc.data()?.used && invitationCodeDoc.data()?.usedBy !== userId)) {
       throw new https.HttpsError("not-found", "Invitation code not found or already used.");
     }
 

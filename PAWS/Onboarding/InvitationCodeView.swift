@@ -82,7 +82,7 @@ struct InvitationCodeView: View {
                 .frame(height: 100)
                 .accessibilityHidden(true)
                 .foregroundStyle(Color.accentColor)
-            Text("Plase enter your invitation code to join the PAWS study.")
+            Text("Please enter your invitation code to join the PAWS study.")
         }
     }
     
@@ -112,8 +112,6 @@ struct InvitationCodeView: View {
             } else {
                 if Auth.auth().currentUser == nil {
                     async let authResult = Auth.auth().signInAnonymously()
-                    print("Auth result: ", try await authResult.user.uid)
-                    
                     let checkInvitationCode = Functions.functions().httpsCallable("checkInvitationCode")
                     
                     do {
