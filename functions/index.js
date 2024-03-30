@@ -79,6 +79,7 @@ exports.beforecreated = beforeUserCreated(async (event) => {
         .get();
 
     if (invitationQuerySnapshot.empty) {
+      // logger.error(`No valid invitation code found for user: ${userId} | ${getAuth().getUser(userId).email}`);
       throw new https.HttpsError("not-found", "No valid invitation code found for this user.");
     }
 

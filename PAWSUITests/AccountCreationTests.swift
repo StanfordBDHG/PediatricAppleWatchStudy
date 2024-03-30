@@ -73,7 +73,7 @@ extension XCUIApplication {
         try navigateOnboardingFlowWelcome()
         try navigateOnboardingFlowInterestingModules()
         try navigateOnboardingInvitationCode()
-        if staticTexts["Your Account"].waitForExistence(timeout: 5) {
+        if staticTexts["Your PAWS Account"].waitForExistence(timeout: 5) {
             try navigateOnboardingAccount(email: email)
         }
         if staticTexts["Consent"].waitForExistence(timeout: 5) {
@@ -122,7 +122,13 @@ extension XCUIApplication {
         try collectionViews.secureTextFields["Password"].enter(value: "HelloWorld")
         try textFields["enter first name"].enter(value: "John")
         try textFields["enter last name"].enter(value: "Doe")
-
+        let datePicker = datePickers.firstMatch
+        //datePicker.pickerWheels.element(boundBy: 2).adjust(toPickerWheelValue: "1970")
+        datePicker.tap()
+        datePicker.buttons["Show year picker"].tap()
+        datePicker.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "1970")
+//        datePicker.pickerWheels["1970"].tap()
+        
         XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
         collectionViews.buttons["Signup"].tap()
 
@@ -184,8 +190,9 @@ extension XCUIApplication {
     }
 
     fileprivate func assertAccountInformation(email: String) throws {
-        XCTAssertTrue(navigationBars.buttons["Your Account"].waitForExistence(timeout: 2))
-        navigationBars.buttons["Your Account"].tap()
+        // also gonna check that the account info matches up in firebase with the user document after linking
+        XCTAssertTrue(navigationBars.buttons["Your PAWS Account"].waitForExistence(timeout: 2))
+        navigationBars.buttons["Your PAWS Account"].tap()
 
         XCTAssertTrue(staticTexts["Account Overview"].waitForExistence(timeout: 5.0))
         XCTAssertTrue(staticTexts["John Doe"].exists)
@@ -196,8 +203,8 @@ extension XCUIApplication {
         XCTAssertTrue(navigationBars.buttons["Close"].waitForExistence(timeout: 0.5))
         navigationBars.buttons["Close"].tap()
 
-        XCTAssertTrue(navigationBars.buttons["Your Account"].waitForExistence(timeout: 2))
-        navigationBars.buttons["Your Account"].tap()
+        XCTAssertTrue(navigationBars.buttons["Your PAWS Account"].waitForExistence(timeout: 2))
+        navigationBars.buttons["Your PAWS Account"].tap()
 
         XCTAssertTrue(navigationBars.buttons["Edit"].waitForExistence(timeout: 2))
         navigationBars.buttons["Edit"].tap()
