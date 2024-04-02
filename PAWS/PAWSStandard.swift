@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKitOnFHIR
@@ -235,12 +236,6 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             // Store whether the participant is older or younger than 18.
             try await userDocumentReference.getDocument().setValue(dob.isAdultDateOfBirth, forKey: "ageGroupIsAdult")
         }
-        /*if let email = details.email, let password = details.password {
-            let credential = EmailAuthProvider.credential(withEmail: email, password: password)
-            if let currentUser = Auth.auth().currentUser {
-              _ = try await currentUser.link(with: credential)
-            }
-        }*/
         
         try await accountStorage.create(identifier, details)
     }
