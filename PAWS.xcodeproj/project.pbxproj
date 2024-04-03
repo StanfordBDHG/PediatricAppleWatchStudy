@@ -1172,7 +1172,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/HealthKitOnFHIR.git";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.4;
+				minimumVersion = 0.2.7;
 			};
 		};
 		2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
