@@ -45,6 +45,7 @@ struct InvitationCodeView: View {
                             print("Auth result: ", try await authResult)
                         }*/
                         await verifyOnboardingCode()
+                        // try Auth.auth().signOut()
                     }
                 )
                     .disabled(invitationCode.isEmpty)

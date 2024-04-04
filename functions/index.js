@@ -32,7 +32,7 @@ exports.checkInvitationCode = onCall(async (request) => {
     const invitationCodeRef = firestore.doc(`invitationCodes/${invitationCode}`);
     const invitationCodeDoc = await invitationCodeRef.get();
 
-    if (!invitationCodeDoc.exists || (invitationCodeDoc.data()?.used && invitationCodeDoc.data()?.usedBy !== userId)) {
+    if (!invitationCodeDoc.exists || (invitationCodeDoc.data().used)) {
       throw new https.HttpsError("not-found", "Invitation code not found or already used.");
     }
 
@@ -78,9 +78,13 @@ exports.beforecreated = beforeUserCreated(async (event) => {
         .limit(1)
         .get();
 
+    logger.info(`Invitation code query snapshot: ${invitationQuerySnapshot.size}`);
+    logger.info(`Event: ${event}`);
+    logger.info(`Event data: ${event.data}`);
+
     if (invitationQuerySnapshot.empty) {
       // logger.error(`No valid invitation code found for user: ${userId} | ${getAuth().getUser(userId).email}`);
-      throw new https.HttpsError("not-found", "No valid invitation code found for this user.");
+      throw new https.HttpsError("not-found", `No valid invitation code found for user ${userId}.`);
     }
 
     const userDoc = await firestore.doc(`users/${userId}`).get();
