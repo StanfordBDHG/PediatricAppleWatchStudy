@@ -40,10 +40,6 @@ struct InvitationCodeView: View {
                             return
                         }
                         
-                        /*if Auth.auth().currentUser == nil {
-                            async let authResult =  Auth.auth().signInAnonymously()
-                            print("Auth result: ", try await authResult)
-                        }*/
                         await verifyOnboardingCode()
                         // try Auth.auth().signOut()
                     }
