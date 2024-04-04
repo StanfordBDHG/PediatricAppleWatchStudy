@@ -34,16 +34,19 @@ struct InvitationCodeView: View {
                     .padding(.bottom, -12)
                 Divider()
                 OnboardingActionsView(
-                    "Redeem Invitation Code",
-                    action: {
-                        guard validation.validateSubviews() else {
-                            return
-                        }
-                        
-                        await verifyOnboardingCode()
-                        // try Auth.auth().signOut()
+                    primaryText: "Redeem Invitation Code",
+                    primaryAction: {
+                    guard validation.validateSubviews() else {
+                        return
                     }
-                )
+                    
+                    await verifyOnboardingCode()
+                    },
+                    secondaryText: "I Already Have an Account"
+                ) {
+                    try Auth.auth().signOut()
+                    // advance to sign in page
+                }
                     .disabled(invitationCode.isEmpty)
             }
                 .padding(.horizontal)
