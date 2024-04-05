@@ -66,7 +66,7 @@ exports.checkInvitationCode = onCall(async (request) => {
     throw error;
   }
 });
-/* */
+
 exports.beforecreated = beforeUserCreated(async (event) => {
   const firestore = admin.firestore();
   const userId = event.data.uid;
@@ -87,7 +87,7 @@ exports.beforecreated = beforeUserCreated(async (event) => {
     const userDoc = await firestore.doc(`users/${userId}`).get();
 
     // Check if the user document exists and contains the correct invitation code.
-    if (!userDoc.exists || userDoc.data()?.invitationCode !== invitationQuerySnapshot.docs[0]?.data().invitationCode) {
+    if (!userDoc.exists || userDoc.data().invitationCode !== invitationQuerySnapshot.docs[0].id) {
       throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
     }
   } catch (error) {

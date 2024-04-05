@@ -33,14 +33,6 @@ final class AccountCreationTests: XCTestCase {
 }
 
 extension XCUIApplication {
-    func conductOnboardingIfNeeded(email: String = "johndoe@stanford.edu") throws {
-        let app = XCUIApplication()
-        
-        if app.staticTexts["Welcome to PAWS!"].waitForExistence(timeout: 5) {
-            try app.navigateOnboardingFlow(email: email)
-        }
-    }
-    
     fileprivate func navigateOnboardingFlow(
         email: String = "johndoe@stanford.edu",
         repeated skippedIfRepeated: Bool = false
@@ -170,7 +162,6 @@ extension XCUIApplication {
     }
 
     fileprivate func assertAccountInformation(email: String) throws {
-        // also gonna check that the account info matches up in firebase with the user document after linking
         XCTAssertTrue(navigationBars.buttons["Your PAWS Account"].waitForExistence(timeout: 2))
         navigationBars.buttons["Your PAWS Account"].tap()
 
