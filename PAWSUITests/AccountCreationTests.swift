@@ -30,31 +30,6 @@ final class AccountCreationTests: XCTestCase {
         app.assertOnboardingComplete()
         try app.assertAccountInformation(email: email)
     }
-
-    func testAccountCreationFlow() {
-        let app = XCUIApplication()
-        app.launch()
-        
-        // Navigate to the account creation screen.
-        app.buttons["Create Account"].tap()
-        
-        // Enter a valid invitation code.
-
-        // Fill out the sign-up form.
-        let emailField = app.textFields["Email"]
-        emailField.tap()
-        emailField.typeText("johndoe@stanford.edu")
-
-        let passwordField = app.secureTextFields["Password"]
-        passwordField.tap()
-        passwordField.typeText("HelloWorld")
-
-        // Submit the form.
-        app.buttons["Submit"].tap()
-
-        // Verify that the account was created successfully.
-        // Verify that the sheet is dismissed, thereby navigating to ECG list view.
-    }
 }
 
 extension XCUIApplication {
@@ -132,16 +107,6 @@ extension XCUIApplication {
         collectionViews.buttons["Signup"].tap()
 
         sleep(3)
-        
-        /*if staticTexts["HealthKit Access"].waitForExistence(timeout: 5) && navigationBars.buttons["Back"].waitForExistence(timeout: 5) {
-            navigationBars.buttons["Back"].tap()
-            
-            XCTAssertTrue(staticTexts["John Doe"].waitForExistence(timeout: 2))
-            XCTAssertTrue(staticTexts[email].waitForExistence(timeout: 2))
-            
-            XCTAssertTrue(buttons["Next"].waitForExistence(timeout: 2))
-            buttons["Next"].tap()
-        }*/
     }
     
     private func navigateOnboardingFlowConsent() throws {
