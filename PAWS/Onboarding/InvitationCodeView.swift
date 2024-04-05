@@ -45,9 +45,8 @@ struct InvitationCodeView: View {
                     secondaryText: "I Already Have an Account"
                 ) {
                     try Auth.auth().signOut()
-                    // advance to sign in page
+                    onboardingNavigationPath.nextStep()
                 }
-                    .disabled(invitationCode.isEmpty)
             }
                 .padding(.horizontal)
                 .padding(.bottom)

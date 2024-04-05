@@ -66,7 +66,7 @@ exports.checkInvitationCode = onCall(async (request) => {
     throw error;
   }
 });
-
+/* */
 exports.beforecreated = beforeUserCreated(async (event) => {
   const firestore = admin.firestore();
   const userId = event.data.uid;
