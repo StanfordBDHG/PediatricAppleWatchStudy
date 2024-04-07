@@ -36,11 +36,11 @@ struct InvitationCodeView: View {
                 OnboardingActionsView(
                     primaryText: "Redeem Invitation Code",
                     primaryAction: {
-                    guard validation.validateSubviews() else {
-                        return
-                    }
+                        guard validation.validateSubviews() else {
+                            return
+                        }
                     
-                    await verifyOnboardingCode()
+                        await verifyOnboardingCode()
                     },
                     secondaryText: "I Already Have an Account"
                 ) {
