@@ -42,11 +42,12 @@ struct InvitationCodeView: View {
                     
                         await verifyOnboardingCode()
                     },
-                    secondaryText: "I Already Have an Account"
-                ) {
-                    try Auth.auth().signOut()
-                    onboardingNavigationPath.nextStep()
-                }
+                    secondaryText: "I Already Have an Account",
+                    secondaryAction: {
+                        try Auth.auth().signOut()
+                        onboardingNavigationPath.nextStep()
+                    }
+                )
             }
                 .padding(.horizontal)
                 .padding(.bottom)
