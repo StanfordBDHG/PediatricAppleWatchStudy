@@ -17,9 +17,9 @@ enum InvitationCodeError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invitationCodeInvalid:
-            NSLocalizedString("The invitation code is invalid or has already been used.", comment: "Invitation Code Invalid")
+            String(localized: "The invitation code is invalid or has already been used.", comment: "Invitation Code Invalid")
         case .userNotAuthenticated:
-            NSLocalizedString("User authentication failed. Please try to sign in again.", comment: "User Not Authenticated")
+            String(localized: "User authentication failed. Please try to sign in again.", comment: "User Not Authenticated")
         case .generalError(let message):
             String(localized: "An error occurred: \(message)", comment: "General Error")
         }
