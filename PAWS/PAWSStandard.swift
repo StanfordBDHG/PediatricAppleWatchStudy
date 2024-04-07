@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKitOnFHIR
@@ -232,7 +231,6 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
         guard let accountStorage else {
             preconditionFailure("Account Storage was requested although not enabled in current configuration.")
         }
-        
         try await accountStorage.create(identifier, details)
     }
 
