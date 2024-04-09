@@ -51,6 +51,12 @@
         }
       }
     },
+    "An error occurred: %@" : {
+      "comment" : "General Error"
+    },
+    "An invitation code is at least 8 characters long." : {
+
+    },
     "ANSWER_1" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -223,10 +229,10 @@
         }
       }
     },
-    "ECG Recordings" : {
+    "ECG Recording" : {
 
     },
-    "EEG Recording" : {
+    "ECG Recordings" : {
 
     },
     "FAQ" : {
@@ -281,6 +287,9 @@
           }
         }
       }
+    },
+    "I Already Have an Account" : {
+
     },
     "Infos" : {
 
@@ -375,6 +384,9 @@
         }
       }
     },
+    "Invitation Code" : {
+
+    },
     "LICENSE_INFO_TITLE" : {
       "localizations" : {
         "en" : {
@@ -423,6 +435,9 @@
           }
         }
       }
+    },
+    "Please enter your invitation code to join the PAWS study." : {
+
     },
     "PROJECT_LICENSE_DESCRIPTION" : {
       "localizations" : {
@@ -539,6 +554,9 @@
     "Recorded no symptoms" : {
 
     },
+    "Redeem Invitation Code" : {
+
+    },
     "Repository Link" : {
       "localizations" : {
         "en" : {
@@ -584,6 +602,12 @@
     },
     "Thank you for participating in the PAWS study!" : {
 
+    },
+    "The invitation code is invalid or has already been used." : {
+      "comment" : "Invitation Code Invalid"
+    },
+    "User authentication failed. Please try to sign in again." : {
+      "comment" : "User Not Authenticated"
     },
     "WELCOME_AREA1_DESCRIPTION" : {
       "localizations" : {
