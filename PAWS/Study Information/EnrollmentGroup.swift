@@ -14,7 +14,7 @@ import SwiftUI
 
 
 @Observable
-class AgeGroup: Module, EnvironmentAccessible {
+class EnrollmentGroup: Module, EnvironmentAccessible {
     // Dependency toward spezi configuration firebase
     @ObservationIgnored @Dependency var accountConfiguration: FirebaseAccountConfiguration?
     @ObservationIgnored @Environment(Account.self) var account
