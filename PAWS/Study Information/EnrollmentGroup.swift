@@ -15,7 +15,7 @@ import SwiftUI
 
 @Observable
 class EnrollmentGroup: Module, EnvironmentAccessible {
-    @ObservationIgnored @Dependency var accountConfiguration: FirebaseAccountConfiguration?
+    @ObservationIgnored @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
     @ObservationIgnored @Environment(Account.self) var account
     var dateOfBirth: Date?
     
