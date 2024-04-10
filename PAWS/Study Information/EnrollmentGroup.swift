@@ -17,7 +17,6 @@ import SwiftUI
 @Observable
 class EnrollmentGroup: Module, EnvironmentAccessible {
     @ObservationIgnored @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
-    @ObservationIgnored @Environment(Account.self) var account
     var dateOfBirth: Date?
     
     var studyType: StudyType? {
@@ -38,11 +37,10 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
             .collection("users")
             .document(uid)
             .addSnapshotListener { documentSnapshot, _ in
-                guard let document = documentSnapshot, let data = document.data() else {
-                    return
+                if let data = documentSnapshot?.data() {
+                    let dobTimestamp = data["DateOfBirthKey"] as? Timestamp
+                    self.dateOfBirth = dobTimestamp?.dateValue()
                 }
-                let dobTimestamp = data["DateOfBirthKey"] as? Timestamp
-                self.dateOfBirth = dobTimestamp?.dateValue()
             }
     }
 }
