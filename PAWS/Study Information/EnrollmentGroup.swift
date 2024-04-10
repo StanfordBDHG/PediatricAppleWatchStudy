@@ -7,9 +7,10 @@
 //
 
 import FirebaseAuth
+import FirebaseFirestore
 import Spezi
 import SpeziAccount
-import SpeziFirebaseAccount
+import SpeziFirebaseConfiguration
 import SwiftUI
 
 
@@ -27,13 +28,21 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
         }
         return yearsOfAge >= 18 ? .adult : .pediatric
     }
-        
+    
     func configure() {
-        guard Auth.auth().currentUser != nil else {
+        guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
-        Task {
-            self.dateOfBirth = await account.details?.dateOfBrith
-        }
+        Firestore
+            .firestore()
+            .collection("users")
+            .document(uid)
+            .addSnapshotListener { documentSnapshot, _ in
+                guard let document = documentSnapshot, let data = document.data() else {
+                    return
+                }
+                let dobTimestamp = data["DateOfBirthKey"] as? Timestamp
+                self.dateOfBirth = dobTimestamp?.dateValue()
+            }
     }
 }
