@@ -27,9 +27,7 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
         }
         return yearsOfAge >= 18 ? .adult : .pediatric
     }
-    
-    init() { }
-    
+        
     func configure() {
         guard Auth.auth().currentUser != nil else {
             return
