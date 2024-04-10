@@ -22,10 +22,10 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     var studyType: StudyType? {
         guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
               let dateOfBirth,
-              let ageYears = Calendar.current.dateComponents([.year], from: dateOfBirth, to: enrollmentDate).year else {
+              let yearsOfAge = Calendar.current.dateComponents([.year], from: dateOfBirth, to: enrollmentDate).year else {
             return nil
         }
-        return ageYears >= 18 ? .adult : .pediatric
+        return yearsOfAge >= 18 ? .adult : .pediatric
     }
     
     init() { }
