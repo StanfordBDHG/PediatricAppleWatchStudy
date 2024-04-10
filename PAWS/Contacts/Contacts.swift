@@ -80,6 +80,7 @@ struct Contacts: View {
     
     @Binding var presentingAccount: Bool
     
+    
     var body: some View {
         NavigationStack {
             ScrollView {
