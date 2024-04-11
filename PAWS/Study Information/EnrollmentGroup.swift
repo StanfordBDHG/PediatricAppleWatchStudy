@@ -19,6 +19,7 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     @ObservationIgnored @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
     var dateOfBirth: Date?
     
+    
     var studyType: StudyType? {
         guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
               let dateOfBirth,
