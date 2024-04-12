@@ -92,9 +92,14 @@ extension XCUIApplication {
         try textFields["enter first name"].enter(value: "John")
         try textFields["enter last name"].enter(value: "Doe")
         let datePicker = datePickers.firstMatch
+        XCTAssertTrue(datePicker.waitForExistence(timeout: 2))
         datePicker.tap()
-        datePicker.buttons.firstMatch.tap()
-        datePicker.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "1970")
+        let dateButton = datePicker.buttons.firstMatch
+        XCTAssertTrue(dateButton.waitForExistence(timeout: 2))
+        dateButton.tap()
+        let dateWheel = datePicker.pickerWheels.element(boundBy: 1)
+        XCTAssertTrue(dateWheel.waitForExistence(timeout: 2))
+        dateWheel.adjust(toPickerWheelValue: "1970")
         
         XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
         collectionViews.buttons["Signup"].tap()

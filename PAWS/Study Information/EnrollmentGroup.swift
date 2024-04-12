@@ -44,23 +44,11 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
             .firestore()
             .collection("users")
             .document(uid)
-            .addSnapshotListener { documentSnapshot, error in
-                /*guard error != nil else {
-                    // throw error?
-                    print(error)
-                    return
-                }*/
-                
+            .addSnapshotListener { documentSnapshot, _ in
                 if let data = documentSnapshot?.data() {
                     let dobTimestamp = data["DateOfBirthKey"] as? Timestamp
                     self.dateOfBirth = dobTimestamp?.dateValue()
                 }
             }
     }
-    
-    /*deinit {
-        if let handle = authStateDidChangeListenerHandle {
-            Auth.auth().removeStateDidChangeListener(handle)
-        }
-    }*/
 }
