@@ -76,7 +76,7 @@ extension XCUIApplication {
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
         
-        sleep(3)
+        sleep(10)
     }
     
     private func navigateOnboardingAccount(email: String) throws {
