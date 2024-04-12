@@ -31,26 +31,25 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     
     func configure() {
         authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            guard let user else {
-                return
-            }
-            self?.registerSnapshotListener(uid: user.uid)
+            self?.registerSnapshotListener(user: user)
         }
-        if let uid = Auth.auth().currentUser?.uid {
-            self.registerSnapshotListener(uid: uid)
-        }
+        self.registerSnapshotListener(user: Auth.auth().currentUser)
     }
     
-    func registerSnapshotListener(uid: String) {
+    func registerSnapshotListener(user: User?) {
+        guard let uid = user?.uid else {
+            return
+        }
         Firestore
             .firestore()
             .collection("users")
             .document(uid)
             .addSnapshotListener { documentSnapshot, error in
-                guard error != nil else {
+                /*guard error != nil else {
                     // throw error?
+                    print(error)
                     return
-                }
+                }*/
                 
                 if let data = documentSnapshot?.data() {
                     let dobTimestamp = data["DateOfBirthKey"] as? Timestamp

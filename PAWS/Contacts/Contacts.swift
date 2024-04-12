@@ -87,6 +87,7 @@ struct Contacts: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
+                    Text("\(enrollmentGroup.studyType)")
                     switch enrollmentGroup.studyType {
                     case .pediatric:
                         ForEach(contacts, id: \.name) { contact in
