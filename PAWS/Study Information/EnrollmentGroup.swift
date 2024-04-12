@@ -18,8 +18,8 @@ import SwiftUI
 class EnrollmentGroup: Module, EnvironmentAccessible {
     @ObservationIgnored @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
     private var dateOfBirth: Date?
-    
-    
+    private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
+
     var studyType: StudyType? {
         guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
               let dateOfBirth,
@@ -30,18 +30,38 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     }
     
     func configure() {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
+        authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            guard let user else {
+                return
+            }
+            self?.registerSnapshotListener(uid: user.uid)
         }
+        if let uid = Auth.auth().currentUser?.uid {
+            self.registerSnapshotListener(uid: uid)
+        }
+    }
+    
+    func registerSnapshotListener(uid: String) {
         Firestore
             .firestore()
             .collection("users")
             .document(uid)
-            .addSnapshotListener { documentSnapshot, _ in
+            .addSnapshotListener { documentSnapshot, error in
+                guard error != nil else {
+                    // throw error?
+                    return
+                }
+                
                 if let data = documentSnapshot?.data() {
                     let dobTimestamp = data["DateOfBirthKey"] as? Timestamp
                     self.dateOfBirth = dobTimestamp?.dateValue()
                 }
             }
     }
+    
+    /*deinit {
+        if let handle = authStateDidChangeListenerHandle {
+            Auth.auth().removeStateDidChangeListener(handle)
+        }
+    }*/
 }

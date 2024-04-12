@@ -14,78 +14,70 @@ import SwiftUI
 /// Displays the contacts for the PAWS.
 struct Contacts: View {
     @Environment(EnrollmentGroup.self) var enrollmentGroup
-    var contacts: [Contact] {
-        var result = [
-            Contact(
-                name: PersonNameComponents(
-                    givenName: "Scott",
-                    familyName: "Ceresnak"
-                ),
-                image: Image("ScottSquarePhoto"), // swiftlint:disable:this accessibility_label_for_image
-                title: "Professor of Pediatrics (Cardiology)",
-                description: String(localized: "SCOTT_CERESNAK_BIO"),
-                organization: "Stanford University",
-                address: {
-                    let address = CNMutablePostalAddress()
-                    address.country = "USA"
-                    address.state = "CA"
-                    address.postalCode = "94304"
-                    address.city = "Palo Alto"
-                    address.street = "725 Welch Rd"
-                    return address
-                }(),
-                contactOptions: [
-                    .email(addresses: ["ceresnak@stanford.edu"]),
-                    ContactOption(
-                        image: Image(systemName: "safari.fill"), // swiftlint:disable:this accessibility_label_for_image
-                        title: "Website",
-                        action: {
-                            if let url = URL(string: "https://profiles.stanford.edu/scott-ceresnak?tab=bio") {
-                                UIApplication.shared.open(url)
-                            }
-                        }
-                    )
-                ]
+    let contacts = [
+        Contact(
+            name: PersonNameComponents(
+                givenName: "Scott",
+                familyName: "Ceresnak"
             ),
-            Contact(
-                name: PersonNameComponents(
-                    givenName: "Aydin",
-                    familyName: "Zahedivash"
-                ),
-                image: Image("AydinSquarePhoto"), // swiftlint:disable:this accessibility_label_for_image
-                title: "Pediatric Stanford Cardiology Fellow",
-                description: String(localized: "AYDIN_ZAHEDIVASH_BIO"),
-                organization: "Stanford University",
-                address: {
-                    let address = CNMutablePostalAddress()
-                    address.country = "USA"
-                    address.state = "CA"
-                    address.postalCode = "94304"
-                    address.city = "Palo Alto"
-                    address.street = "725 Welch Rd"
-                    return address
-                }(),
-                contactOptions: [
-                    .email(addresses: ["aydinz@stanford.edu"]),
-                    ContactOption(
-                        image: Image(systemName: "safari.fill"), // swiftlint:disable:this accessibility_label_for_image
-                        title: "Website",
-                        action: {
-                            if let url = URL(string: "https://profiles.stanford.edu/aydin-zahedivash?tab=bio") {
-                                UIApplication.shared.open(url)
-                            }
+            image: Image("ScottSquarePhoto"), // swiftlint:disable:this accessibility_label_for_image
+            title: "Professor of Pediatrics (Cardiology)",
+            description: String(localized: "SCOTT_CERESNAK_BIO"),
+            organization: "Stanford University",
+            address: {
+                let address = CNMutablePostalAddress()
+                address.country = "USA"
+                address.state = "CA"
+                address.postalCode = "94304"
+                address.city = "Palo Alto"
+                address.street = "725 Welch Rd"
+                return address
+            }(),
+            contactOptions: [
+                .email(addresses: ["ceresnak@stanford.edu"]),
+                ContactOption(
+                    image: Image(systemName: "safari.fill"), // swiftlint:disable:this accessibility_label_for_image
+                    title: "Website",
+                    action: {
+                        if let url = URL(string: "https://profiles.stanford.edu/scott-ceresnak?tab=bio") {
+                            UIApplication.shared.open(url)
                         }
-                    )
-                ]
-            )
-        ]
-        
-        if enrollmentGroup.studyType == .adult {
-            result.append(Contact(name: PersonNameComponents(givenName: "Brynne")))
-        }
-        
-        return result
-    }
+                    }
+                )
+            ]
+        ),
+        Contact(
+            name: PersonNameComponents(
+                givenName: "Aydin",
+                familyName: "Zahedivash"
+            ),
+            image: Image("AydinSquarePhoto"), // swiftlint:disable:this accessibility_label_for_image
+            title: "Pediatric Stanford Cardiology Fellow",
+            description: String(localized: "AYDIN_ZAHEDIVASH_BIO"),
+            organization: "Stanford University",
+            address: {
+                let address = CNMutablePostalAddress()
+                address.country = "USA"
+                address.state = "CA"
+                address.postalCode = "94304"
+                address.city = "Palo Alto"
+                address.street = "725 Welch Rd"
+                return address
+            }(),
+            contactOptions: [
+                .email(addresses: ["aydinz@stanford.edu"]),
+                ContactOption(
+                    image: Image(systemName: "safari.fill"), // swiftlint:disable:this accessibility_label_for_image
+                    title: "Website",
+                    action: {
+                        if let url = URL(string: "https://profiles.stanford.edu/aydin-zahedivash?tab=bio") {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                )
+            ]
+        )
+    ]
     
     
     @Binding var presentingAccount: Bool
@@ -95,12 +87,25 @@ struct Contacts: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    ForEach(contacts, id: \.name) { contact in
-                        PAWSCard {
-                            ContactView(contact: contact)
-                                .buttonStyle(.plain) // ensure the whole list row doesn't render as a button
-                                .padding()
+                    switch enrollmentGroup.studyType {
+                    case .pediatric:
+                        ForEach(contacts, id: \.name) { contact in
+                            PAWSCard {
+                                ContactView(contact: contact)
+                                    .buttonStyle(.plain) // ensure the whole list row doesn't render as a button
+                                    .padding()
+                            }
                         }
+                    case .adult:
+                        ForEach(contacts + [Contact(name: PersonNameComponents(givenName: "Brynne"))], id: \.name) { contact in
+                            PAWSCard {
+                                ContactView(contact: contact)
+                                    .buttonStyle(.plain)
+                                    .padding()
+                            }
+                        }
+                    default:
+                        EmptyView()
                     }
                 }
                     .padding(.vertical)

@@ -28,6 +28,7 @@ final class AccountCreationTests: XCTestCase {
         try app.navigateOnboardingFlow(email: email)
 
         app.assertOnboardingComplete()
+        app.assertStudyGroupAdult()
         try app.assertAccountInformation(email: email)
     }
 }
@@ -159,6 +160,13 @@ extension XCUIApplication {
         XCTAssertTrue(tabBar.buttons["ECG Recordings"].waitForExistence(timeout: 2))
         XCTAssertTrue(tabBar.buttons["Infos"].waitForExistence(timeout: 2))
         XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
+    }
+    
+    fileprivate func assertStudyGroupAdult() {
+        let tabBar = tabBars["Tab Bar"]
+        XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
+        tabBar.buttons["Contacts"].tap()
+        XCTAssertTrue(staticTexts["Brynne"].waitForExistence(timeout: 2))
     }
 
     fileprivate func assertAccountInformation(email: String) throws {
