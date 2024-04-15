@@ -90,6 +90,8 @@ exports.beforecreated = beforeUserCreated(async (event) => {
     if (!userDoc.exists || userDoc.data().invitationCode !== invitationQuerySnapshot.docs[0].id) {
       throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
     }
+
+    return {};
   } catch (error) {
     logger.error(`Error processing request: ${error.message}`);
     if (!error.code) {
