@@ -43,7 +43,7 @@ exports.checkInvitationCode = onCall(async (request) => {
       throw new https.HttpsError("already-exists", "User is already enrolled in the study.");
     }
 
-    return firestore.runTransaction(async (transaction) => {
+    return await firestore.runTransaction(async (transaction) => {
       transaction.set(userStudyRef, {
         invitationCode: invitationCode,
         dateOfEnrollment: FieldValue.serverTimestamp(),
