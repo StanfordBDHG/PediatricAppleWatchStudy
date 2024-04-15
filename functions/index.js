@@ -43,7 +43,7 @@ exports.checkInvitationCode = onCall(async (request) => {
       throw new https.HttpsError("already-exists", "User is already enrolled in the study.");
     }
 
-    await firestore.runTransaction(async (transaction) => {
+    return firestore.runTransaction(async (transaction) => {
       transaction.set(userStudyRef, {
         invitationCode: invitationCode,
         dateOfEnrollment: FieldValue.serverTimestamp(),
@@ -53,11 +53,9 @@ exports.checkInvitationCode = onCall(async (request) => {
         used: true,
         usedBy: userId,
       });
+
+      logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
     });
-
-    logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
-
-    return {};
   } catch (error) {
     logger.error(`Error processing request: ${error.message}`);
     if (!error.code) {
@@ -90,8 +88,6 @@ exports.beforecreated = beforeUserCreated(async (event) => {
     if (!userDoc.exists || userDoc.data().invitationCode !== invitationQuerySnapshot.docs[0].id) {
       throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
     }
-
-    return {};
   } catch (error) {
     logger.error(`Error processing request: ${error.message}`);
     if (!error.code) {
