@@ -19,6 +19,7 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     @ObservationIgnored @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
     private var dateOfBirth: Date?
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
+    private var snapshotListener: ListenerRegistration?
 
     var studyType: StudyType? {
         guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
@@ -37,17 +38,19 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     }
     
     func registerSnapshotListener(user: User?) {
+        // Cancel the previous listener before registering a new one.
+        snapshotListener?.remove()
         guard let uid = user?.uid else {
             return
         }
-        Firestore
+        snapshotListener = Firestore
             .firestore()
             .collection("users")
             .document(uid)
-            .addSnapshotListener { documentSnapshot, _ in
+            .addSnapshotListener { [weak self] documentSnapshot, _ in
                 if let data = documentSnapshot?.data() {
                     let dobTimestamp = data["DateOfBirthKey"] as? Timestamp
-                    self.dateOfBirth = dobTimestamp?.dateValue()
+                    self?.dateOfBirth = dobTimestamp?.dateValue()
                 }
             }
     }
