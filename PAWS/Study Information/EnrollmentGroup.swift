@@ -8,6 +8,7 @@
 
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseFunctions
 import Spezi
 import SpeziAccount
 import SpeziFirebaseConfiguration
@@ -31,6 +32,9 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     }
     
     func configure() {
+        if FeatureFlags.useFirebaseEmulator {
+            Functions.functions().useEmulator(withHost: "localhost", port: 5001)
+        }
         authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             self?.registerSnapshotListener(user: user)
         }
