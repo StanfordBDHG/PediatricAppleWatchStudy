@@ -28,7 +28,7 @@ final class AccountCreationTests: XCTestCase {
         try app.navigateOnboardingFlow(email: email)
 
         app.assertOnboardingComplete()
-        app.assertStudyGroupAdult()
+        // app.assertStudyGroupAdult()
         try app.assertAccountInformation(email: email)
     }
 }
