@@ -62,6 +62,8 @@ exports.checkInvitationCode = onCall(async (request) => {
 
       logger.debug(`Invitation code ${invitationCode} marked as used by user (${userId})`);
     });
+
+    return {};
   } catch (error) {
     logger.error(`Error processing request: ${error.message}`);
     if (!error.code) {
