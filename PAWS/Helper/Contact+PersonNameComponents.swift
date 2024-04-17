@@ -10,6 +10,7 @@ import Foundation
 import SpeziContact
 import SwiftUI
 
+
 extension Contact {
     static let scott = Contact(
         name: PersonNameComponents(
