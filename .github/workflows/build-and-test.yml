@@ -39,9 +39,9 @@ jobs:
       runsonlabels: '["macOS", "self-hosted"]'
       setupfirebaseemulator: true
       fastlanelane: test
-      firebaseemulatorimport: ./functions
+      firebaseemulatorimport: ./firebase
     secrets:
-      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: buildandtest
