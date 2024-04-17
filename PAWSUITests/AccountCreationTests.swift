@@ -76,7 +76,7 @@ extension XCUIApplication {
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
         
-        sleep(10)
+        sleep(3)
     }
     
     private func navigateOnboardingAccount(email: String) throws {
@@ -173,7 +173,7 @@ extension XCUIApplication {
         let tabBar = tabBars["Tab Bar"]
         XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
         tabBar.buttons["Contacts"].tap()
-        XCTAssertTrue(staticTexts["Contact: Brynne"].waitForExistence(timeout: 10))
+        XCTAssertTrue(staticTexts["Contact: Brynne"].waitForExistence(timeout: 2))
     }
 
     fileprivate func assertAccountInformation(email: String) throws {
