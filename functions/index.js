@@ -49,15 +49,13 @@ exports.checkInvitationCode = onCall(async (request) => {
         dateOfEnrollment: FieldValue.serverTimestamp(),
       });
 
-      logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
-
       transaction.update(invitationCodeRef, {
         used: true,
         usedBy: userId,
       });
-
-      logger.debug(`Invitation code ${invitationCode} marked as used by user (${userId})`);
     });
+
+    logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
 
     return {};
   } catch (error) {
