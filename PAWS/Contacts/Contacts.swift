@@ -13,8 +13,11 @@ import SwiftUI
 
 /// Displays the contacts for the PAWS.
 struct Contacts: View {
-    @Environment(EnrollmentGroup.self) var enrollmentGroup
-    var contacts: [Contact] {
+    @Environment(EnrollmentGroup.self) private var enrollmentGroup
+    @Binding var presentingAccount: Bool
+    
+    
+    private var contacts: [Contact] {
         switch enrollmentGroup.studyType {
         case .adult:
             [.scott, .aydin, .brynne]
@@ -24,9 +27,6 @@ struct Contacts: View {
             []
         }
     }
-    
-    @Binding var presentingAccount: Bool
-    
     
     var body: some View {
         NavigationStack {
