@@ -22,6 +22,7 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     private var snapshotListener: ListenerRegistration?
 
+
     var studyType: StudyType? {
         guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
               let dateOfBirth,
