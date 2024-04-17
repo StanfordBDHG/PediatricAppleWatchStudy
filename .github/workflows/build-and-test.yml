@@ -31,7 +31,7 @@ jobs:
       contents: read
   buildandtest:
     name: Build and Test
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@feature/firebase
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     permissions:
       contents: read
     with:
