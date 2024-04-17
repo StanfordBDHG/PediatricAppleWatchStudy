@@ -32,6 +32,7 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
         return yearsOfAge >= 18 ? .adult : .pediatric
     }
     
+    
     func configure() {
         if FeatureFlags.useFirebaseEmulator {
             Functions.functions().useEmulator(withHost: "localhost", port: 5001)
