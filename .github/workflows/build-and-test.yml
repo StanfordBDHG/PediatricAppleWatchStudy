@@ -38,7 +38,7 @@ jobs:
       artifactname: PAWS.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       setupfirebaseemulator: true
-      customcommand: "npm install --prefix ./functions && firebase emulators:exec --import=./firebase 'fastlane test'"
+      customcommand: "npm install --prefix ./functions && firebase emulators:exec --import=./firebase --token ${{ secrets.FIREBASE_TOKEN }} 'fastlane test'"
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: buildandtest
