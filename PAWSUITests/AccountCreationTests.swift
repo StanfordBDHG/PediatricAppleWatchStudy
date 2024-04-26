@@ -28,6 +28,7 @@ final class AccountCreationTests: XCTestCase {
         try app.navigateOnboardingFlow(email: email)
 
         app.assertOnboardingComplete()
+        app.assertStudyGroupAdult()
         try app.assertAccountInformation(email: email)
     }
 }
@@ -74,6 +75,8 @@ extension XCUIApplication {
         try textFields["Invitation Code"].enter(value: "gdxRWF6G")
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
+        
+        sleep(3)
     }
     
     private func navigateOnboardingAccount(email: String) throws {
@@ -91,9 +94,14 @@ extension XCUIApplication {
         try textFields["enter first name"].enter(value: "John")
         try textFields["enter last name"].enter(value: "Doe")
         let datePicker = datePickers.firstMatch
+        XCTAssertTrue(datePicker.waitForExistence(timeout: 2))
         datePicker.tap()
-        datePicker.buttons.firstMatch.tap()
-        datePicker.pickerWheels.element(boundBy: 1).adjust(toPickerWheelValue: "1970")
+        let dateButton = datePicker.buttons.firstMatch
+        XCTAssertTrue(dateButton.waitForExistence(timeout: 2))
+        dateButton.tap()
+        let dateWheel = datePicker.pickerWheels.element(boundBy: 1)
+        XCTAssertTrue(dateWheel.waitForExistence(timeout: 2))
+        dateWheel.adjust(toPickerWheelValue: "1970")
         
         XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
         collectionViews.buttons["Signup"].tap()
@@ -159,6 +167,13 @@ extension XCUIApplication {
         XCTAssertTrue(tabBar.buttons["ECG Recordings"].waitForExistence(timeout: 2))
         XCTAssertTrue(tabBar.buttons["Infos"].waitForExistence(timeout: 2))
         XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
+    }
+    
+    fileprivate func assertStudyGroupAdult() {
+        let tabBar = tabBars["Tab Bar"]
+        XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
+        tabBar.buttons["Contacts"].tap()
+        XCTAssertTrue(staticTexts["Contact: Brynne"].waitForExistence(timeout: 2))
     }
 
     fileprivate func assertAccountInformation(email: String) throws {
