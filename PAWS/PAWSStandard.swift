@@ -147,13 +147,9 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
             let jsonRepresentation = (try? String(data: encoder.encode(resource), encoding: .utf8)) ?? ""
-            try? await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
+            try await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
         } else {
-            do {
-                try await healthKitDocument(id: sample.id).setData(from: resource)
-            } catch {
-                logger.error("Could not store HealthKit sample: \(error)")
-            }
+            try await healthKitDocument(id: sample.id).setData(from: resource)
         }
         
         if let electrocardiogram = sample as? HKElectrocardiogram {

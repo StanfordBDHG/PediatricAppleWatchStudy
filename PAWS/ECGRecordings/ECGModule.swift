@@ -19,6 +19,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     @ObservationIgnored @Dependency var localStorage: LocalStorage
+    @ObservationIgnored @StandardActor var standard: PAWSStandard
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
     private var uploadedElectrocardiograms: Set<HKElectrocardiogram.ID> = []
@@ -33,8 +34,16 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     }
     
     
-    func isUploaded(_ electrocardiogram: HKElectrocardiogram) -> Bool {
-        uploadedElectrocardiograms.contains(where: { $0 == electrocardiogram.uuid })
+    func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) -> Bool {
+        let uploaded = uploadedElectrocardiograms.contains(where: { $0 == electrocardiogram.uuid })
+        
+        if reuploadIfNeeded {
+            Task {
+                await standard.add(sample: electrocardiogram)
+            }
+        }
+        
+        return uploaded
     }
     
     func markAsUploaded(_ electrocardiogram: HKElectrocardiogram) {
