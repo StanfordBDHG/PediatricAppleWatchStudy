@@ -26,7 +26,7 @@ struct ECGRecording: View {
                         Text(electrocardiogram.endDate.formatted())
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        if ecgModule.isUploaded(electrocardiogram) {
+                        if ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true) {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                                 .accessibilityLabel("Checkmark: ECG has been successfully uploaded")
