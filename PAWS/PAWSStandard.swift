@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKitOnFHIR
@@ -43,21 +44,21 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     
     private var userDocumentReference: DocumentReference {
         get async throws {
-            guard let details = await account.details else {
+            guard let accountId = Auth.auth().currentUser?.uid else {
                 throw PAWSStandardError.userNotAuthenticatedYet
             }
 
-            return Self.userCollection.document(details.accountId)
+            return Self.userCollection.document(accountId)
         }
     }
     
     private var userBucketReference: StorageReference {
         get async throws {
-            guard let details = await account.details else {
+            guard let accountId = Auth.auth().currentUser?.uid else {
                 throw PAWSStandardError.userNotAuthenticatedYet
             }
 
-            return Storage.storage().reference().child("users/\(details.accountId)")
+            return Storage.storage().reference().child("users/\(accountId)")
         }
     }
 
@@ -99,10 +100,20 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
                     try await upload(sample: supplementalMetric)
                 } catch {
                     logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
+                    let content = UNMutableNotificationContent()
+                    content.title = "Upload Error"
+                    content.body = "Sample could not be uploaded \(supplementalMetric.sampleType.description) (\(supplementalMetric.uuid.uuidString) at \(Date.now.formatted(date: .numeric, time: .complete)): \((supplementalMetric as? HKQuantitySample)?.quantity.description ?? "Unknown")"
+                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                    try? await UNUserNotificationCenter.current().add(request)
                 }
             }
         } catch {
             logger.log("Could not access HealthKit sample: \(error)")
+            let content = UNMutableNotificationContent()
+            content.title = "HealthKit Error"
+            content.body = "Sample \(electrocardiogram.sampleType.description) with identifier \(electrocardiogram.uuid.uuidString)"
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+            try? await UNUserNotificationCenter.current().add(request)
         }
     }
     
