@@ -41,6 +41,9 @@ struct ECGRecordingsList: View {
                     }
                 }
                 .navigationTitle(String(localized: "ECG Recordings"))
+                .refreshable {
+                    // TODO: Add code for updating list.
+                }
         }
     }
     

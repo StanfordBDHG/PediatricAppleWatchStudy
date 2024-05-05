@@ -42,7 +42,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     private let logger = Logger(subsystem: "PAWS", category: "Standard")
     
     
-    private var userDocumentReference: DocumentReference {
+    var userDocumentReference: DocumentReference {
         get async throws {
             guard let accountId = Auth.auth().currentUser?.uid else {
                 throw PAWSStandardError.userNotAuthenticatedYet
@@ -52,7 +52,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
         }
     }
     
-    private var userBucketReference: StorageReference {
+    var userBucketReference: StorageReference {
         get async throws {
             guard let accountId = Auth.auth().currentUser?.uid else {
                 throw PAWSStandardError.userNotAuthenticatedYet
@@ -72,99 +72,11 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
 
     func add(sample: HKSample) async {
         if let electrocardiogram = sample as? HKElectrocardiogram {
-            await upload(electrocardiogram: electrocardiogram)
+            await ecgStorage.upload(electrocardiogram: electrocardiogram)
         } else if let categorySample = sample as? HKCategorySample {
-            await updateElectrocardiogram(basedOn: categorySample)
+            await ecgStorage.updateElectrocardiogram(basedOn: categorySample)
         } else {
             logger.log("Request to upload unidentified HealthKit Sample: \(sample)")
-        }
-    }
-    
-    private func upload(electrocardiogram: HKElectrocardiogram) async {
-        var supplementalMetrics: [HKSample] = []
-        
-        do {
-            try await upload(sample: electrocardiogram)
-            
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPulseRates) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPhysicalEffort) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingStepCount) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingActiveEnergy) ?? [])
-            
-            if let precedingVo2Max = try? await electrocardiogram.precedingVo2Max {
-                supplementalMetrics.append(precedingVo2Max)
-            }
-            
-            for supplementalMetric in supplementalMetrics {
-                do {
-                    try await upload(sample: supplementalMetric)
-                } catch {
-                    logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
-                    let content = UNMutableNotificationContent()
-                    content.title = "Upload Error"
-                    content.body = "Sample could not be uploaded \(supplementalMetric.sampleType.description) (\(supplementalMetric.uuid.uuidString) at \(Date.now.formatted(date: .numeric, time: .complete)): \((supplementalMetric as? HKQuantitySample)?.quantity.description ?? "Unknown")"
-                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-                    try? await UNUserNotificationCenter.current().add(request)
-                }
-            }
-        } catch {
-            logger.log("Could not access HealthKit sample: \(error)")
-            let content = UNMutableNotificationContent()
-            content.title = "HealthKit Error"
-            content.body = "Sample \(electrocardiogram.sampleType.description) with identifier \(electrocardiogram.uuid.uuidString)"
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-            try? await UNUserNotificationCenter.current().add(request)
-        }
-    }
-    
-    private func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
-        do {
-            guard let updatedElectrocardiogram = try await ecgStorage.electrocardiogram(
-                correlatedWith: categorySample,
-                from: healthStore
-            ) else {
-                return
-            }
-            
-            try await upload(sample: updatedElectrocardiogram, force: true)
-        } catch {
-            logger.log("Could not corrolate category sample with ECG: \(categorySample)")
-        }
-    }
-    
-    private func upload(sample: HKSample, force: Bool = false) async throws {
-        let resource: ResourceProxy
-        if let electrocardiogram = sample as? HKElectrocardiogram {
-            ecgStorage.insert(electrocardiogram: electrocardiogram)
-            
-            guard !ecgStorage.isUploaded(electrocardiogram) || force else {
-                return
-            }
-            
-            async let symptoms = try electrocardiogram.symptoms(from: healthStore)
-            async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
-            
-            resource = ResourceProxy(
-                with: try await electrocardiogram.observation(
-                    symptoms: symptoms,
-                    voltageMeasurements: voltageMeasurements
-                )
-            )
-        } else {
-            resource = try sample.resource
-        }
-        
-        if let mockWebService {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-            let jsonRepresentation = (try? String(data: encoder.encode(resource), encoding: .utf8)) ?? ""
-            try await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
-        } else {
-            try await healthKitDocument(id: sample.id).setData(from: resource)
-        }
-        
-        if let electrocardiogram = sample as? HKElectrocardiogram {
-            ecgStorage.markAsUploaded(electrocardiogram)
         }
     }
     
@@ -184,7 +96,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     }
     
     
-    private func healthKitDocument(id uuid: UUID) async throws -> DocumentReference {
+    func healthKitDocument(id uuid: UUID) async throws -> DocumentReference {
         try await userDocumentReference
             .collection("HealthKit") // Add all HealthKit sources in a /HealthKit collection.
             .document(uuid.uuidString) // Set the document identifier to the UUID of the document.
