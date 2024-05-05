@@ -55,6 +55,18 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         return uploaded
     }
     
+    func isUploadedToFirebase(_ electrocardiogram: HKElectrocardiogram) async throws -> Bool {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            throw PAWSStandard.PAWSStandardError.userNotAuthenticatedYet
+        }
+
+        let docRef = Firestore.firestore().collection("users").document(userId).collection("HealthKit").document(electrocardiogram.uuid.uuidString)
+
+        let docSnapshot = try await docRef.getDocument()
+
+        return docSnapshot.exists
+    }
+    
     func markAsUploaded(_ electrocardiogram: HKElectrocardiogram) {
         uploadedElectrocardiograms.insert(electrocardiogram.uuid)
         try? localStorage.store(uploadedElectrocardiograms, storageKey: StorageKey.uploadedElectrocardiograms)
@@ -186,12 +198,16 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             }
         } catch {
             logger.log("Could not access HealthKit sample: \(error)")
-            let content = UNMutableNotificationContent()
-            content.title = "HealthKit Error"
-            content.body = "Sample \(electrocardiogram.sampleType.description) with identifier \(electrocardiogram.uuid.uuidString)"
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-            try? await UNUserNotificationCenter.current().add(request)
+            await addECGMessage(for: electrocardiogram)
         }
+    }
+    
+    private func addECGMessage(for electrocardiogram: HKElectrocardiogram) async {
+        let content = UNMutableNotificationContent()
+        content.title = "HealthKit Error"
+        content.body = "Sample \(electrocardiogram.sampleType.description) with identifier \(electrocardiogram.uuid.uuidString)"
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+        try? await UNUserNotificationCenter.current().add(request)
     }
     
     private func uploadUnuploadedECGs() {
@@ -200,7 +216,8 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                 do {
                     try await self.upload(sample: ecg)
                 } catch {
-                    // Handle error
+                    logger.log("Could not access HealthKit sample: \(error)")
+                    await addECGMessage(for: ecg)
                 }
             }
         }

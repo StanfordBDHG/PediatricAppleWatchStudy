@@ -13,6 +13,7 @@ import SwiftUI
 struct ECGRecording: View {
     let electrocardiogram: HKElectrocardiogram
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
+    @State var isUploadedToFirebase = false
     @Environment(ECGModule.self) var ecgModule
     
     
@@ -26,7 +27,7 @@ struct ECGRecording: View {
                         Text(electrocardiogram.endDate.formatted())
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        if ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true) {
+                        if isUploadedToFirebase {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                                 .accessibilityLabel("Checkmark: ECG has been successfully uploaded")
@@ -44,14 +45,25 @@ struct ECGRecording: View {
                     Text("Recorded \(symptoms.count) symptoms.")
                 }
             }
-                .padding()
+            .padding()
         }
-            .task {
-                guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
-                    return
-                }
-                
-                self.symptoms = symptoms
+        .task {
+            guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
+                return
             }
+            
+            self.symptoms = symptoms
+            
+            if FeatureFlags.disableFirebase {
+                self.isUploadedToFirebase = ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)
+            } else {
+                do {
+                    let isUploadDB = try await ecgModule.isUploadedToFirebase(electrocardiogram)
+                    self.isUploadedToFirebase = isUploadDB
+                } catch {
+                    print("errpr: \(error.localizedDescription)")
+                }
+            }
+        }
     }
 }
