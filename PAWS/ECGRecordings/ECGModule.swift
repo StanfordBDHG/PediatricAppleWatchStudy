@@ -202,7 +202,10 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
     }
     
-    private func addECGMessage(for electrocardiogram: HKElectrocardiogram) async {
+    
+    /// Creates a notification with a title and body message when there is an error accessing a HealthKit sample.
+    /// - Parameter electrocardiogram: The `HKElectrocardiogram` object for which the error occurred.
+    func addECGMessage(for electrocardiogram: HKElectrocardiogram) async {
         let content = UNMutableNotificationContent()
         content.title = "HealthKit Error"
         content.body = "Sample \(electrocardiogram.sampleType.description) with identifier \(electrocardiogram.uuid.uuidString)"
@@ -223,6 +226,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
     }
     
+    /// Reloads the ECGs by checking if the user is authenticated.
+    /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
+    /// - Throws: An error if the user is not authenticated.
     func reloadECGs() async throws {
         guard let user = Auth.auth().currentUser else {
             logger.error("User not authenticated")
@@ -230,7 +236,10 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
 
         let samplePredicate = HKQuery.predicateForSamples(withStart: user.metadata.creationDate, end: .now, options: .strictStartDate)
-        let queryDescriptor = HKSampleQueryDescriptor(predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)], sortDescriptors: [])
+        let queryDescriptor = HKSampleQueryDescriptor(
+            predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
+            sortDescriptors: []
+        )
         let samples = try await queryDescriptor.result(for: healthStore)
         
         self.electrocardiograms.append(contentsOf: samples.filter { !self.electrocardiograms.contains($0) })

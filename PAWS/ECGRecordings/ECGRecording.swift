@@ -13,7 +13,7 @@ import SwiftUI
 struct ECGRecording: View {
     let electrocardiogram: HKElectrocardiogram
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
-    @State var isUploadedToFirebase = false
+    @State var isUploaded = false
     @Environment(ECGModule.self) var ecgModule
     
     
@@ -27,7 +27,7 @@ struct ECGRecording: View {
                         Text(electrocardiogram.endDate.formatted())
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        if isUploadedToFirebase {
+                        if isUploaded {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                                 .accessibilityLabel("Checkmark: ECG has been successfully uploaded")
@@ -55,13 +55,12 @@ struct ECGRecording: View {
             self.symptoms = symptoms
             
             if FeatureFlags.disableFirebase {
-                self.isUploadedToFirebase = ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)
+                self.isUploaded = ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)
             } else {
                 do {
-                    let isUploadDB = try await ecgModule.isUploadedToFirebase(electrocardiogram)
-                    self.isUploadedToFirebase = isUploadDB
+                    self.isUploaded = try await ecgModule.isUploadedToFirebase(electrocardiogram)
                 } catch {
-                    print("errpr: \(error.localizedDescription)")
+                    await ecgModule.addECGMessage(for: electrocardiogram)
                 }
             }
         }
