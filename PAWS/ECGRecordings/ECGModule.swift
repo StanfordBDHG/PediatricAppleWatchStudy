@@ -222,9 +222,29 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             }
         }
     }
+    
+    func reloadECGs() async throws {
+        guard let user = Auth.auth().currentUser else {
+            logger.error("User not authenticated")
+            return
+        }
+
+        guard let creationDate = user.metadata.creationDate else {
+            logger.error("User creation date not available")
+            return
+        }
+
+        let predicate = HKQuery.predicateForSamples(withStart: creationDate, end: .now, options: .strictStartDate)
+        let predicates = [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(predicate)]
+        
+        let queryDescriptor = HKSampleQueryDescriptor(predicates: predicates, sortDescriptors: [])
+        let samples = try await queryDescriptor.result(for: HKHealthStore())
+        
+        self.electrocardiograms.append(contentsOf: samples.filter { !self.electrocardiograms.contains($0) })
+    }
 }
 
-extension Array where Self.Element: Hashable {
+extension Array where Element: Hashable {
     mutating func appendUnique<C: Collection>(from source: C) where C.Element == Self.Element {
         let existingItems = Set(self)
         for item in source where !existingItems.contains(item) {

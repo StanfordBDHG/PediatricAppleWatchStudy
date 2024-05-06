@@ -42,7 +42,11 @@ struct ECGRecordingsList: View {
                 }
                 .navigationTitle(String(localized: "ECG Recordings"))
                 .refreshable {
-                    // TODO: Add code for updating list.
+                    do {
+                        try await ecgModule.reloadECGs()
+                    } catch {
+                        // logger.error("Error fetching ECG data: \(error.localizedDescription)")
+                    }
                 }
         }
     }
