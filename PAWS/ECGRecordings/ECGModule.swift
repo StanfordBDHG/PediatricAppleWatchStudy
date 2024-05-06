@@ -229,26 +229,10 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
 
-        guard let creationDate = user.metadata.creationDate else {
-            logger.error("User creation date not available")
-            return
-        }
-
-        let predicate = HKQuery.predicateForSamples(withStart: creationDate, end: .now, options: .strictStartDate)
-        let predicates = [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(predicate)]
-        
-        let queryDescriptor = HKSampleQueryDescriptor(predicates: predicates, sortDescriptors: [])
-        let samples = try await queryDescriptor.result(for: HKHealthStore())
+        let samplePredicate = HKQuery.predicateForSamples(withStart: user.metadata.creationDate, end: .now, options: .strictStartDate)
+        let queryDescriptor = HKSampleQueryDescriptor(predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)], sortDescriptors: [])
+        let samples = try await queryDescriptor.result(for: healthStore)
         
         self.electrocardiograms.append(contentsOf: samples.filter { !self.electrocardiograms.contains($0) })
-    }
-}
-
-extension Array where Element: Hashable {
-    mutating func appendUnique<C: Collection>(from source: C) where C.Element == Self.Element {
-        let existingItems = Set(self)
-        for item in source where !existingItems.contains(item) {
-            self.append(item)
-        }
     }
 }
