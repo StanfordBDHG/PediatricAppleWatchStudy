@@ -29,7 +29,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @Dependency var mockWebService: MockWebService?
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
-    private var uploadedElectrocardiograms: Set<HKElectrocardiogram.ID> = []
+    private var uploadedElectrocardiograms: Set<HKElectrocardiogram.ID> = [] // no need for this anymore
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "Standard")
     
@@ -43,28 +43,21 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     }
     
     
-    func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) -> Bool {
-        let uploaded = uploadedElectrocardiograms.contains(where: { $0 == electrocardiogram.uuid })
-        
-        if reuploadIfNeeded {
-            Task {
-                await standard.add(sample: electrocardiogram)
-            }
-        }
-        
-        return uploaded
-    }
-    
-    func isUploadedToFirebase(_ electrocardiogram: HKElectrocardiogram) async throws -> Bool {
+    func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
         guard let userId = Auth.auth().currentUser?.uid else {
             throw PAWSStandard.PAWSStandardError.userNotAuthenticatedYet
         }
 
-        let docRef = Firestore.firestore().collection("users").document(userId).collection("HealthKit").document(electrocardiogram.uuid.uuidString)
+        let electrocardiogramDocumentReference = try await standard.userDocumentReference
+            .collection("HealthKit")
+            .document(electrocardiogram.uuid.uuidString)
+        let snapshot = try await electrocardiogramDocumentReference.getDocument()
+        
+        if !snapshot.exists && reuploadIfNeeded {
+            try await electrocardiogramDocumentReference.setData(from: try electrocardiogram.resource)
+        }
 
-        let docSnapshot = try await docRef.getDocument()
-
-        return docSnapshot.exists
+        return snapshot.exists
     }
     
     func markAsUploaded(_ electrocardiogram: HKElectrocardiogram) {
@@ -138,7 +131,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         if let electrocardiogram = sample as? HKElectrocardiogram {
             self.insert(electrocardiogram: electrocardiogram)
             
-            guard !self.isUploaded(electrocardiogram) || force else {
+            guard try await !self.isUploaded(electrocardiogram) || force else {
                 return
             }
             
@@ -213,8 +206,8 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         try? await UNUserNotificationCenter.current().add(request)
     }
     
-    private func uploadUnuploadedECGs() {
-        for ecg in electrocardiograms where !isUploaded(ecg) {
+    private func uploadUnuploadedECGs() async throws {
+        for ecg in electrocardiograms where try await !isUploaded(ecg) {
             Task {
                 do {
                     try await self.upload(sample: ecg)
@@ -242,6 +235,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         )
         let samples = try await queryDescriptor.result(for: healthStore)
         
-        self.electrocardiograms.append(contentsOf: samples.filter { !self.electrocardiograms.contains($0) })
+        self.electrocardiograms = samples.filter { !self.electrocardiograms.contains($0) }
     }
 }

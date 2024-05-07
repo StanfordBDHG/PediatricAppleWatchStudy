@@ -31,7 +31,7 @@ struct ECGRecording: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
                                 .accessibilityLabel("Checkmark: ECG has been successfully uploaded")
-                        } else {
+                        } else if !FeatureFlags.disableFirebase {
                             ProgressView()
                                 .controlSize(.small)
                                 .padding(.horizontal, 1)
@@ -54,11 +54,9 @@ struct ECGRecording: View {
             
             self.symptoms = symptoms
             
-            if FeatureFlags.disableFirebase {
-                self.isUploaded = ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)
-            } else {
+            if !FeatureFlags.disableFirebase {
                 do {
-                    self.isUploaded = try await ecgModule.isUploadedToFirebase(electrocardiogram)
+                    self.isUploaded = try await ecgModule.isUploaded(electrocardiogram)
                 } catch {
                     await ecgModule.addECGMessage(for: electrocardiogram)
                 }
