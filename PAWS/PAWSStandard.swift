@@ -81,7 +81,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Onboar
     }
     
     func remove(sample: HKDeletedObject) async {
-        ecgStorage.remove(electrocardiogram: sample.uuid)
+        try? await ecgStorage.remove(electrocardiogram: sample.uuid)
         
         if let mockWebService {
             try? await mockWebService.remove(path: "healthkit/\(sample.uuid.uuidString)")

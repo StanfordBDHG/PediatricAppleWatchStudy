@@ -29,7 +29,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @Dependency var mockWebService: MockWebService?
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
-    private var uploadedElectrocardiograms: Set<HKElectrocardiogram.ID> = [] // no need for this anymore
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "Standard")
     
@@ -38,16 +37,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     required init() { }
     
     
-    func configure() {
-        uploadedElectrocardiograms = (try? localStorage.read(storageKey: StorageKey.uploadedElectrocardiograms)) ?? []
-    }
-    
-    
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
-        guard let userId = Auth.auth().currentUser?.uid else {
-            throw PAWSStandard.PAWSStandardError.userNotAuthenticatedYet
-        }
-
         let electrocardiogramDocumentReference = try await standard.userDocumentReference
             .collection("HealthKit")
             .document(electrocardiogram.uuid.uuidString)
@@ -60,21 +50,15 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         return snapshot.exists
     }
     
-    func markAsUploaded(_ electrocardiogram: HKElectrocardiogram) {
-        uploadedElectrocardiograms.insert(electrocardiogram.uuid)
-        try? localStorage.store(uploadedElectrocardiograms, storageKey: StorageKey.uploadedElectrocardiograms)
-    }
-    
     func insert(electrocardiogram: HKElectrocardiogram) {
         electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
         electrocardiograms.append(electrocardiogram)
         electrocardiograms.sort(by: { $0.endDate > $1.endDate })
     }
     
-    func remove(electrocardiogram id: HKElectrocardiogram.ID) {
+    func remove(electrocardiogram id: HKElectrocardiogram.ID) async throws {
         electrocardiograms.removeAll(where: { $0.uuid == id })
-        uploadedElectrocardiograms.remove(id)
-        try? localStorage.store(uploadedElectrocardiograms, storageKey: StorageKey.uploadedElectrocardiograms)
+        try await electrocardiogramDocumentReference(id: id).delete()
     }
     
     func electrocardiogram(
@@ -156,10 +140,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         } else {
             try await standard.healthKitDocument(id: sample.id).setData(from: resource)
         }
-        
-        if let electrocardiogram = sample as? HKElectrocardiogram {
-            self.markAsUploaded(electrocardiogram)
-        }
     }
     
     func upload(electrocardiogram: HKElectrocardiogram) async {
@@ -236,5 +216,11 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         let samples = try await queryDescriptor.result(for: healthStore)
         
         self.electrocardiograms = samples.filter { !self.electrocardiograms.contains($0) }
+    }
+    
+    private func electrocardiogramDocumentReference(id: HKElectrocardiogram.ID) async throws -> DocumentReference {
+        try await standard.userDocumentReference
+            .collection("HealthKit")
+            .document(id.uuidString)
     }
 }
