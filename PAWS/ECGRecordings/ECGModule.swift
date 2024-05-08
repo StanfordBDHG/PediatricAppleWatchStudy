@@ -37,14 +37,16 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     required init() { }
     
     
+    func configure() {
+        
+    }
+    
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
-        let electrocardiogramDocumentReference = try await standard.userDocumentReference
-            .collection("HealthKit")
-            .document(electrocardiogram.uuid.uuidString)
-        let snapshot = try await electrocardiogramDocumentReference.getDocument()
+        let documentReference = try await electrocardiogramDocumentReference(id: electrocardiogram.uuid)
+        let snapshot = try await documentReference.getDocument()
         
         if !snapshot.exists && reuploadIfNeeded {
-            try await electrocardiogramDocumentReference.setData(from: try electrocardiogram.resource)
+            try await documentReference.setData(from: try electrocardiogram.resource)
         }
 
         return snapshot.exists
