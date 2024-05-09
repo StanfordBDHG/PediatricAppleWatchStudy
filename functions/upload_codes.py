@@ -16,14 +16,9 @@ def upload_invitation_codes(db: Client, code_count: int, code_length: int, simul
 
     for _ in range(code_count):
         code = generate_random_alphanumeric(code_length)
-        print(code)
         if not simulate:
             document_reference = invitation_codes_collection.document(code)
             document_reference.set({"used": False})
-            print(document_reference.get().to_dict())
-        print(len(invitation_codes_collection.get()))
-
-    print("Simulated invitation codes successfully.")
 
 
 def main():
