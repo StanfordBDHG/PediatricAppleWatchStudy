@@ -161,7 +161,18 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dr. Zahedivash is a resident physician in the Stanford Department of Pediatrics and will serve as a chief resident during the 2023-2024 academic year. His academic interests focus on the development and translation of innovative technologies and services to address diagnostic and health equity challenges. During his educational career as an engineer and budding physician, he has co-invented a series of computational techniques and devices. Previous inventions include diagnostic deep-learning algorithms to detect unstable coronary artery plaque on intravascular imaging and a surgical probe for intraoperative margin detection during cancer resection. He is passionate about using his medical, technical, and business backgrounds to develop digital health solutions and equitable technology translation strategies for children."
+            "value" : "Dr. Zahedivash is a pediatrician and Clinical Informatics fellow in the Stanford Department of Pediatrics. His academic interests focus on the development and translation of innovative technologies and services to address diagnostic and health equity challenges. He is passionate about using his medical, technical, and business backgrounds to develop digital health solutions and equitable technology translation strategies for children."
+          }
+        }
+      }
+    },
+    "BRYNN_CONNOR_BIO" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dr. Connor is a fellow physician training in Adult Congenital Heart Disease (ACHD) at Stanford University and previously completed a fellowship in Pediatric Cardiology at Stanford. Her primary clinical and academic interests center on improving cardiac related morbidity in adults with congenital heart disease. Arrhythmias are a common morbidity in adults with congenital heart disease and can significantly impact an individual’s health-related quality of life and long-term outcomes. Her current research efforts therefore focus on identifying alternative and more equitable strategies for arrhythmia detection in the ACHD patient population."
           }
         }
       }
