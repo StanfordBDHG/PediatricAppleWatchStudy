@@ -74,7 +74,7 @@ extension Contact {
             )
         ]
     )
-    static let brynne = Contact(
+    static let brynn = Contact(
         name: PersonNameComponents(
             givenName: "Brynn",
             familyName: "Connor"
