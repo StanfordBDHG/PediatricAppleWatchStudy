@@ -49,7 +49,7 @@ extension Contact {
             familyName: "Zahedivash"
         ),
         image: Image("AydinSquarePhoto"),
-        title: "Pediatric Stanford Cardiology Fellow",
+        title: "Pediatric Stanford Clinical Informatics Fellow",
         description: String(localized: "AYDIN_ZAHEDIVASH_BIO"),
         organization: "Stanford University",
         address: {
@@ -74,9 +74,35 @@ extension Contact {
             )
         ]
     )
-    static let brynne = Contact(
+    static let brynn = Contact(
         name: PersonNameComponents(
-            givenName: "Brynne"
-        )
+            givenName: "Brynn",
+            familyName: "Connor"
+        ),
+        image: Image("BrynnSquarePhoto"),
+        title: "Pediatric Stanford Cardiology Fellow",
+        description: String(localized: "BRYNN_CONNOR_BIO"),
+        organization: "Stanford University",
+        address: {
+            let address = CNMutablePostalAddress()
+            address.country = "USA"
+            address.state = "CA"
+            address.postalCode = "94304"
+            address.city = "Palo Alto"
+            address.street = "725 Welch Rd"
+            return address
+        }(),
+        contactOptions: [
+            .email(addresses: ["bsconnor@stanford.edu"]),
+            ContactOption(
+                image: Image(systemName: "safari.fill"),
+                title: "Website",
+                action: {
+                    if let url = URL(string: "https://profiles.stanford.edu/brynn-connor") {
+                        UIApplication.shared.open(url)
+                    }
+                }
+            )
+        ]
     )
 }

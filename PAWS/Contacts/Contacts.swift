@@ -20,7 +20,7 @@ struct Contacts: View {
     private var contacts: [Contact] {
         switch enrollmentGroup.studyType {
         case .adult:
-            [.scott, .aydin, .brynne]
+            [.scott, .aydin, .brynn]
         case .pediatric:
             [.scott, .aydin]
         case .none:
