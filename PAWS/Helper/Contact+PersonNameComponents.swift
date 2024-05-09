@@ -76,8 +76,9 @@ extension Contact {
     )
     static let brynne = Contact(
         name: PersonNameComponents(
-            givenName: "Brynn"
-        )
+            givenName: "Brynn",
+            familyName: "Connor"
+        ),
         image: Image("BrynnSquarePhoto"),
         title: "Pediatric Stanford Cardiology Fellow",
         description: String(localized: "BRYNN_CONNOR_BIO"),
