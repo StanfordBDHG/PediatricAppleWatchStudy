@@ -18,10 +18,9 @@ from typing import List, Dict, Optional, Union
 from .utils import *
 
  
-def connect_to_firebase(serviceAccountKey_file: str = None) -> Client:
+def connect_to_firebase(serviceAccountKey_file: str = None, project_id: str = "spezidatapipelinetemplate") -> Client:
     
     if os.getenv('CI') or "FIRESTORE_EMULATOR_HOST" in os.environ:
-        project_id = "spezidatapipelinetemplate"
         os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"
         os.environ["GCLOUD_PROJECT"] = project_id
         firebase_admin.initialize_app(options={'projectId': project_id})
