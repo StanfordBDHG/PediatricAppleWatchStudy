@@ -173,7 +173,7 @@ extension XCUIApplication {
         let tabBar = tabBars["Tab Bar"]
         XCTAssertTrue(tabBar.buttons["Contacts"].waitForExistence(timeout: 2))
         tabBar.buttons["Contacts"].tap()
-        XCTAssertTrue(staticTexts["Contact: Brynn"].waitForExistence(timeout: 2))
+        XCTAssertTrue(staticTexts["Contact: Brynn Connor"].waitForExistence(timeout: 2))
     }
 
     fileprivate func assertAccountInformation(email: String) throws {
