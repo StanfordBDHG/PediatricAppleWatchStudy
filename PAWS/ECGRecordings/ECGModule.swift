@@ -189,13 +189,15 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     }
     
     private func uploadUnuploadedECGs() async throws {
-        for ecg in electrocardiograms where try await !isUploaded(ecg) {
-            Task {
-                do {
-                    try await self.upload(sample: ecg)
-                } catch {
-                    logger.log("Could not access HealthKit sample: \(error)")
-                    await addECGMessage(for: ecg)
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for ecg in electrocardiograms where try await !isUploaded(ecg) {
+                group.addTask { [weak self] in
+                    do {
+                        try await self?.upload(sample: ecg)
+                    } catch {
+                        self?.logger.log("Could not access HealthKit sample: \(error)")
+                        await self?.addECGMessage(for: ecg)
+                    }
                 }
             }
         }
