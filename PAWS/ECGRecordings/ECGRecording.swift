@@ -55,11 +55,7 @@ struct ECGRecording: View {
             self.symptoms = symptoms
             
             if !FeatureFlags.disableFirebase {
-                do {
-                    self.isUploaded = try await ecgModule.isUploaded(electrocardiogram)
-                } catch {
-                    await ecgModule.addECGMessage(for: electrocardiogram)
-                }
+                self.isUploaded = (try? await ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)) ?? false
             }
         }
     }

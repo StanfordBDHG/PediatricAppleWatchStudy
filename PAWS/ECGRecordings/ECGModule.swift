@@ -37,10 +37,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     required init() { }
     
     
-    func configure() {
-        
-    }
-    
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
         let documentReference = try await electrocardiogramDocumentReference(id: electrocardiogram.uuid)
         let snapshot = try await documentReference.getDocument()
@@ -173,17 +169,24 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             }
         } catch {
             logger.log("Could not access HealthKit sample: \(error)")
-            await addECGMessage(for: electrocardiogram)
+            await addECGMessage(for: electrocardiogram, error: error)
         }
     }
     
     
     /// Creates a notification with a title and body message when there is an error accessing a HealthKit sample.
     /// - Parameter electrocardiogram: The `HKElectrocardiogram` object for which the error occurred.
-    func addECGMessage(for electrocardiogram: HKElectrocardiogram) async {
+    private func addECGMessage(for electrocardiogram: HKElectrocardiogram, error: Error) async {
+        let date = electrocardiogram.startDate
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        let dateString = dateFormatter.string(from: date)
+
         let content = UNMutableNotificationContent()
         content.title = "HealthKit Error"
-        content.body = "Sample \(electrocardiogram.sampleType.description) with identifier \(electrocardiogram.uuid.uuidString)"
+        content.body = "Electrocardiogram recorded on \(dateString) could not be uploaded. Please open up the PAWS app to re-upload the recorded electrocardiogram. \n\n \(error.localizedDescription)"
+
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         try? await UNUserNotificationCenter.current().add(request)
     }
@@ -196,7 +199,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                         try await self?.upload(sample: ecg)
                     } catch {
                         self?.logger.log("Could not access HealthKit sample: \(error)")
-                        await self?.addECGMessage(for: ecg)
+                        await self?.addECGMessage(for: ecg, error: error)
                     }
                 }
             }
