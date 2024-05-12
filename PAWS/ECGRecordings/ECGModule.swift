@@ -40,12 +40,17 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
         let documentReference = try await electrocardiogramDocumentReference(id: electrocardiogram.uuid)
         let snapshot = try await documentReference.getDocument()
-        
-        if !snapshot.exists && reuploadIfNeeded {
-            try await documentReference.setData(from: try electrocardiogram.resource)
-        }
 
-        return snapshot.exists
+        guard !snapshot.exists else {
+            return true
+        }
+        
+        if reuploadIfNeeded {
+            try await documentReference.setData(from: try electrocardiogram.resource)
+            return true
+        }
+        
+        return false
     }
     
     func insert(electrocardiogram: HKElectrocardiogram) {
@@ -160,11 +165,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                     try await upload(sample: supplementalMetric)
                 } catch {
                     logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
-                    let content = UNMutableNotificationContent()
-                    content.title = "Upload Error"
-                    content.body = "Sample could not be uploaded \(supplementalMetric.sampleType.description) (\(supplementalMetric.uuid.uuidString) at \(Date.now.formatted(date: .numeric, time: .complete)): \((supplementalMetric as? HKQuantitySample)?.quantity.description ?? "Unknown")"
-                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-                    try? await UNUserNotificationCenter.current().add(request)
+                    await addECGMessage(for: supplementalMetric, error: error)
                 }
             }
         } catch {
@@ -175,9 +176,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     /// Creates a notification with a title and body message when there is an error accessing a HealthKit sample.
-    /// - Parameter electrocardiogram: The `HKElectrocardiogram` object for which the error occurred.
-    private func addECGMessage(for electrocardiogram: HKElectrocardiogram, error: Error) async {
-        let date = electrocardiogram.startDate
+    /// - Parameter sample: The `HKSample` object for which the error occurred.
+    private func addECGMessage(for sample: HKSample, error: Error) async {
+        let date = sample.startDate
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
@@ -185,7 +186,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
 
         let content = UNMutableNotificationContent()
         content.title = "HealthKit Error"
-        content.body = "Electrocardiogram recorded on \(dateString) could not be uploaded. Please open up the PAWS app to re-upload the recorded electrocardiogram. \n\n \(error.localizedDescription)"
+        content.body = "\(sample.sampleType) recorded on \(dateString) could not be uploaded. Please open the PAWS app to re-upload the sample. \n\n \(error.localizedDescription)"
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         try? await UNUserNotificationCenter.current().add(request)
