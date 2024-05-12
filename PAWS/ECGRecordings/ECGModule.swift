@@ -37,6 +37,8 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     required init() { }
     
     
+    // MARK: - Public Interface
+    
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
         let documentReference = try await electrocardiogramDocumentReference(id: electrocardiogram.uuid)
         let snapshot = try await documentReference.getDocument()
@@ -53,6 +55,42 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         return false
     }
     
+    /// Reloads the ECGs by checking if the user is authenticated.
+    /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
+    /// - Throws: An error if the user is not authenticated.
+    func reloadECGs() async throws {
+        guard let user = Auth.auth().currentUser else {
+            logger.error("User not authenticated")
+            return
+        }
+
+        let samplePredicate = HKQuery.predicateForSamples(withStart: user.metadata.creationDate, end: .now, options: .strictStartDate)
+        let queryDescriptor = HKSampleQueryDescriptor(
+            predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
+            sortDescriptors: []
+        )
+        let samples = try await queryDescriptor.result(for: healthStore)
+        
+        self.electrocardiograms = samples
+    }
+    
+    func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
+        do {
+            guard let updatedElectrocardiogram = try await self.electrocardiogram(
+                correlatedWith: categorySample,
+                from: healthStore
+            ) else {
+                return
+            }
+            
+            try await upload(sample: updatedElectrocardiogram, force: true)
+        } catch {
+            logger.log("Could not corrolate category sample with ECG: \(categorySample)")
+        }
+    }
+    
+    // MARK: - Data Management
+    
     func insert(electrocardiogram: HKElectrocardiogram) {
         electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
         electrocardiograms.append(electrocardiogram)
@@ -64,7 +102,38 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         try await electrocardiogramDocumentReference(id: id).delete()
     }
     
-    func electrocardiogram(
+    func upload(electrocardiogram: HKElectrocardiogram) async {
+        var supplementalMetrics: [HKSample] = []
+        
+        do {
+            try await upload(sample: electrocardiogram)
+            
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPulseRates) ?? [])
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPhysicalEffort) ?? [])
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingStepCount) ?? [])
+            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingActiveEnergy) ?? [])
+            
+            if let precedingVo2Max = try? await electrocardiogram.precedingVo2Max {
+                supplementalMetrics.append(precedingVo2Max)
+            }
+            
+            for supplementalMetric in supplementalMetrics {
+                do {
+                    try await upload(sample: supplementalMetric)
+                } catch {
+                    logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
+                    await addECGMessage(for: supplementalMetric, error: error)
+                }
+            }
+        } catch {
+            logger.log("Could not access HealthKit sample: \(error)")
+            await addECGMessage(for: electrocardiogram, error: error)
+        }
+    }
+    
+    // MARK: - Private Helper Functions
+    
+    private func electrocardiogram(
         correlatedWith correlatedCategorySample: HKCategorySample,
         from healthStore: HKHealthStore
     ) async throws -> HKElectrocardiogram? {
@@ -98,19 +167,10 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         return nil
     }
     
-    func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
-        do {
-            guard let updatedElectrocardiogram = try await self.electrocardiogram(
-                correlatedWith: categorySample,
-                from: healthStore
-            ) else {
-                return
-            }
-            
-            try await upload(sample: updatedElectrocardiogram, force: true)
-        } catch {
-            logger.log("Could not corrolate category sample with ECG: \(categorySample)")
-        }
+    private func electrocardiogramDocumentReference(id: HKElectrocardiogram.ID) async throws -> DocumentReference {
+        try await standard.userDocumentReference
+            .collection("HealthKit")
+            .document(id.uuidString)
     }
     
     private func upload(sample: HKSample, force: Bool = false) async throws {
@@ -145,35 +205,20 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
     }
     
-    func upload(electrocardiogram: HKElectrocardiogram) async {
-        var supplementalMetrics: [HKSample] = []
-        
-        do {
-            try await upload(sample: electrocardiogram)
-            
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPulseRates) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPhysicalEffort) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingStepCount) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingActiveEnergy) ?? [])
-            
-            if let precedingVo2Max = try? await electrocardiogram.precedingVo2Max {
-                supplementalMetrics.append(precedingVo2Max)
-            }
-            
-            for supplementalMetric in supplementalMetrics {
-                do {
-                    try await upload(sample: supplementalMetric)
-                } catch {
-                    logger.log("Could not upload \(supplementalMetric.sampleType): \(error)")
-                    await addECGMessage(for: supplementalMetric, error: error)
+    private func uploadUnuploadedECGs() async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for ecg in electrocardiograms where try await !isUploaded(ecg) {
+                group.addTask { [weak self] in
+                    do {
+                        try await self?.upload(sample: ecg)
+                    } catch {
+                        self?.logger.log("Could not access HealthKit sample: \(error)")
+                        await self?.addECGMessage(for: ecg, error: error)
+                    }
                 }
             }
-        } catch {
-            logger.log("Could not access HealthKit sample: \(error)")
-            await addECGMessage(for: electrocardiogram, error: error)
         }
     }
-    
     
     /// Creates a notification with a title and body message when there is an error accessing a HealthKit sample.
     /// - Parameter sample: The `HKSample` object for which the error occurred.
@@ -190,45 +235,5 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         try? await UNUserNotificationCenter.current().add(request)
-    }
-    
-    private func uploadUnuploadedECGs() async throws {
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for ecg in electrocardiograms where try await !isUploaded(ecg) {
-                group.addTask { [weak self] in
-                    do {
-                        try await self?.upload(sample: ecg)
-                    } catch {
-                        self?.logger.log("Could not access HealthKit sample: \(error)")
-                        await self?.addECGMessage(for: ecg, error: error)
-                    }
-                }
-            }
-        }
-    }
-    
-    /// Reloads the ECGs by checking if the user is authenticated.
-    /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
-    /// - Throws: An error if the user is not authenticated.
-    func reloadECGs() async throws {
-        guard let user = Auth.auth().currentUser else {
-            logger.error("User not authenticated")
-            return
-        }
-
-        let samplePredicate = HKQuery.predicateForSamples(withStart: user.metadata.creationDate, end: .now, options: .strictStartDate)
-        let queryDescriptor = HKSampleQueryDescriptor(
-            predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
-            sortDescriptors: []
-        )
-        let samples = try await queryDescriptor.result(for: healthStore)
-        
-        self.electrocardiograms = samples.filter { !self.electrocardiograms.contains($0) }
-    }
-    
-    private func electrocardiogramDocumentReference(id: HKElectrocardiogram.ID) async throws -> DocumentReference {
-        try await standard.userDocumentReference
-            .collection("HealthKit")
-            .document(id.uuidString)
     }
 }
