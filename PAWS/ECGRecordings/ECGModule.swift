@@ -72,6 +72,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         let samples = try await queryDescriptor.result(for: healthStore)
         
         self.electrocardiograms = samples
+        try await self.uploadUnuploadedECGs()
     }
     
     func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
