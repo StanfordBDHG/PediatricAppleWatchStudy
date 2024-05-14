@@ -11,9 +11,7 @@ import os
 import random
 import string
 from typing import List
-# from ECGDataPipelineTemplate impor
 from ECGDataPipelineTemplate.Modules import firebase_access
-# from ECGDataPipelineTemplate.Modules.firebase_access import connect_to_firebase
 from google.cloud.firestore_v1.client import Client
 
 
