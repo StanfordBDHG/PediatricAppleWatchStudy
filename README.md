@@ -36,7 +36,7 @@ You can build and run the application using [Xcode](https://developer.apple.com/
 ## Generate Invitation Codes
 
 When signing in to the application for the first time, you will be required to enter a valid invitation code before a user account is created.
-Use the `generate_invitation_codes.py` script to generate new codes and upload them to a specified Firebase instance or a local file.
+Use the `upload_codes.py` script to generate new codes and upload them to a specified Firebase instance or a local file.
 
 ```bash
 export FIRESTORE_EMULATOR_HOST="localhost:8080"
