@@ -11,7 +11,9 @@ import os
 import random
 import string
 from typing import List
-from ECGDataPipelineTemplate.Modules.firebase_access import connect_to_firebase
+# from ECGDataPipelineTemplate impor
+from ECGDataPipelineTemplate.Modules import firebase_access
+# from ECGDataPipelineTemplate.Modules.firebase_access import connect_to_firebase
 from google.cloud.firestore_v1.client import Client
 
 
@@ -42,13 +44,14 @@ def main():
                         help="Local path where a copy of the generated invitation codes may be saved")
     parser.add_argument("-d", "--dry", action="store_true", default=False,
                         help="Dry run the program (i.e., without uploading to Firestore)")
+    parser.add_argument("--service_account", type=str, help="The path to the service account JSON file for Firebase")
     parsed = parser.parse_args()
 
     # Assuming that the following environment variables are already set:
     # export FIRESTORE_EMULATOR_HOST="localhost:8080"
     # export GCLOUD_PROJECT=<project_id>
     # Additionally, adjust the path to the service account JSON file as needed.
-    db = connect_to_firebase("", os.environ["GCLOUD_PROJECT"])
+    db = firebase_access.connect_to_firebase(parsed.service_account, os.environ["GCLOUD_PROJECT"])
     codes = upload_invitation_codes(db, parsed.count, parsed.length, parsed.dry)
 
     if parsed.outfile:
