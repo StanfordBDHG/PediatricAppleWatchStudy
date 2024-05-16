@@ -20,7 +20,6 @@ final class DataManagementTests: XCTestCase {
     func testPullToRefresh() throws {
         let app = XCUIApplication()
         try app.navigateOnboardingFlow(email: "johndoe@stanford.edu")
-        let initialECGCount = app.staticTexts["ECG Recording"].exists
         
         try self.exitAppAndOpenHealth(.electrocardiograms)
         app.activate()
