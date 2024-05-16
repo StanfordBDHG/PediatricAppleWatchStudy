@@ -33,8 +33,7 @@ final class DataManagementTests: XCTestCase {
         sleep(2)
         
         // Validate that the ECG list has been updated.
-        let refreshedECGCount = app.staticTexts["ECG Recording"].exists // app.tables.cells.count
-        // XCTAssertGreaterThan(refreshedECGCount, initialECGCount, "ECG list should refresh and show at least one ECG")
+        let refreshedECGCount = app.staticTexts["ECG Recording"].exists
         XCTAssertFalse(initialECGCount)
         XCTAssertTrue(refreshedECGCount)
     }
