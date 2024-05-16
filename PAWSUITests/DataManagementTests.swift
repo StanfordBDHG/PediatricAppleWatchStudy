@@ -24,17 +24,20 @@ final class DataManagementTests: XCTestCase {
         try self.exitAppAndOpenHealth(.electrocardiograms)
         app.activate()
         
-        XCTAssertTrue(app.staticTexts["ECG Recording"].waitForExistence(timeout: 2))
+        let initialECGText = app.staticTexts["ECG Recording"]
+        XCTAssertTrue(initialECGText.waitForExistence(timeout: 2))
         
         // Simulate pull to refresh.
-        let start = app.scrollViews.firstMatch.coordinate(withNormalizedOffset: .zero)
-        let finish = start.withOffset(CGVector(dx: 0, dy: 200))
+        let start = initialECGText.coordinate(withNormalizedOffset: .zero)
+        let finish = initialECGText.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 20))
         start.press(forDuration: 0, thenDragTo: finish)
         
         // Allow some time for the refresh to complete.
         sleep(2)
         
         // Validate that the same ECG is still present after the refresh.
-        XCTAssertTrue(app.staticTexts["ECG Recording"].waitForExistence(timeout: 2))
+        let refreshedECGText = app.staticTexts["ECG Recording"]
+        XCTAssertTrue(refreshedECGText.waitForExistence(timeout: 2))
+        XCTAssertEqual(initialECGText.description, refreshedECGText.description)
     }
 }
