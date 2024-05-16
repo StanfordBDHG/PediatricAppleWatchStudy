@@ -27,7 +27,7 @@ final class DataManagementTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["ECG Recording"].waitForExistence(timeout: 2))
         
         // Simulate pull to refresh.
-        let start = app.scrollViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let start = app.scrollViews.firstMatch.coordinate(withNormalizedOffset: .zero)
         let finish = start.withOffset(CGVector(dx: 0, dy: 200))
         start.press(forDuration: 0, thenDragTo: finish)
         
