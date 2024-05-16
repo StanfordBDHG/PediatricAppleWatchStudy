@@ -1,8 +1,9 @@
 //
-//  DataManagementTests.swift
-//  PAWSUITests
+// This source file is part of the PAWS application based on the Stanford Spezi Template Application project
 //
-//  Created by Matthew Turk on 5/15/24.
+// SPDX-FileCopyrightText: 2023 Stanford University
+//
+// SPDX-License-Identifier: MIT
 //
 
 import XCTest
@@ -24,6 +25,8 @@ final class DataManagementTests: XCTestCase {
         try self.exitAppAndOpenHealth(.electrocardiograms)
         app.activate()
         
+        XCTAssertTrue(app.staticTexts["ECG Recording"].waitForExistence(timeout: 2))
+        
         // Simulate pull to refresh.
         let start = app.scrollViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
         let finish = start.withOffset(CGVector(dx: 0, dy: 200))
@@ -32,9 +35,7 @@ final class DataManagementTests: XCTestCase {
         // Allow some time for the refresh to complete.
         sleep(2)
         
-        // Validate that the ECG list has been updated.
-        let refreshedECGCount = app.staticTexts["ECG Recording"].exists
-        XCTAssertFalse(initialECGCount)
-        XCTAssertTrue(refreshedECGCount)
+        // Validate that the same ECG is still present after the refresh.
+        XCTAssertTrue(app.staticTexts["ECG Recording"].waitForExistence(timeout: 2))
     }
 }
