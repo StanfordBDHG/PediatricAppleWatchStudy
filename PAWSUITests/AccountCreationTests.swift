@@ -34,7 +34,7 @@ final class AccountCreationTests: XCTestCase {
 }
 
 extension XCUIApplication {
-    fileprivate func navigateOnboardingFlow(
+    func navigateOnboardingFlow(
         email: String = "johndoe@stanford.edu",
         repeated skippedIfRepeated: Bool = false
     ) throws {

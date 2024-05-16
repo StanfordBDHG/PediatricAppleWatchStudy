@@ -78,6 +78,7 @@
 		B28A0DDC2BA4AEDE0068258D /* Date+Bool.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28A0DDB2BA4AEDE0068258D /* Date+Bool.swift */; };
 		B2CF6EC12BC63CEB00F85C61 /* StudyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CF6EC02BC63CEB00F85C61 /* StudyType.swift */; };
 		B2CF6EC42BC63D9B00F85C61 /* EnrollmentGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CF6EC32BC63D9B00F85C61 /* EnrollmentGroup.swift */; };
+		B2D49F352BF58CEB006E3817 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D49F342BF58CEB006E3817 /* DataManagementTests.swift */; };
 		B2DB1AD32BB4BCB100B0F49B /* AccountCreationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DB1AD22BB4BCB100B0F49B /* AccountCreationTests.swift */; };
 		B2F7F1DC2BA53F6400BE93BE /* InvitationCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F7F1DB2BA53F6400BE93BE /* InvitationCodeView.swift */; };
 		B2F7F1DF2BA540BB00BE93BE /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = B2F7F1DE2BA540BB00BE93BE /* FirebaseFunctions */; };
@@ -155,6 +156,7 @@
 		B28A0DDB2BA4AEDE0068258D /* Date+Bool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Bool.swift"; sourceTree = "<group>"; };
 		B2CF6EC02BC63CEB00F85C61 /* StudyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyType.swift; sourceTree = "<group>"; };
 		B2CF6EC32BC63D9B00F85C61 /* EnrollmentGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollmentGroup.swift; sourceTree = "<group>"; };
+		B2D49F342BF58CEB006E3817 /* DataManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementTests.swift; sourceTree = "<group>"; };
 		B2DB1AD22BB4BCB100B0F49B /* AccountCreationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationTests.swift; sourceTree = "<group>"; };
 		B2F7F1DB2BA53F6400BE93BE /* InvitationCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationCodeView.swift; sourceTree = "<group>"; };
 		B2F7F1E12BA549A900BE93BE /* InvitationCodeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationCodeError.swift; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				2F4E237D2989A2FE0013F3D9 /* LaunchTests.swift */,
+				B2D49F342BF58CEB006E3817 /* DataManagementTests.swift */,
 				B2DB1AD22BB4BCB100B0F49B /* AccountCreationTests.swift */,
 			);
 			path = PAWSUITests;
@@ -647,6 +650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2D49F352BF58CEB006E3817 /* DataManagementTests.swift in Sources */,
 				B2DB1AD32BB4BCB100B0F49B /* AccountCreationTests.swift in Sources */,
 				2F4E237E2989A2FE0013F3D9 /* LaunchTests.swift in Sources */,
 			);
