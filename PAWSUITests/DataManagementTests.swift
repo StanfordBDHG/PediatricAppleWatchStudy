@@ -28,9 +28,9 @@ final class DataManagementTests: XCTestCase {
         XCTAssertTrue(initialECGText.waitForExistence(timeout: 2))
         
         // Simulate pull to refresh.
-        let start = initialECGText.coordinate(withNormalizedOffset: .zero)
-        let finish = initialECGText.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 20))
-        start.press(forDuration: 0, thenDragTo: finish)
+        let ecgTableView = app.scrollViews.firstMatch
+        XCTAssertTrue(ecgTableView.waitForExistence(timeout: 2))
+        ecgTableView.press(forDuration: 0, thenDragTo: app.tabBars.firstMatch)
         
         // Allow some time for the refresh to complete.
         sleep(2)

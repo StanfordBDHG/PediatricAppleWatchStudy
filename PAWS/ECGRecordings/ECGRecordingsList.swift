@@ -33,7 +33,7 @@ struct ECGRecordingsList: View {
                     }
                         .padding(.vertical)
                 }
-                    .scrollBounceBehavior(.basedOnSize)
+                    .scrollBounceBehavior(.always)
             }
                 .toolbar {
                     if AccountButton.shouldDisplay {
