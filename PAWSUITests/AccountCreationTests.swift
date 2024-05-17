@@ -36,7 +36,7 @@ final class AccountCreationTests: XCTestCase {
 extension XCUIApplication {
     func navigateOnboardingFlow(
         email: String = "johndoe@stanford.edu",
-        code: String,
+        code: String = "gdxRWF6G",
         repeated skippedIfRepeated: Bool = false
     ) throws {
         try navigateOnboardingFlowWelcome()
