@@ -33,7 +33,7 @@ struct ECGRecordingsList: View {
                     }
                         .padding(.vertical)
                 }
-                    .scrollBounceBehavior(.basedOnSize)
+                    .scrollBounceBehavior(.always)
             }
                 .toolbar {
                     if AccountButton.shouldDisplay {
@@ -41,6 +41,9 @@ struct ECGRecordingsList: View {
                     }
                 }
                 .navigationTitle(String(localized: "ECG Recordings"))
+                .refreshable {
+                    try? await ecgModule.reloadECGs()
+                }
         }
     }
     

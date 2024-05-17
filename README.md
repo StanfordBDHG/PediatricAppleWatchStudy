@@ -33,6 +33,19 @@ The application uses the FHIR standard to provide a shared standard to encode da
 
 You can build and run the application using [Xcode](https://developer.apple.com/xcode/) by opening up the **PAWS.xcodeproj**.
 
+## Generate Invitation Codes
+
+When signing in to the application for the first time, you will be required to enter a valid invitation code before a user account is created.
+Use the `upload_codes.py` script to generate new codes and upload them to a specified Firebase instance or a local file.
+
+```bash
+export FIRESTORE_EMULATOR_HOST="localhost:8080"
+export GCLOUD_PROJECT=<project_id>
+
+python -m scripts.upload_codes --outfile=<local_path> \
+--count=<number_of_codes> --length=<code_length> \
+--service_account=<service_account_key_file> [--dry]
+```
 
 ## ECG Data Pipeline
 
