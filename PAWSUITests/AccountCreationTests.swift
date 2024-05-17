@@ -25,7 +25,7 @@ final class AccountCreationTests: XCTestCase {
         let app = XCUIApplication()
         let email = "johndoe@stanford.edu"
         
-        try app.navigateOnboardingFlow(email: email)
+        try app.navigateOnboardingFlow(email: email, code: "gdxRWF6G")
 
         app.assertOnboardingComplete()
         app.assertStudyGroupAdult()
@@ -36,11 +36,12 @@ final class AccountCreationTests: XCTestCase {
 extension XCUIApplication {
     func navigateOnboardingFlow(
         email: String = "johndoe@stanford.edu",
+        code: String,
         repeated skippedIfRepeated: Bool = false
     ) throws {
         try navigateOnboardingFlowWelcome()
         try navigateOnboardingFlowInterestingModules()
-        try navigateOnboardingInvitationCode()
+        try navigateOnboardingInvitationCode(code: code)
         if staticTexts["Your PAWS Account"].waitForExistence(timeout: 5) {
             try navigateOnboardingAccount(email: email)
         }
@@ -70,9 +71,9 @@ extension XCUIApplication {
         }
     }
     
-    private func navigateOnboardingInvitationCode() throws {
+    private func navigateOnboardingInvitationCode(code: String) throws {
         XCTAssertTrue(staticTexts["Invitation Code"].waitForExistence(timeout: 5))
-        try textFields["Invitation Code"].enter(value: "gdxRWF6G")
+        try textFields["Invitation Code"].enter(value: code)
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
         

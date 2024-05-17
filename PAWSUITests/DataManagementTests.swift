@@ -19,7 +19,7 @@ final class DataManagementTests: XCTestCase {
     
     func testPullToRefresh() throws {
         let app = XCUIApplication()
-        try app.navigateOnboardingFlow(email: "johndoe@stanford.edu")
+        try app.navigateOnboardingFlow(email: "johndoe@stanford.edu", code: "Xkdyv3DF")
         
         try self.exitAppAndOpenHealth(.electrocardiograms)
         app.activate()
