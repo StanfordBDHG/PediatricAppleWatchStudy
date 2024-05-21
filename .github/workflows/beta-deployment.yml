@@ -29,6 +29,7 @@ jobs:
       contents: read
     with:
       runsonlabels: '["macOS", "self-hosted"]'
+      environment: staging
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
       fastlanelane: beta
@@ -40,6 +41,7 @@ jobs:
     permissions:
       contents: read
     with:
+      environment: staging
       arguments: '--debug'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
