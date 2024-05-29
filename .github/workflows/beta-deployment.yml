@@ -38,6 +38,7 @@ jobs:
     name: Deploy Firebase Project
     # needs: iosapptestflightdeployment
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
+    environment: staging
     permissions:
       contents: read
     with:
