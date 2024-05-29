@@ -38,11 +38,10 @@ jobs:
     name: Deploy Firebase Project
     # needs: iosapptestflightdeployment
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
-    environment: staging
     permissions:
       contents: read
     with:
       environment: staging
-      arguments: '--project ${{ vars.FIREBASE_PROJECT_ID }}'
+      arguments: '--project ${{ secrets.FIREBASE_PROJECT_ID }}'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
