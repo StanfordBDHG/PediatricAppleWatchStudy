@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 env:
-  FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+  ENVIRONMENT: 'staging'
 
 jobs:
   # buildandtest:
@@ -37,14 +37,23 @@ jobs:
   #     setupsigning: true
   #     fastlanelane: beta
   #   secrets: inherit
+  vars:
+    name: Inject Environment Variables In Deployment Workflow
+    runs-on: ubuntu-latest
+    environment: ${{ env.ENVIRONMENT }}
+    outputs:
+      FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+      ENVIRONMENT: ${{ env.ENVIRONMENT }}
+    steps:
+      - run: echo "Injecting Environment Variables In Deployment Workflow ..."
   deployfirebase:
     name: Deploy Firebase Project
-    # needs: iosapptestflightdeployment
+    needs: vars
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
     permissions:
       contents: read
     with:
-      environment: staging
-      arguments: '--project ${{ env.FIREBASE_PROJECT_ID }}'
+      environment: ${{ needs.vars.outputs.ENVIRONMENT }}
+      arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
