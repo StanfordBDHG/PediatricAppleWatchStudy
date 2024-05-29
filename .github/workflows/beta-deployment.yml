@@ -14,8 +14,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  ENVIRONMENT: 'staging'
 
 jobs:
   # buildandtest:
@@ -40,10 +38,9 @@ jobs:
   vars:
     name: Inject Environment Variables In Deployment Workflow
     runs-on: ubuntu-latest
-    environment: ${{ env.ENVIRONMENT }}
+    environment: staging
     outputs:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-      ENVIRONMENT: ${{ env.ENVIRONMENT }}
     steps:
       - run: echo "Injecting Environment Variables In Deployment Workflow ..."
   deployfirebase:
@@ -53,7 +50,7 @@ jobs:
     permissions:
       contents: read
     with:
-      environment: ${{ needs.vars.outputs.ENVIRONMENT }}
+      environment: staging
       arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
