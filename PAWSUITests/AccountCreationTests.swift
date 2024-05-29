@@ -17,6 +17,9 @@ final class AccountCreationTests: XCTestCase {
         continueAfterFailure = false
 
         let app = XCUIApplication()
+        Task {
+            await setupSnapshot(app)
+        }
         app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
         app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
@@ -40,6 +43,7 @@ extension XCUIApplication {
         repeated skippedIfRepeated: Bool = false
     ) throws {
         try navigateOnboardingFlowWelcome()
+        PAWSUITests.snapshot("0Launch")
         try navigateOnboardingFlowInterestingModules()
         try navigateOnboardingInvitationCode(code: code)
         if staticTexts["Your PAWS Account"].waitForExistence(timeout: 5) {
