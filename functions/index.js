@@ -7,70 +7,70 @@
 //
 
 const admin = require("firebase-admin");
-const functions = require("firebase-functions");
 const {logger, https} = require("firebase-functions/v2");
 const {beforeUserCreated} = require("firebase-functions/v2/identity");
 
 admin.initializeApp();
 
-exports.checkInvitationCode = functions
-    .runWith({
-      invoker: "public",
-      serviceAccount: "cloudfunctionsserviceaccount@${process.env.GCLOUD_PROJECT}.iam.gserviceaccount.com",
-    })
-    .https
-    .onCall(async (request) => {
-      const {invitationCode, userId} = request.data;
+exports.checkInvitationCode = https
+    .onCall(
+        {
+          invoker: "public",
+          serviceAccount: `cloudfunctionsserviceaccount@${process.env.GCLOUD_PROJECT}.iam.gserviceaccount.com`,
+        },
+        async (request) => {
+          const {invitationCode, userId} = request.data;
 
-      if (!userId) {
-        throw new https.HttpsError(
-            "unauthenticated",
-            "User is not properly authenticated.",
-        );
-      }
+          if (!userId) {
+            throw new https.HttpsError(
+                "unauthenticated",
+                "User is not properly authenticated.",
+            );
+          }
 
-      const firestore = admin.firestore();
-      logger.debug(`User (${userId}) -> PAWS, InvitationCode ${invitationCode}`);
+          const firestore = admin.firestore();
+          logger.debug(`User (${userId}) -> PAWS, InvitationCode ${invitationCode}`);
 
-      try {
-      // Based on https://github.com/StanfordSpezi/SpeziStudyApplication/blob/main/functions/index.js
-        const invitationCodeRef = firestore.doc(`invitationCodes/${invitationCode}`);
-        const invitationCodeDoc = await invitationCodeRef.get();
+          try {
+            // Based on https://github.com/StanfordSpezi/SpeziStudyApplication/blob/main/functions/index.js
+            const invitationCodeRef = firestore.doc(`invitationCodes/${invitationCode}`);
+            const invitationCodeDoc = await invitationCodeRef.get();
 
-        if (!invitationCodeDoc.exists || (invitationCodeDoc.data().used)) {
-          throw new https.HttpsError("not-found", "Invitation code not found or already used.");
-        }
+            if (!invitationCodeDoc.exists || (invitationCodeDoc.data().used)) {
+              throw new https.HttpsError("not-found", "Invitation code not found or already used.");
+            }
 
-        const userStudyRef = firestore.doc(`users/${userId}`);
-        const userStudyDoc = await userStudyRef.get();
+            const userStudyRef = firestore.doc(`users/${userId}`);
+            const userStudyDoc = await userStudyRef.get();
 
-        if (userStudyDoc.exists) {
-          throw new https.HttpsError("already-exists", "User is already enrolled in the study.");
-        }
+            if (userStudyDoc.exists) {
+              throw new https.HttpsError("already-exists", "User is already enrolled in the study.");
+            }
 
-        await firestore.runTransaction(async (transaction) => {
-          transaction.set(userStudyRef, {
-            invitationCode: invitationCode,
-            dateOfEnrollment: firestore.FieldValue.serverTimestamp(),
-          });
+            await firestore.runTransaction(async (transaction) => {
+              transaction.set(userStudyRef, {
+                invitationCode: invitationCode,
+                dateOfEnrollment: firestore.FieldValue.serverTimestamp(),
+              });
 
-          transaction.update(invitationCodeRef, {
-            used: true,
-            usedBy: userId,
-          });
-        });
+              transaction.update(invitationCodeRef, {
+                used: true,
+                usedBy: userId,
+              });
+            });
 
-        logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
+            logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
 
-        return {};
-      } catch (error) {
-        logger.error(`Error processing request: ${error.message}`);
-        if (!error.code) {
-          throw new https.HttpsError("internal", "Internal server error.");
-        }
-        throw error;
-      }
-    });
+            return {};
+          } catch (error) {
+            logger.error(`Error processing request: ${error.message}`);
+            if (!error.code) {
+              throw new https.HttpsError("internal", "Internal server error.");
+            }
+            throw error;
+          }
+        },
+    );
 
 exports.beforecreated = beforeUserCreated(async (event) => {
   const firestore = admin.firestore();
