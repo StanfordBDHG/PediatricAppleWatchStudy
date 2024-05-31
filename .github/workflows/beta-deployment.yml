@@ -38,7 +38,7 @@ jobs:
   vars:
     name: Inject Environment Variables In Deployment Workflow
     runs-on: ubuntu-latest
-    environment: staging
+    # environment: staging
     outputs:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
     steps:
@@ -50,7 +50,7 @@ jobs:
     permissions:
       contents: read
     with:
-      environment: staging
+      # environment: staging
       arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
