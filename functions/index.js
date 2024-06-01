@@ -9,6 +9,7 @@
 const admin = require("firebase-admin");
 const {logger, https} = require("firebase-functions/v2");
 const {beforeUserCreated} = require("firebase-functions/v2/identity");
+const {FieldValue} = require("firebase-admin/firestore");
 
 admin.initializeApp();
 
@@ -50,7 +51,7 @@ exports.checkInvitationCode = https
             await firestore.runTransaction(async (transaction) => {
               transaction.set(userStudyRef, {
                 invitationCode: invitationCode,
-                dateOfEnrollment: firestore.FieldValue.serverTimestamp(),
+                dateOfEnrollment: FieldValue.serverTimestamp(),
               });
 
               transaction.update(invitationCodeRef, {
