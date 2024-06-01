@@ -43,7 +43,6 @@ extension XCUIApplication {
         repeated skippedIfRepeated: Bool = false
     ) throws {
         try navigateOnboardingFlowWelcome()
-        PAWSUITests.snapshot("0Launch")
         try navigateOnboardingFlowInterestingModules()
         try navigateOnboardingInvitationCode(code: code)
         if staticTexts["Your PAWS Account"].waitForExistence(timeout: 5) {
@@ -69,14 +68,18 @@ extension XCUIApplication {
     private func navigateOnboardingFlowInterestingModules() throws {
         XCTAssertTrue(staticTexts["Interesting Modules"].waitForExistence(timeout: 5))
         
-        for _ in 1..<4 {
+        for i in 1..<4 {
             XCTAssertTrue(buttons["Next"].waitForExistence(timeout: 2))
             buttons["Next"].tap()
+            if i == 2 {
+                PAWSUITests.snapshot("0Launch")
+            }
         }
     }
     
     private func navigateOnboardingInvitationCode(code: String) throws {
         XCTAssertTrue(staticTexts["Invitation Code"].waitForExistence(timeout: 5))
+        PAWSUITests.snapshot("1InvitationCode")
         try textFields["Invitation Code"].enter(value: code)
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
@@ -189,6 +192,7 @@ extension XCUIApplication {
         XCTAssertTrue(staticTexts["John Doe"].exists)
         XCTAssertTrue(staticTexts[email].exists)
         XCTAssertTrue(staticTexts["Gender Identity, Choose not to answer"].exists)
+        PAWSUITests.snapshot("3AccountInformation")
 
 
         XCTAssertTrue(navigationBars.buttons["Close"].waitForExistence(timeout: 0.5))

@@ -21,4 +21,11 @@ enum FeatureFlags {
     /// Defines if the application should connect to the local firebase emulator. Always set to true when using the iOS simulator.
     static let useFirebaseEmulator = CommandLine.arguments.contains("--useFirebaseEmulator")
     #endif
+    // add a flag for screenshot stuff
+    // one test that creates three ECGs in health app, then passes in flag for go through onboarding, take some screenshots, and then exit the test
+    // only put assertions that you're on the desired screen; then take a screenshot
+    // actually make it part of the existing UI tests, trigger them at the right points
+    // after all the tests you can add some more ECGs and then take a screenshot
+    // does firebase pass in screenshot mode vairable
+    // look at fastlane snapshot docs for the GitHub Actions integration stuff
 }

@@ -13,6 +13,9 @@ final class DataManagementTests: XCTestCase {
         try super.setUpWithError()
         continueAfterFailure = false
         let app = XCUIApplication()
+        Task {
+            await setupSnapshot(app)
+        }
         app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
         app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
@@ -39,5 +42,16 @@ final class DataManagementTests: XCTestCase {
         let refreshedECGText = app.staticTexts["ECG Recording"]
         XCTAssertTrue(refreshedECGText.waitForExistence(timeout: 2))
         XCTAssertEqual(initialECGText.description, refreshedECGText.description)
+        
+        // Now return to the Health app, and add some more ECGs before capturing a screenshot (for App Store).
+        for _ in 0..<10 {
+            try self.exitAppAndOpenHealth(.electrocardiograms)
+        }
+        
+        app.activate()
+        
+        Task {
+            await PAWSUITests.snapshot("2Home")
+        }
     }
 }
