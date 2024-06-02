@@ -65,4 +65,4 @@ __pycache__/
 *$py.class
 
 # Fastlane
-screenshots/
+.screenshots/
