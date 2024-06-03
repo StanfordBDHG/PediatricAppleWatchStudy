@@ -46,7 +46,7 @@ final class DataManagementTests: XCTestCase {
         XCTAssertEqual(initialECGText.description, refreshedECGText.description)
         
         // Now return to the Health app, and add some more ECGs before capturing a screenshot (for App Store).
-        for _ in 0..<5 where UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
+        for _ in 0..<4 where UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
             try self.exitAppAndOpenHealth(.electrocardiograms)
         }
         
