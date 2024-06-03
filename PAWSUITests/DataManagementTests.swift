@@ -9,12 +9,17 @@
 import XCTest
 
 final class DataManagementTests: XCTestCase {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
-        let app = XCUIApplication()
-        app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
-        app.deleteAndLaunch(withSpringboardAppName: "PAWS")
+        
+        let app = await XCUIApplication()
+        await setupSnapshot(app)
+        
+        await MainActor.run {
+            app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
+        }
+        await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
     func testPullToRefresh() throws {
@@ -39,5 +44,16 @@ final class DataManagementTests: XCTestCase {
         let refreshedECGText = app.staticTexts["ECG Recording"]
         XCTAssertTrue(refreshedECGText.waitForExistence(timeout: 2))
         XCTAssertEqual(initialECGText.description, refreshedECGText.description)
+        
+        // Now return to the Health app, and add some more ECGs before capturing a screenshot (for App Store).
+        for _ in 0..<4 where UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
+            try self.exitAppAndOpenHealth(.electrocardiograms)
+        }
+        
+        app.activate()
+        
+        Task {
+            await PAWSUITests.snapshot("2Home")
+        }
     }
 }

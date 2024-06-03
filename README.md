@@ -47,6 +47,30 @@ python -m scripts.upload_codes --outfile=<local_path> \
 --service_account=<service_account_key_file> [--dry]
 ```
 
+## Generate Screenshots
+PAWS uses [Fastlane Snapshots](https://docs.fastlane.tools/getting-started/ios/screenshots/) to automatically screenshot specific screens in the app during UI tests.
+To generate new screenshots, you will likewise need to set the proper environment variables for you shell session.
+
+```bash
+export FIRESTORE_EMULATOR_HOST="localhost:8080"
+export GCLOUD_PROJECT=<project_id>
+
+firebase emulators:start --import=./firebase
+```
+
+Then, run `fastlane snapshot`.
+By default, results will end up in the `.screenshots` folder, overwriting previous files.
+
+> [!NOTE]
+> Snapshot will run UI tests and concurrently take screenshots on multiple device simulators.
+> As such, multiple new PAWS accounts will be created, possibly in rapid succession, using the same hard-coded testing invitation codes.
+
+The current workaround for simultaneous account registrations during `fastlane snapshot` is to continually reset invitation codes to an unused state in Firestore by running a designated Python script on repeat (in a shell session with the same environment variables).
+
+```bash
+for i in {1..360}; do python -m scripts.upload_codes; sleep 10; done
+```
+
 ## ECG Data Pipeline
 
 ### Pipeline Structure
