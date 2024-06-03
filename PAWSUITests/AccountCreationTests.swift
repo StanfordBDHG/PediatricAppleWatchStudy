@@ -12,16 +12,15 @@ import XCTHealthKit
 
 
 final class AccountCreationTests: XCTestCase {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
 
-        let app = XCUIApplication()
-        Task {
-            await setupSnapshot(app)
-        }
+        let app = await XCUIApplication()
+        await setupSnapshot(app)
+
         app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
-        app.deleteAndLaunch(withSpringboardAppName: "PAWS")
+        await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
     func testOnboardingFlow() throws {
