@@ -19,7 +19,9 @@ final class AccountCreationTests: XCTestCase {
         let app = await XCUIApplication()
         await setupSnapshot(app)
 
-        app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
+        await MainActor.run {
+            app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
+        }
         await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
