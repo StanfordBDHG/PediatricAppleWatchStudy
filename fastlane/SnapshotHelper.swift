@@ -1,8 +1,10 @@
 //
-//  SnapshotHelper.swift
-//  Example
+// This source file is part of the PAWS application based on the Stanford Spezi Template Application project
+// Generated from `fastlane snapshot init` and originally authored by Felix Krause on 10/8/15
 //
-//  Created by Felix Krause on 10/8/15.
+// SPDX-FileCopyrightText: 2023 Stanford University
+//
+// SPDX-License-Identifier: MIT
 //
 
 // -----------------------------------------------------
