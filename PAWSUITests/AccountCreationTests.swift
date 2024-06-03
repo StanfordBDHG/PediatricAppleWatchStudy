@@ -69,10 +69,10 @@ extension XCUIApplication {
     private func navigateOnboardingFlowInterestingModules() throws {
         XCTAssertTrue(staticTexts["Interesting Modules"].waitForExistence(timeout: 5))
         
-        for i in 1..<4 {
+        for index in 1..<4 {
             XCTAssertTrue(buttons["Next"].waitForExistence(timeout: 2))
             buttons["Next"].tap()
-            if i == 2 {
+            if index == 2 {
                 PAWSUITests.snapshot("0Launch")
             }
         }
