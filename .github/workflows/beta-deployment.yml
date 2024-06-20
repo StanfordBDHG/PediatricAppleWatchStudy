@@ -53,6 +53,6 @@ jobs:
       contents: read
     with:
       environment: staging
-      arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
+      arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }} --only firestore:rules'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
