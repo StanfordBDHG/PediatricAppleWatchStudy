@@ -3,3 +3,5 @@ pandas
 numpy
 matplotlib
 ipywidgets
+fhir.resources
+-i https://test.pypi.org/simple/ spezi-data-pipeline==0.1.0b1
