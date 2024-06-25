@@ -87,7 +87,7 @@ jobs:
         pip install jupyterlab
     - name: Install ECGReviewer Dependencies
       run: |
-        pip install -r requirements.txt
+        pip install -r ./ECGDataManager/requirements.txt
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
