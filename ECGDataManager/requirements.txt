@@ -4,4 +4,5 @@ numpy
 matplotlib
 ipywidgets
 fhir.resources
--i https://test.pypi.org/simple/ spezi-data-pipeline==0.1.0b1
+--extra-index-url https://test.pypi.org/simple/
+spezi-data-pipeline==0.1.0b1
