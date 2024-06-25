@@ -58,7 +58,7 @@ def process_ecg_data(db: Client, data: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Processed ECG data.
     """
-    
+
     # Get diagnosis-related data from Firestore
     data_diagnosis_enhanced = fetch_diagnosis_data(db, data)
 
@@ -211,22 +211,18 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
         "EffectiveDateTimeHHMM",
     ] + list(new_columns)
 
-
     for col in additional_columns:
         if col not in extended_df.columns:
             extended_df[col] = None
 
     for index, row in extended_df.iterrows():
         resource_id = row["ResourceId"]
-        fetched_row = fetched_df[
-            fetched_df["ResourceId"] == resource_id
-        ]
+        fetched_row = fetched_df[fetched_df["ResourceId"] == resource_id]
         if not fetched_row.empty:
             for col in additional_columns:
                 if col in fetched_row.columns:
                     extended_df.at[index, col] = fetched_row[col].values[0]
-                
-                
+
     return extended_df
 
 
