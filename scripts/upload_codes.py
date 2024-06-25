@@ -30,7 +30,6 @@ from typing import List
 from spezi_data_pipeline.data_access.firebase_fhir_data_access import (
     FirebaseFHIRAccess,
 )
-from spezi_data_pipeline.data_flattening.fhir_resources_flattener import ENCODING
 from google.cloud.firestore_v1.client import Client
 
 
@@ -137,7 +136,7 @@ def main():
     )
 
     if parsed.outfile:
-        with open(parsed.outfile, "w+", encoding=ENCODING) as f:
+        with open(parsed.outfile, "w+", encoding="utf-8") as f:
             f.write("\n".join(codes))
 
 
