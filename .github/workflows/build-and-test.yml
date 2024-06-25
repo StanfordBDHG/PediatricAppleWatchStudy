@@ -85,20 +85,20 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install jupyterlab
-    - name: Install ECGDataPipelineTemplate Dependencies
+    - name: Install ECGReviewer Dependencies
       run: |
         pip install pandas numpy matplotlib firebase-admin requests ipywidgets pytz
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
-        echo "GCLOUD_PROJECT=ecgdatapipelinetemplate" >> $GITHUB_ENV
+        echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
-        firebase emulators:exec --import=./ECGDataPipelineTemplate/sample_data "jupyter nbconvert --to pdf --execute ./ECGDataPipelineTemplate/ECGDataPipelineTemplate.ipynb"
+        firebase emulators:exec --import=./ECGReviewer/sample_data "jupyter nbconvert --to pdf --execute ./ECGReviewer/ECGReviewer.ipynb"
       env:
         CI: true
     - uses: actions/upload-artifact@v4
       with:
-        name: ECGDataPipelineTemplate.pdf
-        path: ECGDataPipelineTemplate.pdf
+        name: ECGReviewer.pdf
+        path: ECGReviewer.pdf
   

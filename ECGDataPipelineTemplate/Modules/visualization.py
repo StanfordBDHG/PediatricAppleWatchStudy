@@ -6,271 +6,622 @@
 # SPDX-License-Identifier: MIT
 #
 
+"""
+This module provides classes and associated functions for viewing, filtering, and 
+analyzing ECG data. The primary class, ECGDataViewer, allows users to interact with 
+ECG data through a graphical interface, enabling the review, diagnosis, and visualization 
+of ECG recordings. The module also includes functions for plotting single lead ECGs and 
+configuring the appearance of the plots.
+"""
 
-# Visualization and UI Libraries
+# Standard library imports
+from enum import Enum
+from math import ceil
+import datetime
+from functools import partial
+
+# Related third-party imports
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
 from ipywidgets import Layout
-from IPython.display import display, clear_output, HTML
+from IPython.display import display, clear_output
 from matplotlib.ticker import AutoMinorLocator
-
-# Data Handling and Scientific Computing Libraries
-import pandas as pd
-from pandas import to_datetime
-import numpy as np
-from functools import partial
-from typing import List, Dict, Optional, Union
-from math import ceil 
-from datetime import datetime
-
 from google.cloud.firestore_v1.client import Client
-from .utils import *
-from .data_preparation import *
-from .firebase_access import *
-        
-        
-class ECGDataViewer:
-    def __init__(self, df_ecg, db):
+from google.cloud.exceptions import GoogleCloudError
+
+# Local application/library specific imports
+from spezi_data_pipeline.data_flattening.fhir_resources_flattener import ColumnNames
+
+USERS_COLLECTION = "users"
+ECG_DATA_SUBCOLLECTION = "HealthKit"
+DIAGNOSIS_DATA_SUBCOLLECTION = "Diagnosis"
+
+
+class WidgetStrings(Enum):
+    """
+    Enumerates standardized strings for widgets.
+    """
+
+    SELECT = "Select"
+    OTHER = "Other"
+    COLON_SYMBOL = ":"
+    TRACING_QUALITY = "Tracing Quality"
+    DIAGNOSIS = "Diagnosis"
+    NOTES = "Notes"
+    SAVE_DIAGNOSIS = "Save Diagnosis"
+    COMPLETE_INITIALS = "Please complete your initials."
+    YOUR_INITIALS = "Your Initials:"
+    ENTER_INITIALS = "Enter your initials here."
+    LOAD_MORE = "LOAD MORE"
+    MISSING_INITIALS = (
+        "Please select valid initials from the list or enter your initials."
+    )
+    USER_NOT_FOUND = "User not found"
+
+
+class TracingQuality(Enum):
+    """
+    Enumerates standardized options for tracing quality selection.
+    """
+
+    UNINTERPRETABLE = "Uninterpretable"
+    POOR_QUALITY = "Poor quality"
+    ADEQUATE = "Adequate"
+    GOOD = "Good"
+    EXCELLENT = "Excellent"
+
+
+class Diagnoses(Enum):
+    """
+    Enumerates standardized options for diagnosis selection.
+    """
+
+    NORMAL_SINUS_RHYTHM = "Normal Sinus Rhythm"
+    SINUS_TACHYCARDIA = "Sinus Tachycardia"
+    SVT = "SVT"
+    EAT = "EAT"
+    AF = "AF"
+    VT = "VT"
+    HEART_BLOCK = "Heart Block"
+    OTHER = "Other"
+
+
+class PlotParams(Enum):
+    """
+    Enumerates parameters for plotting ECG signals."""
+
+    LWIDTH = 0.5
+    AMPLITUTE_ECG = 1.8
+    TIME_TICKS = 0.2
+    ECG_UNIT = "uV"
+    TIME_UNIT = "sec"
+    FIG_WIDTH = 15
+    FIG_HEIGHT = 2
+
+
+class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
+    """
+    A class to view and interact with ECG data.
+
+    Attributes:
+        df_ecg (pd.DataFrame): DataFrame containing the ECG data.
+        db: Database connection instance.
+    """
+
+    def __init__(self, df_ecg: pd.DataFrame, db: Client):
+        """
+        Initialize the ECGDataViewer with the given ECG DataFrame and database connection.
+
+        Args:
+            df_ecg (pd.DataFrame): DataFrame containing the ECG data.
+            db: Database connection instance.
+        """
         self.db = db
         self.df_ecg = df_ecg
         self.filtered_data = pd.DataFrame()
         self.plot_counter = 0
         self.ecg_output = widgets.Output()
         self.message_output = widgets.Output()
+        self.error_output = widgets.Output()
+        self.unreviewed_message_widget = widgets.HTML()
         self.setup_widgets()
         self.display_widgets()
-        
+
     def setup_widgets(self):
-        unique_initials = pd.Series(self.df_ecg['Reviewers'].explode()).dropna().astype(str).unique()
-        initials_options = ['Select'] + sorted(unique_initials) + ['Other']
-        self.initials_dropdown = widgets.Dropdown(options=initials_options, description='Initials:')
-        self.initials_textarea = widgets.Textarea(placeholder='Enter your initials here.', description='Initials:', layout=Layout(width='300px'))
-        self.initials_textarea.layout.visibility = 'hidden'
-        self.initials_dropdown.observe(self.on_initials_change, names='value')
+        """
+        Set up the initial widgets for the viewer.
+        """
+        unique_initials = (
+            pd.Series(self.df_ecg["Reviewers"].explode()).dropna().astype(str).unique()
+        )
+        initials_options = (
+            [WidgetStrings.SELECT.value]
+            + sorted(unique_initials)
+            + [WidgetStrings.OTHER.value]
+        )
+        self.initials_dropdown = widgets.Dropdown(
+            options=initials_options, description=WidgetStrings.YOUR_INITIALS.value
+        )
+        self.initials_textarea = widgets.Textarea(
+            placeholder=WidgetStrings.ENTER_INITIALS.value,
+            description=WidgetStrings.YOUR_INITIALS.value,
+            layout=Layout(width="300px"),
+        )
+        self.initials_textarea.layout.visibility = "hidden"
+        self.initials_dropdown.observe(self.on_initials_change, names="value")
 
-        review_statuses = ['Select'] + sorted(self.df_ecg['ReviewStatus'].dropna().unique().tolist())
-        self.review_status_dropdown = widgets.Dropdown(options=review_statuses, description='Review Status:',layout=Layout(width='300px'))
-        self.review_status_dropdown.style.description_width = '140px'  
-        
-        self.load_more_button = widgets.Button(description='LOAD MORE', button_style='info', icon='plus', layout=Layout(width='200px', height='50px'))
+        self.load_more_button = widgets.Button(
+            description=WidgetStrings.LOAD_MORE.value,
+            button_style="info",
+            icon="plus",
+            layout=Layout(width="200px", height="50px"),
+        )
         self.load_more_button.on_click(self.load_more_ecg)
-        self.review_status_dropdown.observe(self.update_filtered_data, names='value')
 
-    
     def on_initials_change(self, change):
-        if change['new'] == 'Other':
-            self.initials_textarea.layout.visibility = 'visible'
+        """
+        Handle changes in the initials dropdown widget.
+
+        Args:
+            change: The change event from the dropdown widget.
+        """
+        self.clear_outputs()  # Clear outputs on any change in dropdown
+        self.plot_counter = 0
+
+        if change["new"] == WidgetStrings.OTHER.value:
+            self.initials_textarea.layout.visibility = "visible"
+            self.error_output.clear_output()
+        elif change["new"] == WidgetStrings.SELECT.value:
+            with self.error_output:
+                clear_output()
+                print(WidgetStrings.COMPLETE_INITIALS.value)
         else:
-            self.initials_textarea.layout.visibility = 'hidden'
+            self.initials_textarea.layout.visibility = "hidden"
+            self.update_unreviewed_message()
 
     def display_widgets(self):
-        display(self.initials_dropdown, self.initials_textarea, self.review_status_dropdown, self.ecg_output, self.message_output,self.load_more_button)
+        """
+        Display the initial widgets.
+        """
+        display(
+            self.initials_dropdown,
+            self.initials_textarea,
+            self.unreviewed_message_widget,
+            self.ecg_output,
+            self.message_output,
+            self.error_output,
+            self.load_more_button,
+        )
 
-    def update_filtered_data(self, change):
-        with self.ecg_output and self.message_output:
-            clear_output(wait=True) 
-        self.plot_counter = 0
-        if change['new'] != 'Select':
-            self.apply_filters()
+    def clear_outputs(self):
+        """
+        Clear the output widgets.
+        """
+        self.ecg_output.clear_output()
+        self.message_output.clear_output()
+        self.error_output.clear_output()
+        self.unreviewed_message_widget.value = ""
+
+    def update_unreviewed_message(self):
+        """
+        Update the message widget with the number of unreviewed ECGs.
+        """
+        initials = (
+            self.initials_textarea.value.strip()
+            if self.initials_dropdown.value == WidgetStrings.OTHER.value
+            else self.initials_dropdown.value
+        )
+        self.apply_filters(
+            initials
+        )  # Apply filters to determine the number of unreviewed ECGs
+        total_unreviewed = len(self.filtered_data)
+        message = (
+            f"<b style='font-size: large;'>Total unreviewed recordings for "
+            f"{initials}: {total_unreviewed}</b>"
+        )
+        self.unreviewed_message_widget.value = message
+
+    def load_more_ecg(self, b=None):  # pylint: disable=unused-argument
+        """
+        Load more ECG data for review.
+
+        Args:
+            b: Button click event (default is None).
+        """
+        initials = (
+            self.initials_textarea.value.strip()
+            if self.initials_dropdown.value == WidgetStrings.OTHER.value
+            else self.initials_dropdown.value
+        )
+        if initials == WidgetStrings.SELECT.value:
+            with self.error_output:
+                clear_output()
+                print(WidgetStrings.MISSING_INITIALS.value)
+            return
+
+        self.update_unreviewed_message()
+        if self.plot_counter < len(self.filtered_data):
+            self.plot_ecg_data()
         else:
-            with self.message_output and self.ecg_output:
-                clear_output(wait=True)
-                print("Please select a valid review status to view ECG data.")
+            with self.message_output:
+                clear_output()
+                display(
+                    widgets.HTML(
+                        value="<b style='color: green; font-size: 22px;'>No more ECG data "
+                        "to review.✓</b>"
+                    )
+                )
 
-    def apply_filters(self):
-        self.filtered_data = self.df_ecg[self.df_ecg['ReviewStatus'] == self.review_status_dropdown.value]
-        self.plot_ecg_data()
-        
+    def apply_filters(self, initials):
+        """
+        Apply filters to the ECG data based on the review status and initials.
+
+        Args:
+            initials (str): The initials to filter by.
+        """
+        if self.initials_dropdown.value == WidgetStrings.OTHER.value:
+            self.filtered_data = self.df_ecg[
+                self.df_ecg["ReviewStatus"] == "Incomplete review"
+            ]
+        else:
+            self.filtered_data = self.df_ecg[
+                (self.df_ecg["ReviewStatus"] == "Incomplete review")
+                & (self.df_ecg["Reviewers"].apply(lambda x: initials not in x))
+            ]
+
     def plot_ecg_data(self):
+        """
+        Plot the ECG data.
+        """
         with self.ecg_output:
             clear_output(wait=True)
-            onscreen_plots = 2
-            for index, row in self.filtered_data.iloc[self.plot_counter:self.plot_counter+onscreen_plots].iterrows():
+            onscreen_plots = 1
+            for _, row in self.filtered_data.iloc[
+                self.plot_counter : self.plot_counter + onscreen_plots
+            ].iterrows():
                 self.plot_single_ecg(row)
-                self.create_diagnosis_widgets(row['UserId'], row['DocumentId'])
+                self.create_diagnosis_widgets(
+                    row[ColumnNames.USER_ID.value], row[ColumnNames.RESOURCE_ID.value]
+                )
             self.plot_counter += onscreen_plots
 
-    def plot_single_ecg(self, row):
-        fig, axs = plt.subplots(3, 1, figsize=(14, 5), constrained_layout=True)
-        
-        for i, key in enumerate(['ECGDataRecording1', 'ECGDataRecording2', 'ECGDataRecording3']):
-            title = f"ECG part {i+1} recorded on {row['EffectiveDateStart']}"
-            plotSingleLeadECG(row[key], sample_rate=row['SamplingFrequency'], title=title, ax=axs[i])
-        
-        user_id = row['UserId']
-        heart_rate = int(row['HeartRate'])
-        ecg_interpretation = row['ElectrocardiogramClassification']
+    def plot_single_ecg(self, row):  # pylint: disable=too-many-locals
+        """
+        Plot a single ECG recording.
 
-        user_id_html = widgets.HTML(value=f"<b style='font-size: larger;'>User ID {user_id}</b>")
-        heart_rate_html = widgets.HTML(value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>")
-        interpretation_html = widgets.HTML(value=f"<b style='font-size: larger;'>Classification: ")
+        Args:
+            row (pd.Series): The row of the DataFrame containing the ECG data.
+        """
+        _, axs = plt.subplots(3, 1, figsize=(14, 5), constrained_layout=True)
+
+        for i, key in enumerate(
+            ["ECGDataRecording1", "ECGDataRecording2", "ECGDataRecording3"]
+        ):
+            title = f"ECG part {i+1} recorded on {row['EffectiveDateTimeHHMM']}"
+            plot_single_lead_ecg(
+                row[key],
+                sample_rate=row[ColumnNames.SAMPLING_FREQUENCY.value],
+                title=title,
+                ax=axs[i],
+            )
+
+        user_id = row[ColumnNames.USER_ID.value]
+        heart_rate = int(row[ColumnNames.HEART_RATE.value])
+        ecg_interpretation = row[ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value]
+
+        group_class = row["AgeGroup"]
+        user_id_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'><span style='color: blue;'>{group_class}</span> "
+            f"User ID {user_id}</b>"
+        )
+
+        heart_rate_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
+        )
+        interpretation_html = widgets.HTML(
+            value="<b style='font-size: larger;'>Classification: "
+        )
 
         # Conditional color for non-sinusRhythm classifications
-        if ecg_interpretation != 'sinusRhythm':
-            interpretation_html.value += f"<span style='color: red;'>{ecg_interpretation}</span>"
+        if ecg_interpretation != "sinusRhythm":
+            interpretation_html.value += (
+                f"<span style='color: red;'>{ecg_interpretation}</span>"
+            )
         else:
             interpretation_html.value += f"{ecg_interpretation}"
 
         interpretation_html.value += "</b>"
 
         display(user_id_html, heart_rate_html, interpretation_html)
-        
+
         # Add review status
-        diagnosis_collection_ref = self.db.collection('users').document(user_id).collection('Observation').document(row['DocumentId']).collection('Diagnosis')
+        diagnosis_collection_ref = (
+            self.db.collection(USERS_COLLECTION)
+            .document(user_id)
+            .collection(ECG_DATA_SUBCOLLECTION)
+            .document(row[ColumnNames.RESOURCE_ID.value])
+            .collection(DIAGNOSIS_DATA_SUBCOLLECTION)
+        )
         diagnosis_docs = list(diagnosis_collection_ref.stream())
         num_diagnosis_docs = len(diagnosis_docs)
 
-        diagnosis_status_html = widgets.HTML(value=f"<b style='font-size: larger;'>This recording has been reviewed {num_diagnosis_docs} times:</b>")
+        diagnosis_status_html = widgets.HTML(
+            value="<b style='font-size: larger;'>This recording has been reviewed "
+            f"{num_diagnosis_docs} times:</b>"
+        )
         display(diagnosis_status_html)
 
         if num_diagnosis_docs != 0:
             for doc in diagnosis_docs:
                 doc_data = doc.to_dict()
-                physician_initial = doc_data.get('physicianInitials', 'N/A')
-                diagnosis_date = doc_data.get('diagnosisDate', 'N/A')
-                reviewers_html = widgets.HTML(value=f"<span style='font-size: larger;'>Physician: {physician_initial}, Date: {diagnosis_date}</span>")
+                physician_initial = doc_data.get("physicianInitials", "N/A")
+                diagnosis_date = doc_data.get("diagnosisDate", "N/A")
+                reviewers_html = widgets.HTML(
+                    value=f"<span style='font-size: larger;'>Physician: "
+                    f"{physician_initial}, Date: {diagnosis_date}</span>"
+                )
                 display(reviewers_html)
-                
+
         plt.show()
-        
-        
+
     def create_diagnosis_widgets(self, user_id, document_id):
-        message_output_specific = widgets.Output()  # Create a specific output for this set of widgets
+        """
+        Create and display widgets for diagnosing an ECG recording.
+
+        Args:
+            user_id (str): The user ID associated with the ECG recording.
+            document_id (str): The document ID of the ECG recording.
+        """
+        message_output_specific = widgets.Output()
 
         diagnosis_dropdown = widgets.Dropdown(
-            options=['Select', 'Normal', 'Sinus tachycardia', 'SVT', 'EAT', 'AF', 'VT', 'Heart Block', 'Other'],
-            description='Diagnosis:'
+            options=[
+                WidgetStrings.SELECT.value,
+                Diagnoses.NORMAL_SINUS_RHYTHM.value,
+                Diagnoses.SINUS_TACHYCARDIA.value,
+                Diagnoses.SVT.value,
+                Diagnoses.EAT.value,
+                Diagnoses.AF.value,
+                Diagnoses.VT.value,
+                Diagnoses.HEART_BLOCK.value,
+                Diagnoses.OTHER.value,
+            ],
+            description=WidgetStrings.DIAGNOSIS.value
+            + WidgetStrings.COLON_SYMBOL.value,
         )
-        diagnosis_dropdown.style.description_width = '120px'  
-        
+        diagnosis_dropdown.style.description_width = "120px"
+
         tracing_quality_dropdown = widgets.Dropdown(
-            options=['Select', 'Uninterpretable', 'Poor quality', 'Adequate', 'Good', 'Excellent'],
-            description='Tracing Quality:'
+            options=[
+                WidgetStrings.SELECT.value,
+                TracingQuality.UNINTERPRETABLE.value,
+                TracingQuality.POOR_QUALITY.value,
+                TracingQuality.ADEQUATE.value,
+                TracingQuality.GOOD.value,
+                TracingQuality.EXCELLENT.value,
+            ],
+            description=WidgetStrings.TRACING_QUALITY.value
+            + WidgetStrings.COLON_SYMBOL.value,
         )
-        tracing_quality_dropdown.style.description_width = '140px'
-        
-        notes_textarea = widgets.Textarea(description='Notes:')
-        save_button = widgets.Button(description='Save Diagnosis', button_style='success', icon='save', layout=Layout(width='250px', height='50px'))
-        
-        def hide_widgets(b):
-            save_button.on_click(partial(self.save_diagnosis, user_id, document_id, diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, message_output_specific))
+        tracing_quality_dropdown.style.description_width = "140px"
+
+        notes_textarea = widgets.Textarea(
+            description=WidgetStrings.NOTES.value + WidgetStrings.COLON_SYMBOL.value
+        )
+        save_button = widgets.Button(
+            description=WidgetStrings.SAVE_DIAGNOSIS.value,
+            button_style="success",
+            icon="save",
+            layout=Layout(width="250px", height="50px"),
+        )
+
+        def hide_widgets(b):  # pylint: disable=unused-argument
+            save_button.on_click(
+                partial(
+                    self.save_diagnosis,
+                    user_id,
+                    document_id,
+                    diagnosis_dropdown,
+                    tracing_quality_dropdown,
+                    notes_textarea,
+                    message_output_specific,
+                )
+            )
 
             # Hide the widgets if not all selections have been made
-            initials = self.initials_dropdown.value if self.initials_dropdown.value != 'Other' else self.initials_textarea.value.strip()
-            if not (diagnosis_dropdown.value == 'Select' or tracing_quality_dropdown.value == 'Select' or initials == 'Select'):
-                diagnosis_dropdown.layout.visibility = 'hidden'
-                tracing_quality_dropdown.layout.visibility = 'hidden'
-                notes_textarea.layout.visibility = 'hidden'
-    
+            initials = (
+                self.initials_dropdown.value
+                if self.initials_dropdown.value != WidgetStrings.OTHER.value
+                else self.initials_textarea.value.strip()
+            )
+            if WidgetStrings.SELECT.value in (
+                diagnosis_dropdown.value,
+                tracing_quality_dropdown.value,
+                initials,
+            ):
+                diagnosis_dropdown.layout.visibility = "hidden"
+                tracing_quality_dropdown.layout.visibility = "hidden"
+                notes_textarea.layout.visibility = "hidden"
+
         # Attach the hide_widgets function to the button's on_click event
-        save_button.on_click(lambda b: hide_widgets(b))
-        
+        save_button.on_click(hide_widgets)
+
         # Display the widgets
-        widgets_box = widgets.VBox([diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, save_button, message_output_specific])
+        widgets_box = widgets.VBox(
+            [
+                diagnosis_dropdown,
+                tracing_quality_dropdown,
+                notes_textarea,
+                save_button,
+                message_output_specific,
+            ]
+        )
         display(widgets_box)
 
-        # Optional: Return the widgets_box if you need to manipulate or display it elsewhere
         return widgets_box
 
-    def load_more_ecg(self, b=None):
-        with self.message_output:
-            clear_output(wait=True) 
-        if self.plot_counter < len(self.filtered_data):
-            self.plot_ecg_data()
-        else:
-            with self.message_output:
-                no_more_ecg_html = widgets.HTML(value=f"<b style='color: #006400; font-size: 25px;'>No more ECG data to review.✓</b>")
-                display(no_more_ecg_html) 
-                # print("No more ECG data to review.")
+    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-arguments
+        self,
+        user_id,
+        document_id,
+        diagnosis_dropdown,
+        tracing_quality_dropdown,
+        notes_textarea,
+        message_output_specific,
+        b=None,  # pylint: disable=unused-argument
+    ):
+        """
+        Save the diagnosis for an ECG recording.
 
-    def save_diagnosis(self, user_id, document_id, diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, message_output_specific, b=None):
+        Args:
+            user_id (str): The user ID associated with the ECG recording.
+            document_id (str): The document ID of the ECG recording.
+            diagnosis_dropdown (widgets.Dropdown): The dropdown widget for diagnosis.
+            tracing_quality_dropdown (widgets.Dropdown): The dropdown widget for tracing quality.
+            notes_textarea (widgets.Textarea): The textarea widget for notes.
+            message_output_specific (widgets.Output): The output widget for messages.
+            b: Button click event (default is None).
+        """
         with message_output_specific:
             clear_output(wait=True)
             diagnosis = diagnosis_dropdown.value
             tracing_quality = tracing_quality_dropdown.value
             notes = notes_textarea.value
-            initials = self.initials_dropdown.value if self.initials_dropdown.value != 'Other' else self.initials_textarea.value.strip()
+            initials = (
+                self.initials_dropdown.value
+                if self.initials_dropdown.value != WidgetStrings.OTHER.value
+                else self.initials_textarea.value.strip()
+            )
 
-            if diagnosis == 'Select' or tracing_quality == 'Select' or initials == 'Select':
-                # print('Complete all fields before saving.')
-                missing_fields_html = widgets.HTML(value=f"<span style='color: red; font-size: 20px;'>Complete all fields before saving.</span>")
-                display(missing_fields_html) 
-                                
+            if WidgetStrings.SELECT.value in (diagnosis, tracing_quality, initials):
+                missing_fields_html = widgets.HTML(
+                    value="<span style='color: red; font-size: 20px;'>Complete "
+                    "all fields before saving.</span>"
+                )
+                display(missing_fields_html)
+
                 return
-            
-            user_ref = self.db.collection('users').document(user_id)
-            recording_ref = user_ref.collection('Observation').document(document_id)
-            diagnosis_ref = recording_ref.collection('Diagnosis')
+
+            user_ref = self.db.collection(USERS_COLLECTION).document(user_id)
+            recording_ref = user_ref.collection(ECG_DATA_SUBCOLLECTION).document(
+                document_id
+            )
+            diagnosis_ref = recording_ref.collection(DIAGNOSIS_DATA_SUBCOLLECTION)
             num_diagnosis_docs = len(list(diagnosis_ref.stream()))
-                
+
             new_diagnosis_data = {
-                'physicianInitials': initials,
-                'physicianDiagnosis': diagnosis,
-                'tracingQuality': tracing_quality,
-                'notes': notes,
-                'diagnosisDate': datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+                "physicianInitials": initials,
+                "physicianDiagnosis": diagnosis,
+                "tracingQuality": tracing_quality,
+                "notes": notes,
+                "diagnosisDate": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
             }
 
-            try:
+            try:  # pylint: disable=too-many-nested-blocks
                 if num_diagnosis_docs < 3:
                     diagnosis_doc_ref = diagnosis_ref.document()
                     diagnosis_doc_ref.set(new_diagnosis_data)
 
                     # Update the ecg_df using the document_id as index
-                    index = self.df_ecg.index[self.df_ecg['DocumentId'] == document_id].tolist()
+                    index = self.df_ecg.index[
+                        self.df_ecg["ResourceId"] == document_id
+                    ].tolist()
                     if index:
                         for idx in index:
                             if idx in self.df_ecg.index:
-                                self.df_ecg.at[idx, 'NumberOfReviewers'] += 1
-                                if isinstance(self.df_ecg.at[idx, 'Reviewers'], list):
-                                    self.df_ecg.at[idx, 'Reviewers'].append(initials)
-                                    self.df_ecg.at[idx, 'ReviewStatus'] = 'Incomplete review' if self.df_ecg.at[idx, 'NumberOfReviewers']< 3 else 'Complete review'
+                                self.df_ecg.at[idx, "NumberOfReviewers"] += 1
+                                if isinstance(self.df_ecg.at[idx, "Reviewers"], list):
+                                    self.df_ecg.at[idx, "Reviewers"].append(initials)
+                                    self.df_ecg.at[idx, "ReviewStatus"] = (
+                                        "Incomplete review"
+                                        if self.df_ecg.at[idx, "NumberOfReviewers"] < 3
+                                        else "Complete review"
+                                    )
 
-                    # print('Diagnosis saved successfully.')
-                    data_saved_html = widgets.HTML(value=f"<span style='color: green; font-size: 20px;'>Diagnosis saved successfully.✓</span>")
-                    display(data_saved_html) 
-                    
-                    
+                    data_saved_html = widgets.HTML(
+                        value="<span style='color: green; font-size: 20px;'>Diagnosis "
+                        "saved successfully.✓</span>"
+                    )
+                    display(data_saved_html)
+
                 else:
-                    print('ECG has already been reviewed. No further review is required.')
-                    
-            except Exception as e:
-                print(f'Error saving diagnosis: {e}')
-                
-                
-def _ax_plot(ax, x, y, secs=10, lwidth=0.5, amplitude_ecg = 1.8, time_ticks =0.2):
-    ax.set_xticks(np.arange(0,secs + time_ticks,time_ticks))    
-    ax.set_yticks(np.arange(-ceil(amplitude_ecg),ceil(amplitude_ecg),1.0))
+                    print(
+                        "ECG has already been reviewed. No further review is required."
+                    )
+
+            except GoogleCloudError as gce:
+                error_html = widgets.HTML(
+                    value="<span style='color: red; font-size: 20px;'>Error saving "
+                    f"diagnosis: {gce}</span>"
+                )
+                display(error_html)
+            except KeyError as ke:
+                error_html = widgets.HTML(
+                    value=f"<span style='color: red; font-size: 20px;'>Key error: {ke}</span>"
+                )
+                display(error_html)
+            except TypeError as te:
+                error_html = widgets.HTML(
+                    value=f"<span style='color: red; font-size: 20px;'>Type error: {te}</span>"
+                )
+                display(error_html)
+
+            # except Exception as e:
+            #     print(f"Error saving diagnosis: {e}")
+
+
+def _ax_plot(ax, x, y, secs):
+    """
+    Plot the ECG data on the given axis.
+
+    Args:
+        ax (plt.Axes): The axis to plot on.
+        x (np.ndarray): The x values of the plot.
+        y (np.ndarray): The y values of the plot.
+        secs (float): The duration of the ECG recording in seconds.
+    """
+    ax.set_xticks(
+        np.arange(
+            0,
+            secs + PlotParams.TIME_TICKS.value,
+            PlotParams.TIME_TICKS.value,
+        )
+    )
+    ax.set_yticks(
+        np.arange(
+            -ceil(PlotParams.AMPLITUTE_ECG.value),
+            ceil(PlotParams.AMPLITUTE_ECG.value),
+            1.0,
+        )
+    )
 
     ax.minorticks_on()
     ax.xaxis.set_minor_locator(AutoMinorLocator(5))
-    ax.set_ylim(-amplitude_ecg, amplitude_ecg)
+    ax.set_ylim(-PlotParams.AMPLITUTE_ECG.value, PlotParams.AMPLITUTE_ECG.value)
     ax.set_xlim(0, secs)
 
-    ax.grid(which='major', linestyle='-', linewidth='0.5', color='red')
-    ax.grid(which='minor', linestyle='-', linewidth='0.5', color=(1, 0.7, 0.7))
-    
-    ax.plot(x,y, linewidth=lwidth)
+    ax.grid(which="major", linestyle="-", linewidth="0.5", color="red")
+    ax.grid(which="minor", linestyle="-", linewidth="0.5", color=(1, 0.7, 0.7))
+
+    ax.plot(x, y, linewidth=PlotParams.LWIDTH.value)
 
 
-def plotSingleLeadECG(
-    ecg: Union[list, np.ndarray], 
-    sample_rate: int = 500, 
-    title: str = 'ECG', 
-    fig_width: float = 15, 
-    fig_height: float = 2, 
-    line_w: float = 0.5, 
-    ecg_amp: float = 1.8, 
-    timetick: float = 0.2, 
-    ax: Optional[plt.Axes] = None
+def plot_single_lead_ecg(
+    ecg: list | np.ndarray,
+    sample_rate: int = 500,
+    title: str = "ECG",
+    ax: plt.Axes | None = None,
 ) -> None:
-    """Plot multi lead ECG chart.
-    # Arguments
-        ecg        : m x n ECG signal data, which m is number of leads and n is length of signal.
-        sample_rate: Sample rate of the signal.
-        title      : Title which will be shown on top off chart
-        fig_width  : The width of the plot
-        fig_height : The height of the plot
+    """
+    Plot a single lead ECG chart.
+
+    Args:
+        ecg (list | np.ndarray): ECG signal data.
+        sample_rate (int): Sample rate of the signal.
+        title (str): Title to be shown on the chart.
+        ax (plt.Axes | None): The axis to plot on (default is None).
     """
 
     if not isinstance(ecg, (list, np.ndarray)):
@@ -278,241 +629,313 @@ def plotSingleLeadECG(
         return
 
     if ax is None:
-        plt.figure(figsize=(fig_width,fig_height))
+        plt.figure(figsize=(PlotParams.FIG_WIDTH.value, PlotParams.FIG_HEIGHT.value))
         ax = plt.gca()
-    
+
     ax.set_title(title)
-    ax.set_ylabel('mV')
-    ax.set_xlabel('sec')
+    ax.set_ylabel(PlotParams.ECG_UNIT.value)
+    ax.set_xlabel(PlotParams.TIME_UNIT.value)
     # plt.subplots_adjust(
-    #     hspace = 0, 
+    #     hspace = 0,
     #     wspace = 0.04,
     #     left   = 0.04,  # the left side of the subplots of the figure
     #     right  = 0.98,  # the right side of the subplots of the figure
     #     bottom = 0.2,   # the bottom of the subplots of the figure
     #     top    = 0.88
     #     )
-    seconds = len(ecg)/sample_rate
+    seconds = len(ecg) / sample_rate
 
     # ax = plt.subplot(1, 1, 1)
-    #plt.rcParams['lines.linewidth'] = 5
-    step = 1.0/sample_rate
-    _ax_plot(ax,np.arange(0,len(ecg)*step,step),ecg, seconds, line_w, ecg_amp, timetick)
-
-DEFAULT_PATH = './'
-show_counter = 1
-def show_svg(tmp_path = DEFAULT_PATH):
-    """Plot multi lead ECG chart.
-    # Arguments
-        tmp_path: path for temporary saving the result svg file
-    """ 
-    global show_counter
-    file_name = tmp_path + "show_tmp_file_{}.svg".format(show_counter)
-    plt.savefig(file_name)
-    os.system("open {}".format(file_name))
-    show_counter += 1
-    plt.close()
-
-def show():
-    plt.show()
-
-    
+    # plt.rcParams['lines.linewidth'] = 5
+    step = 1.0 / sample_rate
+    _ax_plot(ax, np.arange(0, len(ecg) * step, step), ecg, seconds)
 
 
-def exploreECGdata(df_ecg: pd.DataFrame, db: Client) -> None:
-    ecg_data = df_ecg.to_dict(orient='records')
+class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
+    """
+    A class used to explore and visualize ECG data interactively.
 
-    unique_initials = pd.Series(df_ecg['Reviewers'].explode()).dropna().astype(str).unique()
-    initials = (['Select'] + sorted(unique_initials) + ['Other']) if unique_initials.size > 0 else ['Select', 'SRC', 'AZ', 'VB', 'Other']
-    initials_dropdown = widgets.Dropdown(options=initials, description='Select your initials:', style={'description_width': 'initial'})
+    Attributes:
+        data (pd.DataFrame): The original ECG data.
+        filtered_data (pd.DataFrame): The filtered ECG data.
+        age_group_dropdown (widgets.Dropdown): Dropdown widget for selecting the age group.
+        ecg_class_dropdown (widgets.Dropdown): Dropdown widget for selecting the ECG classification.
+        user_id_dropdown (widgets.Dropdown): Dropdown widget for selecting the user ID.
+        date_time_dropdown (widgets.Dropdown): Dropdown widget for selecting the date and time.
+        load_data_button (widgets.Button): Button widget for loading and plotting the data.
+        output (widgets.Output): Output widget for displaying the plots and information.
+    """
 
-    # Textarea for entering initials if 'Other' is selected
-    initials_textarea = widgets.Textarea(placeholder='Enter your initials here.', description='Add initials:', style={'description_width': 'initial'})
-    initials_textarea.layout.visibility = 'hidden'
+    def __init__(self, data):
+        """
+        Initializes the ECGDataExplorer with the given data and sets up the interactive widgets.
 
-    def on_initials_change(change):
-        if change['new'] == 'Other':
-            initials_textarea.layout.visibility = 'visible'
+        Args:
+            data (pd.DataFrame): The ECG data to be explored.
+        """
+        self.data = data
+        self.filtered_data = data.copy()
+
+        self.age_group_dropdown = widgets.Dropdown(
+            options=self.get_unique_values_with_all("AgeGroup"),
+            description="Age Group",
+            value="All",
+            layout=widgets.Layout(padding="10px 0px 30px 40px"),
+        )
+
+        self.ecg_class_dropdown = widgets.Dropdown(
+            options=self.get_unique_values_with_all(
+                ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value
+            ),
+            description="ECG Class",
+            value="All",
+            layout=widgets.Layout(padding="10px 0px 30px 40px"),
+        )
+
+        self.user_id_dropdown = widgets.Dropdown(
+            options=self.get_unique_values_with_all("UserId"),
+            description="User ID",
+            value="All",
+            layout=widgets.Layout(padding="10px 0px 30px 40px"),
+        )
+
+        self.date_time_dropdown = widgets.Dropdown(
+            options=self.get_unique_values_with_all("EffectiveDateTimeHHMM"),
+            description="Date",
+            value="All",
+            layout=widgets.Layout(padding="10px 0px 40px 40px"),
+        )
+
+        self.load_data_button = widgets.Button(
+            description="LOAD DATA+",
+            button_style="success",
+            layout=widgets.Layout(
+                width="200px", height="50px", padding="10px 40px 10px 40px"
+            ),
+        )
+
+        self.age_group_dropdown.observe(self.filter_data, names="value")
+        self.ecg_class_dropdown.observe(self.filter_data, names="value")
+        self.user_id_dropdown.observe(self.filter_data, names="value")
+        self.date_time_dropdown.observe(self.filter_data, names="value")
+        self.load_data_button.on_click(self.plot_ecg_recording)
+
+        display(
+            self.age_group_dropdown,
+            self.ecg_class_dropdown,
+            self.user_id_dropdown,
+            self.date_time_dropdown,
+            self.load_data_button,
+        )
+
+        self.output = widgets.Output()
+        display(self.output)
+
+    def get_unique_values_with_all(self, column):
+        """
+        Get unique values from a column including an "All" option.
+
+        Args:
+            column (str): The name of the column from which to get unique values.
+
+        Returns:
+            list: A list of unique values with "All" as the first option.
+        """
+        unique_values = self.data[column].astype(str).unique().tolist()
+        unique_values.insert(0, "All")
+        return unique_values
+
+    def filter_data(self, change=None):  # pylint: disable=unused-argument
+        """
+        Filters the data based on the selected dropdown values and updates the dropdown options.
+
+        Args:
+            change (dict, optional): The change event from the dropdown widgets. Defaults to None.
+        """
+        self.filtered_data = self.data.copy()
+
+        if self.age_group_dropdown.value != "All":
+            self.filtered_data = self.filtered_data[
+                self.filtered_data["AgeGroup"] == self.age_group_dropdown.value
+            ]
+
+        if self.ecg_class_dropdown.value != "All":
+            self.filtered_data = self.filtered_data[
+                self.filtered_data[ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value]
+                == self.ecg_class_dropdown.value
+            ]
+
+        self.update_user_id_dropdown_options()
+
+        if self.user_id_dropdown.value != "All":
+            self.filtered_data = self.filtered_data[
+                self.filtered_data[ColumnNames.USER_ID.value]
+                == self.user_id_dropdown.value
+            ]
+
+        self.update_date_time_dropdown_options()
+
+        if self.date_time_dropdown.value != "All":
+            self.filtered_data = self.filtered_data[
+                self.filtered_data["EffectiveDateTimeHHMM"]
+                == self.date_time_dropdown.value
+            ]
+
+        self.update_dropdown_options()
+
+    def update_dropdown_options(self):
+        """
+        Updates the options for the age group and ECG class dropdowns based on the current data.
+        """
+        self.age_group_dropdown.options = self.get_unique_values_with_all_column(
+            self.data, "AgeGroup"
+        )
+        self.ecg_class_dropdown.options = self.get_unique_values_with_all_column(
+            self.data, ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value
+        )
+
+    def update_user_id_dropdown_options(self):
+        """
+        Updates the options for the user ID dropdown based on the filtered data.
+        """
+        filtered_for_user_ids = self.data.copy()
+
+        if self.age_group_dropdown.value != "All":
+            filtered_for_user_ids = filtered_for_user_ids[
+                filtered_for_user_ids["AgeGroup"] == self.age_group_dropdown.value
+            ]
+
+        if self.ecg_class_dropdown.value != "All":
+            filtered_for_user_ids = filtered_for_user_ids[
+                filtered_for_user_ids[
+                    ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value
+                ]
+                == self.ecg_class_dropdown.value
+            ]
+
+        self.user_id_dropdown.options = self.get_unique_values_with_all_column(
+            filtered_for_user_ids, "UserId"
+        )
+
+    def update_date_time_dropdown_options(self):
+        """
+        Updates the options for the date and time dropdown based on the filtered data.
+        """
+        filtered_for_dates = self.data.copy()
+
+        if self.age_group_dropdown.value != "All":
+            filtered_for_dates = filtered_for_dates[
+                filtered_for_dates["AgeGroup"] == self.age_group_dropdown.value
+            ]
+
+        if self.ecg_class_dropdown.value != "All":
+            filtered_for_dates = filtered_for_dates[
+                filtered_for_dates[ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value]
+                == self.ecg_class_dropdown.value
+            ]
+
+        if self.user_id_dropdown.value != "All":
+            filtered_for_dates = filtered_for_dates[
+                filtered_for_dates[ColumnNames.USER_ID.value]
+                == self.user_id_dropdown.value
+            ]
+
+        self.date_time_dropdown.options = self.get_unique_values_with_all_column(
+            filtered_for_dates, "EffectiveDateTimeHHMM"
+        )
+
+    def get_unique_values_with_all_column(self, data, column):
+        """
+        Get unique values from a specific column including an "All" option.
+
+        Args:
+            data (pd.DataFrame): The data from which to get unique values.
+            column (str): The name of the column from which to get unique values.
+
+        Returns:
+            list: A list of unique values with "All" as the first option.
+        """
+        unique_values = data[column].astype(str).unique().tolist()
+        unique_values.insert(0, "All")
+        return unique_values
+
+    def plot_ecg_recording(self, change=None):  # pylint: disable=unused-argument
+        """
+        Plots the filtered ECG recordings.
+
+        Args:
+            change (dict, optional): The change event from the load data button. Defaults to None.
+        """
+        with self.output:
+            clear_output(wait=True)
+            if not self.filtered_data.empty:
+                for _, row in self.filtered_data.iterrows():
+                    self.plot_single_ecg(row)
+
+    def plot_single_ecg(self, row):  # pylint: disable=too-many-locals
+        """
+        Plot a single ECG recording.
+
+        Args:
+            row (pd.Series): The row of the DataFrame containing the ECG data.
+        """
+        _, axs = plt.subplots(3, 1, figsize=(14, 5), constrained_layout=True)
+
+        for i, key in enumerate(
+            ["ECGDataRecording1", "ECGDataRecording2", "ECGDataRecording3"]
+        ):
+            title = f"ECG part {i+1} recorded on {row['EffectiveDateTime']}"
+            plot_single_lead_ecg(
+                row[key],
+                sample_rate=row["SamplingFrequency"],
+                title=title,
+                ax=axs[i],
+            )
+
+        user_id = row["UserId"]
+        heart_rate = int(row["HeartRate"])
+        ecg_interpretation = row["ElectrocardiogramClassification"]
+
+        group_class = row["AgeGroup"]
+        user_id_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'><span style='color: blue;'>{group_class}</span> "
+            f"User ID {user_id}</b>"
+        )
+
+        heart_rate_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
+        )
+        interpretation_html = widgets.HTML(
+            value="<b style='font-size: larger;'>Classification: "
+        )
+
+        if ecg_interpretation != "sinusRhythm":
+            interpretation_html.value += (
+                f"<span style='color: red;'>{ecg_interpretation}</span>"
+            )
         else:
-            initials_textarea.layout.visibility = 'hidden'
+            interpretation_html.value += f"{ecg_interpretation}"
 
-    # Register the change event handler
-    initials_dropdown.observe(on_initials_change, names='value')
-    
-    classifications = [('Select', 'Select')] + sorted([(c, c) for c in df_ecg['ElectrocardiogramClassification'].unique()])
-    classification_dropdown = widgets.Dropdown(options=classifications, description='Show Users classified as:', style={'description_width': 'initial'})
+        interpretation_html.value += "</b>"
 
-    review_statuses = [('Select', 'Select')] + sorted([(status, status) for status in df_ecg['ReviewStatus'].unique()])
-    review_status_dropdown = widgets.Dropdown(options=review_statuses, description='Review Status:', style={'description_width': 'initial'})
+        display(user_id_html, heart_rate_html, interpretation_html)
 
-    user_dropdown = widgets.Dropdown(description='Select User ID:', style={'description_width': 'initial'})
-    date_dropdown = widgets.Dropdown(description='Select recording date:', style={'description_width': 'initial'})
+        diagnosis_status_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'>This recording has been reviewed "
+            f"{row.get('NumberOfReviewers')} times:</b>"
+        )
+        display(diagnosis_status_html)
 
-    diagnosis_dropdown = widgets.Dropdown(options=['Select','Normal', 'Sinus tachycardia', 'SVT', 'EAT', 'AF', 'VT', 'Heart Block','Other'], description='Add diagnosis:', style={'description_width': 'initial'}, layout=Layout(display='none'))
-    tracing_quality_dropdown = widgets.Dropdown(options=[('Select', 'Select')] + ['Uninterpretable', 'Poor quality', 'Adequate', 'Good', 'Excellent'], description='Evaluate Tracing Quality:', style={'description_width': 'initial'}, layout=Layout(display='none'))
-    notes_textarea = widgets.Textarea(placeholder='Enter your notes here.', description='Add notes:', style={'description_width': 'initial'}, layout=Layout(display='none'))
+        if row.get("NumberOfReviewers") != 0:
+            for index, _ in enumerate(row.get("Reviewers", [])):
+                reviewers_initials = row.get(
+                    f"Diagnosis{index+1}_physicianInitials", ""
+                )
+                diagnosis_date = row.get(f"Diagnosis{index+1}_diagnosisDate", "")
+                reviewers_html = widgets.HTML(
+                    value=f"<span style='font-size: larger;'><b>Physician: {reviewers_initials}, "
+                    f"Date: {diagnosis_date}</b></span>"
+                )
+                display(reviewers_html)
 
-    plot_output = widgets.Output()
-
-    spacing = '15px'
-    for widget in [classification_dropdown, review_status_dropdown, user_dropdown, date_dropdown, diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, initials_dropdown]:
-        widget.layout.margin = spacing
-
-    def onClassificationChange(change):
-        classification = change['new']
-        filtered_data = df_ecg[df_ecg['ElectrocardiogramClassification'] == classification]
-        user_ids = sorted(filtered_data['UserId'].unique())
-        user_dropdown.options = user_ids if user_ids else ['No users available']
-        if user_ids:
-            user_dropdown.value = user_ids[0]
-
-    def onReviewChange(change):
-        review_statuses = change['new']
-        filtered_data = df_ecg[df_ecg['ReviewStatus'] == review_statuses]
-        user_ids = sorted(filtered_data['UserId'].unique())
-        user_dropdown.options = user_ids if user_ids else ['No users available']
-        if user_ids:
-            user_dropdown.value = user_ids[0]
-
-    classification_dropdown.observe(onClassificationChange, names='value')
-    review_status_dropdown.observe(onReviewChange, names='value')
-
-    def onUserChange(change):
-        user_id = change['new']
-        classification = classification_dropdown.value
-        review_status = review_status_dropdown.value
-        if user_id and user_id != 'No users available':
-            # Filter dates both by classification and user
-            filtered_data = df_ecg[(df_ecg['UserId'] == user_id) & (df_ecg['ElectrocardiogramClassification'] == classification) & (df_ecg['ReviewStatus'] == review_status)]
-            dates = sorted(filtered_data['EffectiveDateStart'].unique())
-            date_dropdown.options = dates if dates else ['No dates available']
-            if dates:
-                date_dropdown.value = dates[0]
-
-    user_dropdown.observe(onUserChange, names='value')
-
-    # Define a dictionary to hold the current selection's data
-    current_selection = {'user_ecg_data': None}
-
-
-    get_selections_button = widgets.Button(description='Save', button_style='info', icon='search', layout=Layout(display='none'))
-    message_output = widgets.Label() 
-
-    def updatePlot(*args):
-        user_id = user_dropdown.value
-        date = date_dropdown.value
-        if user_id and date and user_id != 'No users available' and date != 'No dates available':
-            user_ecg_data = next((d for d in ecg_data if d['UserId'] == user_id and d['EffectiveDateStart'] == date), None)
-            # Update the current_selection dictionary with the latest user_ecg_data
-            current_selection['user_ecg_data'] = user_ecg_data
-            
-            if user_ecg_data:
-                # Data is available for plotting, show the conditional widgets
-                for widget in [diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, get_selections_button]:
-                    widget.layout.display = 'flex'  # Make widget visible
-                    with plot_output:
-                        clear_output(wait=True) 
-
-                        # Check the diagnosis status
-                        diagnosis_collection_ref = db.collection('users').document(user_id).collection('Observation').document(user_ecg_data.get('DocumentId')).collection('Diagnosis')
-                        diagnosis_docs = list(diagnosis_collection_ref.stream())
-                        num_diagnosis_docs = len(diagnosis_docs)
-
-                        diagnosis_status_html = widgets.HTML(value=f"<b style='font-size: larger;'>The number of diagnoses is {num_diagnosis_docs}.</b>")
-                        display(diagnosis_status_html)
-
-                        if num_diagnosis_docs != 0:
-                            for doc in diagnosis_docs:
-                                doc_data = doc.to_dict()
-                                physician_initial = doc_data.get('physicianInitials', 'N/A')
-                                diagnosis_date = doc_data.get('diagnosisDate', 'N/A')
-                                print(f"Physician: {physician_initial}, Diagnosis Date: {diagnosis_date}")
-                        
-                        heart_rate = int(user_ecg_data.get('HeartRate'))
-                        ecg_interpretation = user_ecg_data.get('ElectrocardiogramClassification')
-
-                        heart_rate_html = widgets.HTML(value=f"<b style='font-size: larger;'>Average heart rate: {heart_rate} bpm.</b>")
-                        interpretation_html = widgets.HTML(value=f"<b style='font-size: larger;'> Apple Watch interpretation: {ecg_interpretation}.</b>")
-
-                        display(heart_rate_html, interpretation_html)
-
-                        fig, axs = plt.subplots(3, 1, figsize=(15, 6), constrained_layout=True)
-
-                        for i, key in enumerate(['ECGDataRecording1', 'ECGDataRecording2', 'ECGDataRecording3']):
-                            ecg = user_ecg_data[key]
-                            sample_rate = user_ecg_data.get('SamplingFrequency', 500)  # Default to 500 if not available
-
-                            if ecg:  # Check if there is data for the current key
-                                title = f'{key} for UserID {user_id}'
-                                plotSingleLeadECG(ecg, sample_rate=sample_rate, title=title, ax=axs[i])
-                            else:
-                                axs[i].text(0.5, 0.5, 'No data available', horizontalalignment='center', verticalalignment='center', transform=axs[i].transAxes)
-                        plt.show()
-
-                else:
-                    # No data available for plotting, keep the conditional widgets hidden
-                    for widget in [diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, get_selections_button]:
-                        widget.layout.display = 'none'
-                        
-                        with plot_output:
-                            clear_output(wait=True)
-                            # print("No data for this selection.")
-    
-    date_dropdown.observe(updatePlot, names='value')
-
-
-    def getSelections(b):
-        user_ecg_data = current_selection['user_ecg_data']
-        if user_ecg_data:
-                diagnosis_selection = diagnosis_dropdown.value
-                tracing_quality_selection = tracing_quality_dropdown.value
-                notes_content = notes_textarea.value
-                initials_content = initials_dropdown.value
-
-                user_id = user_ecg_data.get('UserId')
-                document_id = user_ecg_data.get('DocumentId')
-                users_collection_ref = db.collection('users')
-                diagnosis_collection_ref = users_collection_ref.document(user_id).collection('Observation').document(document_id).collection('Diagnosis')
-
-                diagnosis_docs = list(diagnosis_collection_ref.stream())
-                num_diagnosis_docs = len(diagnosis_docs)
-
-                if num_diagnosis_docs < 3:
-                    new_diagnosis_data = {
-                        'physicianInitials': initials_content,
-                        'physicianDiagnosis': diagnosis_selection,  
-                        'tracingQuality': tracing_quality_selection,  
-                        'notes': notes_content, 
-                        'diagnosisDate': datetime.datetime.now().strftime('%Y-%m-%d_%H:%m')
-                        }
-                    # Add a new document to the 'Diagnosis' collection
-                    new_doc_ref = diagnosis_collection_ref.document()  # This generates a new document ID automatically
-                    if initials_content:
-                        new_doc_ref.set(new_diagnosis_data)
-
-                        # print('The new diagnosis data have been saved.')
-                        message_output.value = 'The new diagnosis data have been saved.'
-
-                        # Update df_ecg - discuss about it
-                        df_ecg = read_and_flatten_ecg_data(db)
-                        
-                    else:
-                        print('Your initials are missing. Add them and click SAVE again.')
-                elif num_diagnosis_docs >= 3:
-                    #  print('The recording has been reviewed. No further diagnosis is required.')
-                    message_output.value = 'The recording has already been reviewed. No further diagnosis is required.'
-
-    get_selections_button.on_click(getSelections)
-
-    def clearMessage(*args):
-        message_output.value = ''  # Clear the message when new selections are made
-
-    # Bind clearMessage to dropdown changes or other interactions
-    classification_dropdown.observe(clearMessage, names='value')
-    review_status_dropdown.observe(clearMessage, names='value')
-    user_dropdown.observe(clearMessage, names='value')
-    date_dropdown.observe(clearMessage, names='value')
-
-    top_layout = widgets.VBox([initials_dropdown, initials_textarea ,classification_dropdown, review_status_dropdown, user_dropdown, date_dropdown])
-    bottom_layout = widgets.VBox([plot_output, diagnosis_dropdown, tracing_quality_dropdown, notes_textarea, get_selections_button])
-    display(top_layout, bottom_layout, message_output)
+        plt.show()
