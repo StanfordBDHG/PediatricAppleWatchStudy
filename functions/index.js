@@ -74,37 +74,37 @@ exports.checkInvitationCode = https
     );
 
 exports.beforecreated = beforeUserCreated(
-  {
-    serviceAccount: `cloudfunctionsserviceaccount@${process.env.GCLOUD_PROJECT}.iam.gserviceaccount.com`,
-  },
-  async (event) => {
-  const firestore = admin.firestore();
-  const userId = event.data.uid;
+    {
+      serviceAccount: `cloudfunctionsserviceaccount@${process.env.GCLOUD_PROJECT}.iam.gserviceaccount.com`,
+    },
+    async (event) => {
+      const firestore = admin.firestore();
+      const userId = event.data.uid;
 
-  try {
-    // Check Firestore to confirm whether an invitation code has been associated with a user.
-    const invitationQuerySnapshot = await firestore.collection("invitationCodes")
-        .where("usedBy", "==", userId)
-        .limit(1)
-        .get();
+      try {
+        // Check Firestore to confirm whether an invitation code has been associated with a user.
+        const invitationQuerySnapshot = await firestore.collection("invitationCodes")
+            .where("usedBy", "==", userId)
+            .limit(1)
+            .get();
 
-    logger.info(`Invitation code query snapshot: ${invitationQuerySnapshot.size}`);
+        logger.info(`Invitation code query snapshot: ${invitationQuerySnapshot.size}`);
 
-    if (invitationQuerySnapshot.empty) {
-      throw new https.HttpsError("not-found", `No valid invitation code found for user ${userId}.`);
-    }
+        if (invitationQuerySnapshot.empty) {
+          throw new https.HttpsError("not-found", `No valid invitation code found for user ${userId}.`);
+        }
 
-    const userDoc = await firestore.doc(`users/${userId}`).get();
+        const userDoc = await firestore.doc(`users/${userId}`).get();
 
-    // Check if the user document exists and contains the correct invitation code.
-    if (!userDoc.exists || userDoc.data().invitationCode !== invitationQuerySnapshot.docs[0].id) {
-      throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
-    }
-  } catch (error) {
-    logger.error(`Error processing request: ${error.message}`);
-    if (!error.code) {
-      throw new https.HttpsError("internal", "Internal server error.");
-    }
-    throw error;
-  }
-});
+        // Check if the user document exists and contains the correct invitation code.
+        if (!userDoc.exists || userDoc.data().invitationCode !== invitationQuerySnapshot.docs[0].id) {
+          throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
+        }
+      } catch (error) {
+        logger.error(`Error processing request: ${error.message}`);
+        if (!error.code) {
+          throw new https.HttpsError("internal", "Internal server error.");
+        }
+        throw error;
+      }
+    });
