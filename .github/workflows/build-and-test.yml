@@ -87,7 +87,7 @@ jobs:
         pip install jupyterlab
     - name: Install ECGReviewer Dependencies
       run: |
-        pip install pandas numpy matplotlib firebase-admin requests ipywidgets pytz
+        pip install -r requirements.txt
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
