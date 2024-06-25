@@ -64,6 +64,9 @@ jobs:
       - name: Install Infrastructure
         run: |
           pip install pylint
+      - name: Install ECGReviewer Dependencies
+        run: |
+          pip install -r ./ecg_data_manager/requirements.txt
       - name: Analysing the code with pylint
         run: |
           pylint $(git ls-files '*.py')
