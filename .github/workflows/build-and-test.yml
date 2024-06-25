@@ -63,7 +63,6 @@ jobs:
       - uses: actions/setup-python@v5
       - name: Install Infrastructure
         run: |
-          python -m pip install --upgrade pip
           pip install -e .
           pip install pylint
       - name: Analysing the code with pylint
@@ -114,14 +113,14 @@ jobs:
         pip install jupyterlab
     - name: Install ECGReviewer Dependencies
       run: |
-        pip install -r ./ECGDataManager/requirements.txt
+        pip install -r ./ecg_data_manager/requirements.txt
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
         echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
-        firebase emulators:exec --import=./ECGDataManager/sample_data "jupyter nbconvert --to pdf --execute ./ECGDataManager/ECGReviewer.ipynb"
+        firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute ./ecg_data_manager/ECGReviewer.ipynb"
       env:
         CI: true
     - uses: actions/upload-artifact@v4
