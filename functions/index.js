@@ -73,7 +73,11 @@ exports.checkInvitationCode = https
         },
     );
 
-exports.beforecreated = beforeUserCreated(async (event) => {
+exports.beforecreated = beforeUserCreated(
+  {
+    serviceAccount: `cloudfunctionsserviceaccount@${process.env.GCLOUD_PROJECT}.iam.gserviceaccount.com`,
+  },
+  async (event) => {
   const firestore = admin.firestore();
   const userId = event.data.uid;
 
