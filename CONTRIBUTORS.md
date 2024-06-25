@@ -25,3 +25,4 @@ PAWS Contributors
 * [Aydin Zahedivash](http://github.com/aydinzahedi)
 * [Scott Randolph Ceresnak](https://med.stanford.edu/profiles/scott-ceresnak)
 * [Oliver Aalami](http://github.com/aalami5)
+* [Vasiliki (Vicky) Bikia](https://github.com/Vicbi)
