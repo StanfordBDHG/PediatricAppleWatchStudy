@@ -12,35 +12,41 @@ import HealthKit
 import OSLog
 import enum ModelsR4.ResourceProxy
 import Spezi
+import SpeziFirebaseConfiguration
+import SpeziHealthKit
 import SpeziLocalStorage
-import SpeziMockWebService
 import UserNotifications
 
 
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
-    enum StorageKey {
-        static let uploadedElectrocardiograms = "ECGModule.uploadedElectrocardiograms"
-    }
-    
-    
-    @ObservationIgnored @Dependency var localStorage: LocalStorage
-    @ObservationIgnored @StandardActor var standard: PAWSStandard
-    @ObservationIgnored @Dependency var mockWebService: MockWebService?
+    @ObservationIgnored @Dependency private var firebaseConfiguration: ConfigureFirebaseApp
+    @ObservationIgnored @Dependency private var healthKit: HealthKit
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
+    private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     private let healthStore = HKHealthStore()
-    private let logger = Logger(subsystem: "PAWS", category: "Standard")
+    private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
     
     
-    /// Creates an instance of a ``MockWebService``.
     required init() { }
     
     
-    // MARK: - Public Interface
+    func configure() {
+        authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            guard user != nil else {
+                return
+            }
+            
+            Task {
+                try await self?.reloadECGs()
+            }
+        }
+    }
+    
     
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
-        let documentReference = try await electrocardiogramDocumentReference(id: electrocardiogram.uuid)
+        let documentReference = try await Firestore.firestore().healthKitCollectionReference.document(electrocardiogram.uuid.uuidString)
         let snapshot = try await documentReference.getDocument()
 
         guard !snapshot.exists else {
@@ -61,6 +67,11 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func reloadECGs() async throws {
         guard let user = Auth.auth().currentUser else {
             logger.error("User not authenticated")
+            return
+        }
+        
+        guard healthKit.authorized else {
+            logger.error("HealthKit permissions not yet provided.")
             return
         }
 
@@ -98,9 +109,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         electrocardiograms.sort(by: { $0.endDate > $1.endDate })
     }
     
-    func remove(electrocardiogram id: HKElectrocardiogram.ID) async throws {
+    func remove(sample id: HKSample.ID) async throws {
         electrocardiograms.removeAll(where: { $0.uuid == id })
-        try await electrocardiogramDocumentReference(id: id).delete()
+        try await Firestore.firestore().healthKitCollectionReference.document(id.uuidString).delete()
     }
     
     func upload(electrocardiogram: HKElectrocardiogram) async {
@@ -168,11 +179,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         return nil
     }
     
-    private func electrocardiogramDocumentReference(id: HKElectrocardiogram.ID) async throws -> DocumentReference {
-        try await standard.userDocumentReference
-            .collection("HealthKit")
-            .document(id.uuidString)
-    }
     
     private func upload(sample: HKSample, force: Bool = false) async throws {
         let resource: ResourceProxy
@@ -196,14 +202,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             resource = try sample.resource
         }
         
-        if let mockWebService {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-            let jsonRepresentation = (try? String(data: encoder.encode(resource), encoding: .utf8)) ?? ""
-            try await mockWebService.upload(path: "healthkit/\(sample.uuid.uuidString)", body: jsonRepresentation)
-        } else {
-            try await standard.healthKitDocument(id: sample.id).setData(from: resource)
-        }
+        try await Firestore.firestore().healthKitCollectionReference.document(sample.id.uuidString).setData(from: resource)
     }
     
     private func uploadUnuploadedECGs() async throws {
