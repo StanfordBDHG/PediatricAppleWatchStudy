@@ -49,7 +49,6 @@ extension XCUIApplication {
         if staticTexts["Your PAWS Account"].waitForExistence(timeout: 5) {
             try navigateOnboardingAccount(email: email)
         }
-        try navigateOnboardingFinish()
         if staticTexts["Consent"].waitForExistence(timeout: 5) {
             try navigateOnboardingFlowConsent()
         }
@@ -132,19 +131,6 @@ extension XCUIApplication {
 
         XCTAssertTrue(buttons["I Consent"].waitForExistence(timeout: 2))
         buttons["I Consent"].tap()
-    }
-    
-    private func navigateOnboardingFinish() throws {
-        XCTAssertTrue(staticTexts["Finish Account Setup"].waitForExistence(timeout: 5))
-        
-        XCTAssertTrue(staticTexts["First"].waitForExistence(timeout: 2))
-        try textFields["enter first name"].enter(value: "John")
-        
-        XCTAssertTrue(staticTexts["Last"].waitForExistence(timeout: 2))
-        try textFields["enter last name"].enter(value: "Doe")
-        
-        XCTAssertTrue(buttons["Complete"].waitForExistence(timeout: 2))
-        buttons["Complete"].tap()
     }
 
     private func navigateOnboardingFlowHealthKitAccess() throws {

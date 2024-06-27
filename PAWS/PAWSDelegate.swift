@@ -6,9 +6,11 @@
 // SPDX-License-Identifier: MIT
 //
 
+import FirebaseFirestore
 import Spezi
 import SpeziAccount
 import SpeziFirebaseAccount
+import SpeziFirebaseAccountStorage
 import SpeziFirebaseStorage
 import SpeziFirestore
 import SpeziHealthKit
@@ -42,6 +44,7 @@ class PAWSDelegate: SpeziAppDelegate {
                 } else {
                     FirebaseStorageConfiguration()
                 }
+                FirestoreAccountStorage(storeIn: Firestore.firestore().userCollectionReference)
             }
 
             if HKHealthStore.isHealthDataAvailable() {
@@ -55,7 +58,7 @@ class PAWSDelegate: SpeziAppDelegate {
     }
     
     
-    private var firestore: Firestore {
+    private var firestore: SpeziFirestore.Firestore {
         let settings = FirestoreSettings()
         if FeatureFlags.useFirebaseEmulator {
             settings.host = "localhost:8080"

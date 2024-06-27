@@ -34,12 +34,12 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     func configure() {
         authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            guard user != nil else {
+            guard user != nil, let self else {
                 return
             }
             
             Task {
-                try await self?.reloadECGs()
+                try await self.reloadECGs()
             }
         }
     }
@@ -86,34 +86,8 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         try await self.uploadUnuploadedECGs()
     }
     
-    func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
-        do {
-            guard let updatedElectrocardiogram = try await self.electrocardiogram(
-                correlatedWith: categorySample,
-                from: healthStore
-            ) else {
-                return
-            }
-            
-            try await upload(sample: updatedElectrocardiogram, force: true)
-        } catch {
-            logger.log("Could not corrolate category sample with ECG: \(categorySample)")
-        }
-    }
     
-    // MARK: - Data Management
-    
-    func insert(electrocardiogram: HKElectrocardiogram) {
-        electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
-        electrocardiograms.append(electrocardiogram)
-        electrocardiograms.sort(by: { $0.endDate > $1.endDate })
-    }
-    
-    func remove(sample id: HKSample.ID) async throws {
-        electrocardiograms.removeAll(where: { $0.uuid == id })
-        try await Firestore.firestore().healthKitCollectionReference.document(id.uuidString).delete()
-    }
-    
+    // MARK: - ECG & HealthKit Data Management
     func upload(electrocardiogram: HKElectrocardiogram) async {
         var supplementalMetrics: [HKSample] = []
         
@@ -143,7 +117,33 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
     }
     
+    func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
+        do {
+            guard let updatedElectrocardiogram = try await self.electrocardiogram(
+                correlatedWith: categorySample,
+                from: healthStore
+            ) else {
+                return
+            }
+            
+            try await upload(sample: updatedElectrocardiogram, force: true)
+        } catch {
+            logger.log("Could not corrolate category sample with ECG: \(categorySample)")
+        }
+    }
+    
+    func remove(sample id: HKSample.ID) async throws {
+        electrocardiograms.removeAll(where: { $0.uuid == id })
+        try await Firestore.firestore().healthKitCollectionReference.document(id.uuidString).delete()
+    }
+    
+    
     // MARK: - Private Helper Functions
+    private func insert(electrocardiogram: HKElectrocardiogram) {
+        electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
+        electrocardiograms.append(electrocardiogram)
+        electrocardiograms.sort(by: { $0.endDate > $1.endDate })
+    }
     
     private func electrocardiogram(
         correlatedWith correlatedCategorySample: HKCategorySample,
