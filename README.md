@@ -11,7 +11,7 @@ SPDX-License-Identifier: MIT
 # Pediatric Apple Watch Study Application
 
 [![Beta Deployment](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/actions/workflows/beta-deployment.yml/badge.svg)](https://github.com/StanfordBDHG/PediatricAppleWatchStudy/actions/workflows/beta-deployment.yml)
-[![codecov](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy/graph/badge.svg?token=0SNRhbC0wi)](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy)
+[![codecov](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy/graph/badge.svg?token=dxs74T2g0s)](https://codecov.io/gh/StanfordBDHG/PediatricAppleWatchStudy)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10602852.svg)](https://doi.org/10.5281/zenodo.10602852)
 
 

@@ -14,12 +14,18 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: main
+  cancel-in-progress: false
+
 jobs:
   buildandtest:
     name: Build and Test
     uses: ./.github/workflows/build-and-test.yml
     permissions:
       contents: read
+      actions: read
+      security-events: write
     secrets: inherit
   iosapptestflightdeployment:
     name: iOS App TestFlight Deployment
@@ -29,17 +35,28 @@ jobs:
       contents: read
     with:
       runsonlabels: '["macOS", "self-hosted"]'
+      environment: staging
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
       fastlanelane: beta
     secrets: inherit
+  vars:
+    name: Inject Environment Variables In Deployment Workflow
+    needs: iosapptestflightdeployment
+    runs-on: ubuntu-latest
+    environment: staging
+    outputs:
+      FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+    steps:
+      - run: echo "Injecting Environment Variables In Deployment Workflow ..."
   deployfirebase:
     name: Deploy Firebase Project
-    needs: iosapptestflightdeployment
+    needs: vars
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
     permissions:
       contents: read
     with:
-      arguments: '--debug'
+      environment: staging
+      arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}

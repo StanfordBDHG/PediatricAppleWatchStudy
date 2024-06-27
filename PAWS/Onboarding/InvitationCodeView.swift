@@ -9,6 +9,7 @@
 import Firebase
 import FirebaseAuth
 import FirebaseFunctions
+import OSLog
 import SpeziOnboarding
 import SpeziValidation
 import SpeziViews
@@ -110,21 +111,12 @@ struct InvitationCodeView: View {
                 
                 try? await Task.sleep(for: .seconds(0.25))
             } else {
-                if Auth.auth().currentUser == nil {
-                    async let authResult = Auth.auth().signInAnonymously()
-                    let checkInvitationCode = Functions.functions().httpsCallable("checkInvitationCode")
-                    
-                    do {
-                        _ = try await checkInvitationCode.call(
-                            [
-                                "invitationCode": invitationCode,
-                                "userId": authResult.user.uid
-                            ]
-                        )
-                    } catch {
-                        throw InvitationCodeError.invitationCodeInvalid
-                    }
-                }
+                try Auth.auth().signOut()
+                try await Auth.auth().signInAnonymously()
+                let checkInvitationCode = Functions.functions().httpsCallable("checkInvitationCode")
+                
+                let result = try await checkInvitationCode.call(["invitationCode": invitationCode])
+                Logger().info("Inviation Code Verification Successful")
             }
             
             await onboardingNavigationPath.nextStep()
