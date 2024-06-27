@@ -71,27 +71,25 @@ The current workaround for simultaneous account registrations during `fastlane s
 for i in {1..360}; do python -m scripts.upload_codes; sleep 10; done
 ```
 
-## ECG Data Pipeline
+## ECG Data Manager
 
-### Pipeline Structure
+The ECG Data Manager provides capabilities for reviewing and exploring the recorded ECG data. It relies on the [spezi_data_pipeline](https://test.pypi.org/project/spezi-data-pipeline/0.1.0b1/) package which is a library engineered to improve workflows associated with data accessibility and analysis in healthcare environments. In addition, to the functions and classes of the spezi_data_pipeline, the two notebooks, namely `ECGReviewer.ipynb` and `ECGExplore.ipynb` offer an environment for interactive data visualization and analysis.
 
-The Spezi ECG Data Pipeline adopts a modular structure, comprising several Python modules and a notebook for interactive data visualization and analysis:
-
-- `firebase_access.py`: Manages access to Firebase for data storage and retrieval.
-- `data_preparation.py`: Prepares and processes raw ECG data.
+The ECG Data Manager includes:
 - `utils.py`: Provides utility functions for data processing.
 - `visualization.py`: Contains functions for data visualization.
-- `ECGDataPipelineTemplate.ipynb`: An interactive notebook for analyzing and reviewing ECG data.
+- `ECGReviewer.ipynb`: An interactive notebook for loading, analyzing, and reviewing ECG data.
+- `ECGExplorer.ipynb`: An interactive notebook for loading, exploring, and filtering ECG data based on filters, such as age group, ECG recording classification, user, and date.
 
 ### Notebook Setup Instructions
 
-You can open and run the `ECGDataPipelineTemplate.ipynb` notebook in, e.g., Google Colab.
-Once the notebook is open, execute the following cell to clone the Spezi ECG Data Analysis Pipeline repository and navigate into the cloned directory:
+You can open and run the `ECGReviewer.ipynb` and `ECGExplorer.ipynb` notebooks in, e.g., Google Colab.
+Once the notebook is open, execute the following cell to clone the PediatricAppleWatchStudy repository and navigate into the cloned directory:
 
 ```python
 # Clone GitHub repository for Spezi ECG Data Pipeline
 git clone https://github.com/StanfordBDHG/PediatricAppleWatchStudy.git
-cd PediatricAppleWatchStudy/ECGDataPipeline
+cd PediatricAppleWatchStudy/ecg_data_manager
 ```
 
 Remember to upload the `serviceAccountKey_file.json` to the workspace directory to enable Firebase access. This file is necessary for authentication and should be securely handled.
@@ -102,7 +100,15 @@ To start reviewing ECG data, execute the cells in your notebook.
 
 This interactive tool allows you to plot ECG data, add diagnoses, evaluate the trace quality, and add notes.
 
-![ecg_data_interactive_tool_snapshot.png](ECGDataPipelineTemplate/Figures/ecg_data_interactive_tool_snapshot.png)
+![ecg_data_interactive_reviewer.png](ecg_data_manager/Figures/ecg_data_interactive_reviewer.png)
+
+### Use the Interactive ECG Exploring Tool
+
+To start exploring ECG data, execute the cells in your notebook. 
+
+This interactive tool allows you to plot ECG data, filter ECG recordings, and select specific users and timestamps.
+
+![ecg_data_interactive_explorer.png](ecg_data_manager/Figures/ecg_data_interactive_explorer.png)
 
 
 ## Contributing

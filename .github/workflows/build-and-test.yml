@@ -65,8 +65,36 @@ jobs:
       coveragereports: PAWS.xcresult
     secrets:
       token: ${{ secrets.CODECOV_TOKEN }}
+  pylint:
+    name: PyLint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Install Infrastructure
+        run: |
+          pip install pylint
+      - name: Install ECGReviewer Dependencies
+        run: |
+          pip install -r ./ecg_data_manager/requirements.txt
+      - name: Analysing the code with pylint
+        run: |
+          pylint $(git ls-files '*.py')
+  black_lint:
+    name: Black Code Formatter Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Install Black
+        run: pip install black[jupyter]
+      - name: Check code formatting with Black
+        run: black . --exclude '\.ipynb$'
   buildandtestdatapipelinenotebook:
-    name: Build and Test ECG Data pipeline Notebook
+    name: Build and Test ECG Reviewer Notebook
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -98,20 +126,20 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install jupyterlab
-    - name: Install ECGDataPipelineTemplate Dependencies
+    - name: Install ECGReviewer Dependencies
       run: |
-        pip install pandas numpy matplotlib firebase-admin requests ipywidgets pytz
+        pip install -r ./ecg_data_manager/requirements.txt
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
-        echo "GCLOUD_PROJECT=ecgdatapipelinetemplate" >> $GITHUB_ENV
+        echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
-        firebase emulators:exec --import=./ECGDataPipelineTemplate/sample_data "jupyter nbconvert --to pdf --execute ./ECGDataPipelineTemplate/ECGDataPipelineTemplate.ipynb"
+        firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute ./ecg_data_manager/ECGReviewer.ipynb"
       env:
         CI: true
     - uses: actions/upload-artifact@v4
       with:
-        name: ECGDataPipelineTemplate.pdf
-        path: ECGDataPipelineTemplate.pdf
+        name: ECGReviewer.pdf
+        path: ECGReviewer.pdf
   
