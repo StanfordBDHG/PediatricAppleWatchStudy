@@ -117,8 +117,7 @@ struct InvitationCodeView: View {
                     do {
                         _ = try await checkInvitationCode.call(
                             [
-                                "invitationCode": invitationCode,
-                                "userId": authResult.user.uid
+                                "invitationCode": invitationCode
                             ]
                         )
                     } catch {

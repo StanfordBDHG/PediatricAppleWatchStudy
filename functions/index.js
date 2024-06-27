@@ -20,14 +20,15 @@ exports.checkInvitationCode = https
           serviceAccount: `cloudfunctionsserviceaccount@${process.env.GCLOUD_PROJECT}.iam.gserviceaccount.com`,
         },
         async (request) => {
-          const {invitationCode, userId} = request.data;
-
-          if (!userId) {
+          if (!request.auth) {
             throw new https.HttpsError(
                 "unauthenticated",
-                "User is not properly authenticated.",
+                "The function must be called with a valid authenticated request.",
             );
           }
+
+          const invitationCode = request.data.invitationCode;
+          const userId = request.auth.uid;
 
           const firestore = admin.firestore();
           logger.debug(`User (${userId}) -> PAWS, InvitationCode ${invitationCode}`);
