@@ -12,13 +12,17 @@ import XCTHealthKit
 
 
 final class AccountCreationTests: XCTestCase {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         continueAfterFailure = false
 
-        let app = XCUIApplication()
-        app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
-        app.deleteAndLaunch(withSpringboardAppName: "PAWS")
+        let app = await XCUIApplication()
+        await setupSnapshot(app)
+
+        await MainActor.run {
+            app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
+        }
+        await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
     func testOnboardingFlow() throws {
@@ -65,14 +69,18 @@ extension XCUIApplication {
     private func navigateOnboardingFlowInterestingModules() throws {
         XCTAssertTrue(staticTexts["Interesting Modules"].waitForExistence(timeout: 5))
         
-        for _ in 1..<4 {
+        for index in 1..<4 {
             XCTAssertTrue(buttons["Next"].waitForExistence(timeout: 2))
             buttons["Next"].tap()
+            if index == 2 {
+                PAWSUITests.snapshot("0Launch")
+            }
         }
     }
     
     private func navigateOnboardingInvitationCode(code: String) throws {
         XCTAssertTrue(staticTexts["Invitation Code"].waitForExistence(timeout: 5))
+        PAWSUITests.snapshot("1InvitationCode")
         try textFields["Invitation Code"].enter(value: code)
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
@@ -185,6 +193,7 @@ extension XCUIApplication {
         XCTAssertTrue(staticTexts["John Doe"].exists)
         XCTAssertTrue(staticTexts[email].exists)
         XCTAssertTrue(staticTexts["Gender Identity, Choose not to answer"].exists)
+        PAWSUITests.snapshot("3AccountInformation")
 
 
         XCTAssertTrue(navigationBars.buttons["Close"].waitForExistence(timeout: 0.5))
