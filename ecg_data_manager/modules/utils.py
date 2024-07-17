@@ -314,6 +314,7 @@ def prioritize_abnormal_recordings(df: pd.DataFrame) -> pd.DataFrame:
     df["Priority"] = (
         df[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] != "sinusRhythm"
     ).astype(int)
+
     sorted_df = df.sort_values(by="Priority", ascending=False)
     sorted_df = sorted_df.drop(columns=["Priority"])
     return sorted_df

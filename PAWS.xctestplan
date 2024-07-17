@@ -9,6 +9,15 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:PAWS.xcodeproj",
+          "identifier" : "653A254C283387FE005D4D48",
+          "name" : "PAWS"
+        }
+      ]
+    },
     "targetForVariableExpansion" : {
       "containerPath" : "container:PAWS.xcodeproj",
       "identifier" : "653A254C283387FE005D4D48",

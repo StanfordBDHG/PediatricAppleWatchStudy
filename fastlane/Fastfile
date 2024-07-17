@@ -82,7 +82,6 @@ platform :ios do
       ],
       submit_beta_review: true,
       notify_external_testers: true,
-      expire_previous_builds: true,
       changelog: commit[:message]
     )
   end

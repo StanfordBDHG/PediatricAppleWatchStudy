@@ -13,6 +13,7 @@ import SwiftUI
 
 struct HealthKitPermissions: View {
     @Environment(HealthKit.self) private var healthKitDataSource
+    @Environment(ECGModule.self) private var ecgModule
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
     
     @State private var healthKitProcessing = false
@@ -52,7 +53,7 @@ struct HealthKitPermissions: View {
                             print("Could not request HealthKit permissions.")
                         }
                         healthKitProcessing = false
-                        
+                        try? await ecgModule.reloadECGs()
                         onboardingNavigationPath.nextStep()
                     }
                 )
