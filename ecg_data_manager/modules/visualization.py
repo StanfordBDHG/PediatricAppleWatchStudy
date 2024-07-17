@@ -309,7 +309,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         user_id = row[ColumnNames.USER_ID.value]
         heart_rate = int(row[ColumnNames.HEART_RATE.value])
-        ecg_interpretation = row[ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value]
+        ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
 
         group_class = row["AgeGroup"]
         user_id_html = widgets.HTML(
@@ -685,7 +685,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         self.ecg_class_dropdown = widgets.Dropdown(
             options=self.get_unique_values_with_all(
-                ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value
+                ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
             ),
             description="ECG Class",
             value="All",
@@ -761,7 +761,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         if self.ecg_class_dropdown.value != "All":
             self.filtered_data = self.filtered_data[
-                self.filtered_data[ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value]
+                self.filtered_data[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
                 == self.ecg_class_dropdown.value
             ]
 
@@ -791,7 +791,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
             self.data, "AgeGroup"
         )
         self.ecg_class_dropdown.options = self.get_unique_values_with_all_column(
-            self.data, ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value
+            self.data, ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
         )
 
     def update_user_id_dropdown_options(self):
@@ -808,7 +808,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         if self.ecg_class_dropdown.value != "All":
             filtered_for_user_ids = filtered_for_user_ids[
                 filtered_for_user_ids[
-                    ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value
+                    ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
                 ]
                 == self.ecg_class_dropdown.value
             ]
@@ -830,7 +830,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         if self.ecg_class_dropdown.value != "All":
             filtered_for_dates = filtered_for_dates[
-                filtered_for_dates[ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value]
+                filtered_for_dates[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
                 == self.ecg_class_dropdown.value
             ]
 
