@@ -92,7 +92,7 @@ git clone https://github.com/StanfordBDHG/PediatricAppleWatchStudy.git
 cd PediatricAppleWatchStudy/ecg_data_manager
 ```
 
-Remember to upload the `serviceAccountKey_file.json` to the workspace directory to enable Firebase access. This file is necessary for authentication and should be securely handled.
+To run the notebooks, add them to Colab Enterprise within the same Google Cloud project as your Firebase setup. For other Python notebook environments, use the Firebase credentials and upload the `serviceAccountKey_file.json` to the workspace directory to enable Firebase access. This file is essential for authentication and should be securely handled.
 
 ### Use the Interactive ECG Reviewing Tool
 
