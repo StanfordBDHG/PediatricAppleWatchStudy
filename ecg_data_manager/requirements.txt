@@ -5,4 +5,4 @@ matplotlib
 ipywidgets
 fhir.resources
 --extra-index-url https://test.pypi.org/simple/
-spezi-data-pipeline==0.1.0b4
+spezi-data-pipeline==0.1.0b5
