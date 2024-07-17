@@ -168,7 +168,7 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
         ColumnNames.USER_ID.value,
         "ResourceId",
         "EffectiveDateTimeHHMM",
-        ColumnNames.ELECTROCARDIOGRAM_CLASSIFICATION.value,
+        ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value,
         "NumberOfReviewers",
         "Reviewers",
         "ReviewStatus",
@@ -311,9 +311,10 @@ def prioritize_abnormal_recordings(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Sorted DataFrame with abnormal recordings at the top.
     """
-    df["Priority"] = (df["ElectrocardiogramClassification"] != "sinusRhythm").astype(
-        int
-    )
+    df["Priority"] = (
+        df[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] != "sinusRhythm"
+    ).astype(int)
+
     sorted_df = df.sort_values(by="Priority", ascending=False)
     sorted_df = sorted_df.drop(columns=["Priority"])
     return sorted_df
