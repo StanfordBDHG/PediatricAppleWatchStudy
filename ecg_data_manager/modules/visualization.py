@@ -37,6 +37,24 @@ from spezi_data_pipeline.data_flattening.fhir_resources_flattener import ColumnN
 USERS_COLLECTION = "users"
 ECG_DATA_SUBCOLLECTION = "HealthKit"
 DIAGNOSIS_DATA_SUBCOLLECTION = "Diagnosis"
+AGE_GROUP_STRING = "AgeGroup"
+SINUS_RHYTHM = "sinusRhythm"
+
+
+class DiagnosisKeyNames(Enum):
+    """
+    Enumerates strings related to a diagnosis entry.
+    """
+
+    NUMBER_OF_REVIEWERS = "NumberOfReviewers"
+    REVIEWERS = "Reviewers"
+    REVIEW_STATUS = "ReviewStatus"
+    PHYSICIAN_INITIALS = "physicianInitials"
+    PHYSICIAN_DIAGNOSIS = "physicianDiagnosis"
+    TRACING_QUALITY = "tracingQuality"
+    NOTES = "notes"
+    DIAGNOSIS_DATE = "diagnosisDate"
+
 
 
 class WidgetStrings(Enum):
@@ -134,7 +152,10 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         Set up the initial widgets for the viewer.
         """
         unique_initials = (
-            pd.Series(self.df_ecg["Reviewers"].explode()).dropna().astype(str).unique()
+            pd.Series(self.df_ecg[DiagnosisKeyNames.REVIEWERS.value].explode())
+            .dropna()
+            .astype(str)
+            .unique()
         )
         initials_options = (
             [WidgetStrings.SELECT.value]
@@ -263,12 +284,20 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         """
         if self.initials_dropdown.value == WidgetStrings.OTHER.value:
             self.filtered_data = self.df_ecg[
-                self.df_ecg["ReviewStatus"] == "Incomplete review"
+                self.df_ecg[DiagnosisKeyNames.REVIEW_STATUS.value]
+                == "Incomplete review"
             ]
         else:
             self.filtered_data = self.df_ecg[
-                (self.df_ecg["ReviewStatus"] == "Incomplete review")
-                & (self.df_ecg["Reviewers"].apply(lambda x: initials not in x))
+                (
+                    self.df_ecg[DiagnosisKeyNames.REVIEW_STATUS.value]
+                    == "Incomplete review"
+                )
+                & (
+                    self.df_ecg[DiagnosisKeyNames.REVIEWERS.value].apply(
+                        lambda x: initials not in x
+                    )
+                )
             ]
 
     def plot_ecg_data(self):
@@ -309,9 +338,11 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         user_id = row[ColumnNames.USER_ID.value]
         heart_rate = int(row[ColumnNames.HEART_RATE.value])
-        ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
+        ecg_interpretation = row[
+            ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
+        ]
 
-        group_class = row["AgeGroup"]
+        group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
             value=f"<b style='font-size: larger;'><span style='color: blue;'>{group_class}</span> "
             f"User ID {user_id}</b>"
@@ -325,7 +356,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         )
 
         # Conditional color for non-sinusRhythm classifications
-        if ecg_interpretation != "sinusRhythm":
+        if ecg_interpretation != SINUS_RHYTHM:
             interpretation_html.value += (
                 f"<span style='color: red;'>{ecg_interpretation}</span>"
             )
@@ -356,8 +387,8 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         if num_diagnosis_docs != 0:
             for doc in diagnosis_docs:
                 doc_data = doc.to_dict()
-                physician_initial = doc_data.get("physicianInitials", "N/A")
-                diagnosis_date = doc_data.get("diagnosisDate", "N/A")
+                physician_initial = doc_data.get(DiagnosisKeyNames.PHYSICIAN_INITIALS.value, "N/A")
+                diagnosis_date = doc_data.get(DiagnosisKeyNames.DIAGNOSIS_DATE.value, "N/A")
                 reviewers_html = widgets.HTML(
                     value=f"<span style='font-size: larger;'>Physician: "
                     f"{physician_initial}, Date: {diagnosis_date}</span>"
@@ -512,11 +543,11 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
             num_diagnosis_docs = len(list(diagnosis_ref.stream()))
 
             new_diagnosis_data = {
-                "physicianInitials": initials,
-                "physicianDiagnosis": diagnosis,
-                "tracingQuality": tracing_quality,
-                "notes": notes,
-                "diagnosisDate": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                DiagnosisKeyNames.PHYSICIAN_INITIALS.value: initials,
+                DiagnosisKeyNames.PHYSICIAN_DIAGNOSIS.value: diagnosis,
+                DiagnosisKeyNames.TRACING_QUALITY.value: tracing_quality,
+                DiagnosisKeyNames.NOTES.value: notes,
+                DiagnosisKeyNames.DIAGNOSIS_DATE.value: datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
             }
 
             try:  # pylint: disable=too-many-nested-blocks
@@ -526,17 +557,32 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
                     # Update the ecg_df using the document_id as index
                     index = self.df_ecg.index[
-                        self.df_ecg["ResourceId"] == document_id
+                        self.df_ecg[ColumnNames.RESOURCE_ID.value] == document_id
                     ].tolist()
                     if index:
                         for idx in index:
                             if idx in self.df_ecg.index:
-                                self.df_ecg.at[idx, "NumberOfReviewers"] += 1
-                                if isinstance(self.df_ecg.at[idx, "Reviewers"], list):
-                                    self.df_ecg.at[idx, "Reviewers"].append(initials)
-                                    self.df_ecg.at[idx, "ReviewStatus"] = (
+                                self.df_ecg.at[
+                                    idx, DiagnosisKeyNames.NUMBER_OF_REVIEWERS.value
+                                ] += 1
+                                if isinstance(
+                                    self.df_ecg.at[
+                                        idx, DiagnosisKeyNames.REVIEWERS.value
+                                    ],
+                                    list,
+                                ):
+                                    self.df_ecg.at[
+                                        idx, DiagnosisKeyNames.REVIEWERS.value
+                                    ].append(initials)
+                                    self.df_ecg.at[
+                                        idx, DiagnosisKeyNames.REVIEW_STATUS.value
+                                    ] = (
                                         "Incomplete review"
-                                        if self.df_ecg.at[idx, "NumberOfReviewers"] < 3
+                                        if self.df_ecg.at[
+                                            idx,
+                                            DiagnosisKeyNames.NUMBER_OF_REVIEWERS.value,
+                                        ]
+                                        < 3
                                         else "Complete review"
                                     )
 
@@ -567,9 +613,6 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                     value=f"<span style='color: red; font-size: 20px;'>Type error: {te}</span>"
                 )
                 display(error_html)
-
-            # except Exception as e:
-            #     print(f"Error saving diagnosis: {e}")
 
 
 def _ax_plot(ax, x, y, secs):
@@ -623,11 +666,6 @@ def plot_single_lead_ecg(
         title (str): Title to be shown on the chart.
         ax (plt.Axes | None): The axis to plot on (default is None).
     """
-
-    if not isinstance(ecg, (list, np.ndarray)):
-        print(f"Invalid ECG data format for plotting: {title}")
-        return
-
     if ax is None:
         plt.figure(figsize=(PlotParams.FIG_WIDTH.value, PlotParams.FIG_HEIGHT.value))
         ax = plt.gca()
@@ -635,18 +673,8 @@ def plot_single_lead_ecg(
     ax.set_title(title)
     ax.set_ylabel(PlotParams.ECG_UNIT.value)
     ax.set_xlabel(PlotParams.TIME_UNIT.value)
-    # plt.subplots_adjust(
-    #     hspace = 0,
-    #     wspace = 0.04,
-    #     left   = 0.04,  # the left side of the subplots of the figure
-    #     right  = 0.98,  # the right side of the subplots of the figure
-    #     bottom = 0.2,   # the bottom of the subplots of the figure
-    #     top    = 0.88
-    #     )
     seconds = len(ecg) / sample_rate
 
-    # ax = plt.subplot(1, 1, 1)
-    # plt.rcParams['lines.linewidth'] = 5
     step = 1.0 / sample_rate
     _ax_plot(ax, np.arange(0, len(ecg) * step, step), ecg, seconds)
 
@@ -677,7 +705,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         self.filtered_data = data.copy()
 
         self.age_group_dropdown = widgets.Dropdown(
-            options=self.get_unique_values_with_all("AgeGroup"),
+            options=self.get_unique_values_with_all(AGE_GROUP_STRING),
             description="Age Group",
             value="All",
             layout=widgets.Layout(padding="10px 0px 30px 40px"),
@@ -693,7 +721,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         )
 
         self.user_id_dropdown = widgets.Dropdown(
-            options=self.get_unique_values_with_all("UserId"),
+            options=self.get_unique_values_with_all(ColumnNames.USER_ID.value),
             description="User ID",
             value="All",
             layout=widgets.Layout(padding="10px 0px 30px 40px"),
@@ -756,12 +784,14 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         if self.age_group_dropdown.value != "All":
             self.filtered_data = self.filtered_data[
-                self.filtered_data["AgeGroup"] == self.age_group_dropdown.value
+                self.filtered_data[AGE_GROUP_STRING] == self.age_group_dropdown.value
             ]
 
         if self.ecg_class_dropdown.value != "All":
             self.filtered_data = self.filtered_data[
-                self.filtered_data[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
+                self.filtered_data[
+                    ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
+                ]
                 == self.ecg_class_dropdown.value
             ]
 
@@ -788,7 +818,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         Updates the options for the age group and ECG class dropdowns based on the current data.
         """
         self.age_group_dropdown.options = self.get_unique_values_with_all_column(
-            self.data, "AgeGroup"
+            self.data, AGE_GROUP_STRING
         )
         self.ecg_class_dropdown.options = self.get_unique_values_with_all_column(
             self.data, ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
@@ -802,7 +832,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         if self.age_group_dropdown.value != "All":
             filtered_for_user_ids = filtered_for_user_ids[
-                filtered_for_user_ids["AgeGroup"] == self.age_group_dropdown.value
+                filtered_for_user_ids[AGE_GROUP_STRING] == self.age_group_dropdown.value
             ]
 
         if self.ecg_class_dropdown.value != "All":
@@ -814,7 +844,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
             ]
 
         self.user_id_dropdown.options = self.get_unique_values_with_all_column(
-            filtered_for_user_ids, "UserId"
+            filtered_for_user_ids, ColumnNames.USER_ID.value
         )
 
     def update_date_time_dropdown_options(self):
@@ -825,12 +855,14 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         if self.age_group_dropdown.value != "All":
             filtered_for_dates = filtered_for_dates[
-                filtered_for_dates["AgeGroup"] == self.age_group_dropdown.value
+                filtered_for_dates[AGE_GROUP_STRING] == self.age_group_dropdown.value
             ]
 
         if self.ecg_class_dropdown.value != "All":
             filtered_for_dates = filtered_for_dates[
-                filtered_for_dates[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
+                filtered_for_dates[
+                    ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
+                ]
                 == self.ecg_class_dropdown.value
             ]
 
@@ -884,19 +916,21 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         for i, key in enumerate(
             ["ECGDataRecording1", "ECGDataRecording2", "ECGDataRecording3"]
         ):
-            title = f"ECG part {i+1} recorded on {row['EffectiveDateTime']}"
+            title = f"ECG part {i+1} recorded on {row[ColumnNames.EFFECTIVE_DATE_TIME.value]}"
             plot_single_lead_ecg(
                 row[key],
-                sample_rate=row["SamplingFrequency"],
+                sample_rate=row[ColumnNames.SAMPLING_FREQUENCY.value],
                 title=title,
                 ax=axs[i],
             )
 
-        user_id = row["UserId"]
-        heart_rate = int(row["HeartRate"])
-        ecg_interpretation = row["ElectrocardiogramClassification"]
+        user_id = row[ColumnNames.USER_ID.value]
+        heart_rate = int(row[ColumnNames.HEART_RATE.value])
+        ecg_interpretation = row[
+            ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
+        ]
 
-        group_class = row["AgeGroup"]
+        group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
             value=f"<b style='font-size: larger;'><span style='color: blue;'>{group_class}</span> "
             f"User ID {user_id}</b>"
@@ -909,7 +943,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
             value="<b style='font-size: larger;'>Classification: "
         )
 
-        if ecg_interpretation != "sinusRhythm":
+        if ecg_interpretation != SINUS_RHYTHM:
             interpretation_html.value += (
                 f"<span style='color: red;'>{ecg_interpretation}</span>"
             )
@@ -926,8 +960,8 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         )
         display(diagnosis_status_html)
 
-        if row.get("NumberOfReviewers") != 0:
-            for index, _ in enumerate(row.get("Reviewers", [])):
+        if row.get(DiagnosisKeyNames.NUMBER_OF_REVIEWERS.value) != 0:
+            for index, _ in enumerate(row.get(DiagnosisKeyNames.REVIEWERS.value, [])):
                 reviewers_initials = row.get(
                     f"Diagnosis{index+1}_physicianInitials", ""
                 )
