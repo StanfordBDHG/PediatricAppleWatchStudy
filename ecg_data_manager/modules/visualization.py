@@ -56,7 +56,6 @@ class DiagnosisKeyNames(Enum):
     DIAGNOSIS_DATE = "diagnosisDate"
 
 
-
 class WidgetStrings(Enum):
     """
     Enumerates standardized strings for widgets.
@@ -387,8 +386,12 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         if num_diagnosis_docs != 0:
             for doc in diagnosis_docs:
                 doc_data = doc.to_dict()
-                physician_initial = doc_data.get(DiagnosisKeyNames.PHYSICIAN_INITIALS.value, "N/A")
-                diagnosis_date = doc_data.get(DiagnosisKeyNames.DIAGNOSIS_DATE.value, "N/A")
+                physician_initial = doc_data.get(
+                    DiagnosisKeyNames.PHYSICIAN_INITIALS.value, "N/A"
+                )
+                diagnosis_date = doc_data.get(
+                    DiagnosisKeyNames.DIAGNOSIS_DATE.value, "N/A"
+                )
                 reviewers_html = widgets.HTML(
                     value=f"<span style='font-size: larger;'>Physician: "
                     f"{physician_initial}, Date: {diagnosis_date}</span>"
@@ -547,7 +550,9 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 DiagnosisKeyNames.PHYSICIAN_DIAGNOSIS.value: diagnosis,
                 DiagnosisKeyNames.TRACING_QUALITY.value: tracing_quality,
                 DiagnosisKeyNames.NOTES.value: notes,
-                DiagnosisKeyNames.DIAGNOSIS_DATE.value: datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                DiagnosisKeyNames.DIAGNOSIS_DATE.value: datetime.datetime.now().strftime(
+                    "%Y-%m-%d %H:%M"
+                ),
             }
 
             try:  # pylint: disable=too-many-nested-blocks
