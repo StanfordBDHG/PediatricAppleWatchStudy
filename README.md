@@ -92,7 +92,7 @@ Once the notebook is open, execute the following cell to clone the PediatricAppl
 ```python
 # Clone GitHub repository for Spezi ECG Data Pipeline
 git clone https://github.com/StanfordBDHG/PediatricAppleWatchStudy.git
-cd PediatricAppleWatchStudy/ECGReviewer
+cd PediatricAppleWatchStudy/ecg_data_manager
 ```
 
 To run the notebooks, add them to Colab Enterprise within the same Google Cloud project as your Firebase setup. For other Python notebook environments, use the Firebase credentials and upload the `serviceAccountKey_file.json` to the workspace directory to enable Firebase access. This file is essential for authentication and should be securely handled.
@@ -103,7 +103,7 @@ To start reviewing ECG data, execute the cells in your notebook.
 
 This interactive tool allows you to plot ECG data, add diagnoses, evaluate the trace quality, and add notes.
 
-![ecg_data_interactive_reviewer.png](ECGReviewer/Figures/ecg_data_interactive_reviewer.png)
+![ecg_data_interactive_reviewer.png](ecg_data_manager/Figures/ecg_data_interactive_reviewer.png)
 
 #### Use the Interactive ECG Exploring Tool
 
@@ -111,7 +111,7 @@ To start exploring ECG data, execute the cells in your notebook.
 
 This interactive tool allows you to plot ECG data, filter ECG recordings, and select specific users and timestamps.
 
-![ecg_data_interactive_explorer.png](ECGReviewer/Figures/ecg_data_interactive_explorer.png)
+![ecg_data_interactive_explorer.png](ecg_data_manager/Figures/ecg_data_interactive_explorer.png)
 
 
 ## Firebase & Google Cloud Setup

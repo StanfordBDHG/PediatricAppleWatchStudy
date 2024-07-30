@@ -79,7 +79,7 @@ jobs:
           pip install pylint
       - name: Install ECGReviewer Dependencies
         run: |
-          pip install -r ./ECGReviewer/requirements.txt
+          pip install -r ./ecg_data_manager/requirements.txt
       - name: Analysing the code with pylint
         run: |
           pylint $(git ls-files '*.py')
@@ -128,14 +128,14 @@ jobs:
         pip install jupyterlab
     - name: Install ECGReviewer Dependencies
       run: |
-        pip install -r ./ECGReviewer/requirements.txt
+        pip install -r ./ecg_data_manager/requirements.txt
     - name: Set Firestore Emulator Environment Variable
       run: |
         echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
         echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
-        firebase emulators:exec --import=./ECGReviewer/sample_data "jupyter nbconvert --to pdf --execute ./ECGReviewer/ECGReviewer_ColabBasic.ipynb"
+        firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute ./ECGReviewer/ECGReviewer_ColabBasic.ipynb"
       env:
         CI: true
     - uses: actions/upload-artifact@v4
