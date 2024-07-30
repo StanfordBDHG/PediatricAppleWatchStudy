@@ -140,7 +140,7 @@ jobs:
         echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
     - name: Run Firebase Emulator & Execute Notebook
       run: |
-        firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute ./ecg_data_manager/ECGReviewer_ColabBasic.ipynb"
+        firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute './ecg_data_manager/ECG Reviewer.ipynb'"
       env:
         CI: true
     - uses: actions/upload-artifact@v4
