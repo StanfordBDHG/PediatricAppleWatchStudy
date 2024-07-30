@@ -1,8 +1,3 @@
-firebase_admin
-pandas
-numpy
-matplotlib
-ipywidgets
-fhir.resources
---extra-index-url https://test.pypi.org/simple/
-spezi-data-pipeline==0.1.0b5
+spezi-data-pipeline ~= 0.1.0
+pydantic[email] ~= 2.8.2
+ipywidgets ~= 8.1.3
