@@ -13,7 +13,6 @@ on:
   push:
     tags:
       - "*"
-  workflow_dispatch:
 
 concurrency:
   group: production
