@@ -17,9 +17,13 @@ on:
       environment:
         description: |
           The GitHub deployment environment.
-        required: false
-        type: string
-        default: 'staging'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
   workflow_call:
     inputs:
       environment:
@@ -27,7 +31,7 @@ on:
           The GitHub deployment environment.
         required: false
         type: string
-        default: 'staging'
+        default: staging
 
 concurrency:
   group: main
