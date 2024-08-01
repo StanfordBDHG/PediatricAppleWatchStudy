@@ -62,7 +62,6 @@ jobs:
     secrets: inherit
   iosapptestflightdeployment:
     name: iOS App TestFlight Deployment
-    needs: buildandtest
     needs: [determineenvironment, buildandtest]
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     permissions:
