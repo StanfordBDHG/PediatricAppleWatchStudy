@@ -13,14 +13,47 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      environment:
+        description: |
+          The GitHub deployment environment.
+        required: false
+        type: string
+        default: 'staging'
+  workflow_call:
+    inputs:
+      environment:
+        description: |
+          The GitHub deployment environment.
+        required: false
+        type: string
+        default: 'staging'
 
 concurrency:
   group: main
   cancel-in-progress: false
 
 jobs:
+  determineenvironment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Determine target repository, environment, and version
+        id: set-env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "::set-output name=environment::${{ inputs.environment }}"
+          elif [[ "${{ github.event_name }}" == "workflow_call" ]]; then
+            echo "::set-output name=environment::${{ inputs.environment }}"
+          else
+            echo "::set-output name=environment::staging"
+          fi
   buildandtest:
     name: Build and Test
+    needs: determineenvironment
     uses: ./.github/workflows/build-and-test.yml
     permissions:
       contents: read
@@ -30,33 +63,33 @@ jobs:
   iosapptestflightdeployment:
     name: iOS App TestFlight Deployment
     needs: buildandtest
+    needs: [determineenvironment, buildandtest]
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     permissions:
       contents: read
     with:
       runsonlabels: '["macOS", "self-hosted"]'
-      environment: staging
+      environment: ${{ needs.determineenvironment.outputs.environment }}
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
       fastlanelane: beta
     secrets: inherit
   vars:
     name: Inject Environment Variables In Deployment Workflow
-    needs: iosapptestflightdeployment
     runs-on: ubuntu-latest
-    environment: staging
+    environment: ${{ needs.determineenvironment.outputs.environment }}
     outputs:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
     steps:
       - run: echo "Injecting Environment Variables In Deployment Workflow ..."
   deployfirebase:
     name: Deploy Firebase Project
-    needs: vars
+    needs: [determineenvironment, vars, iosapptestflightdeployment]
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
     permissions:
       contents: read
     with:
-      environment: staging
+      environment: ${{ needs.determineenvironment.outputs.environment }}
       arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
