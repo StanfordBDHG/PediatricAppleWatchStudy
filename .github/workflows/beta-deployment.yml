@@ -80,6 +80,7 @@ jobs:
     secrets: inherit
   vars:
     name: Inject Environment Variables In Deployment Workflow
+    needs: determineenvironment
     runs-on: ubuntu-latest
     environment: ${{ needs.determineenvironment.outputs.environment }}
     outputs:
