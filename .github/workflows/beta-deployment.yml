@@ -90,7 +90,7 @@ jobs:
           echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
   deployfirebase:
     name: Deploy Firebase Project
-    needs: [determineenvironment, vars, iosapptestflightdeployment]
+    needs: [determineenvironment, vars] # iosapptestflightdeployment
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
     permissions:
       contents: read
