@@ -49,11 +49,11 @@ jobs:
         id: set-env
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "::set-output name=environment::${{ inputs.environment }}"
+            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "workflow_call" ]]; then
-            echo "::set-output name=environment::${{ inputs.environment }}"
+            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=environment::staging"
+            echo "environment=staging" >> $GITHUB_OUTPUT
           fi
   buildandtest:
     name: Build and Test
