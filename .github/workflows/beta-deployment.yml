@@ -39,13 +39,14 @@ concurrency:
 
 jobs:
   determineenvironment:
+    name: Determine Environment
     runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.set-env.outputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Determine environment
+      - name: Determine Environment
         id: set-env
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
