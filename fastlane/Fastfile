@@ -75,14 +75,28 @@ platform :ios do
     )
     build
     commit = last_git_commit
-    upload_to_testflight(
-      distribute_external: true,
-      groups: [
-        "External Testers"
-      ],
-      submit_beta_review: true,
-      notify_external_testers: true,
-      changelog: commit[:message]
-    )
+    
+    environment = options[:environment] || "staging"
+    
+    if environment == "production"
+      deliver(
+        submit_for_review: true,
+        force: true,
+        overwrite_screenshots: true,
+        automatic_release: true,
+        metadata_path: "./metadata",
+        screenshots_path: "./screenshots"
+      )
+    else
+      upload_to_testflight(
+        distribute_external: true,
+        groups: [
+          "External Testers"
+        ],
+        submit_beta_review: true,
+        notify_external_testers: true,
+        changelog: commit[:message]
+      )
+    end
   end
 end

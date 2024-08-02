@@ -85,7 +85,8 @@ jobs:
     outputs:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
     steps:
-      - run: echo "Injecting Environment Variables In Deployment Workflow ..."
+      - run: |
+          echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
   deployfirebase:
     name: Deploy Firebase Project
     needs: [determineenvironment, vars, iosapptestflightdeployment]
