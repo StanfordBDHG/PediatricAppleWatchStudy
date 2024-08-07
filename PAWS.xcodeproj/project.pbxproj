@@ -418,6 +418,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				2F8256602C635AA300F65970 /* PBXTargetDependency */,
+				2F8256622C635AA300F65970 /* PBXTargetDependency */,
 			);
 			name = PAWS;
 			packageProductDependencies = (
@@ -649,6 +651,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2F8256602C635AA300F65970 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 2F82565F2C635AA300F65970 /* SwiftPackageListJSONPlugin */;
+		};
+		2F8256622C635AA300F65970 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 2F8256612C635AA300F65970 /* SwiftLintPlugin */;
+		};
 		653A255F28338800005D4D48 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 653A254C283387FE005D4D48 /* PAWS */;
@@ -1129,6 +1139,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "Spezi" */;
 			productName = Spezi;
+		};
+		2F82565F2C635AA300F65970 /* SwiftPackageListJSONPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */;
+			productName = "plugin:SwiftPackageListJSONPlugin";
+		};
+		2F8256612C635AA300F65970 /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
 		};
 		2FB099AE2A875DF100B20952 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
