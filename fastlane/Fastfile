@@ -87,7 +87,7 @@ platform :ios do
   end
 
   desc "Publish a release to TestFlight or the App Store depending on the environment"
-  lane :deploy do
+  lane :deploy do |options|
     signin
     increment_build_number(
       {

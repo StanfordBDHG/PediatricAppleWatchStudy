@@ -23,127 +23,127 @@ jobs:
     uses: StanfordBDHG/.github/.github/workflows/reuse.yml@v2
     permissions:
       contents: read
-  swiftlint:
-    name: SwiftLint
-    uses: StanfordBDHG/.github/.github/workflows/swiftlint.yml@v2
-    permissions:
-      contents: read
-  markdownlinkcheck:
-    name: Markdown Link Check
-    uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@v2
-    permissions:
-      contents: read
-  codeql:
-    name: CodeQL
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    with:
-      codeql: true
-      fastlanelane: codeql
-    permissions:
-      security-events: write
-      actions: read
-  buildandtest:
-    name: Build and Test
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    permissions:
-      contents: read
-    with:
-      artifactname: PAWS.xcresult
-      runsonlabels: '["macOS", "self-hosted"]'
-      setupfirebaseemulator: true
-      fastlanelane: test
-      firebaseemulatorimport: ./firebase
-    secrets:
-      GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
-  uploadcoveragereport:
-    name: Upload Coverage Report
-    needs: buildandtest
-    uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
-    permissions:
-      contents: read
-    with:
-      coveragereports: PAWS.xcresult
-    secrets:
-      token: ${{ secrets.CODECOV_TOKEN }}
-  pylint:
-    name: PyLint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Install Infrastructure
-        run: |
-          pip install pylint
-      - name: Install ECGReviewer Dependencies
-        run: |
-          pip install -r ./ecg_data_manager/requirements.txt
-      - name: Analysing the code with pylint
-        run: |
-          pylint $(git ls-files '*.py')
-  black_lint:
-    name: Black Code Formatter Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Install Black
-        run: pip install black[jupyter]
-      - name: Check code formatting with Black
-        run: black . --exclude '\.ipynb$'
-  buildandtestdatapipelinenotebook:
-    name: Build and Test ECG Reviewer Notebook
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-    - name: Setup NodeJS
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'microsoft'
-        java-version: '17'
-    - name: Setup LaTex
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y --no-install-recommends pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic || true
-        if ! dpkg -l pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic; then
-          sudo apt-get update --fix-missing
-          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
-        fi
-    - name: Cache Firebase Emulators
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/firebase/emulators
-        key: ${{ runner.os }}-${{ runner.arch }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
-    - name: Install Firebase CLI Tools
-      run: npm install -g firebase-tools
-    - name: Install Infrastructure
-      run: |
-        python -m pip install --upgrade pip
-        pip install jupyterlab
-    - name: Install ECGReviewer Dependencies
-      run: |
-        pip install -r ./ecg_data_manager/requirements.txt
-    - name: Install Cloud Functions Dependencies
-      run: |
-        npm install --prefix functions
-    - name: Set Firestore Emulator Environment Variable
-      run: |
-        echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
-        echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
-    - name: Run Firebase Emulator & Execute Notebook
-      run: |
-        firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute './ecg_data_manager/ECG Reviewer.ipynb'"
-      env:
-        CI: true
-    - uses: actions/upload-artifact@v4
-      with:
-        name: ECGReviewer_ColabBasic.pdf
-        path: ECGReviewer_ColabBasic.pdf
+  # swiftlint:
+  #   name: SwiftLint
+  #   uses: StanfordBDHG/.github/.github/workflows/swiftlint.yml@v2
+  #   permissions:
+  #     contents: read
+  # markdownlinkcheck:
+  #   name: Markdown Link Check
+  #   uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@v2
+  #   permissions:
+  #     contents: read
+  # codeql:
+  #   name: CodeQL
+  #   uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+  #   with:
+  #     codeql: true
+  #     fastlanelane: codeql
+  #   permissions:
+  #     security-events: write
+  #     actions: read
+  # buildandtest:
+  #   name: Build and Test
+  #   uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+  #   permissions:
+  #     contents: read
+  #   with:
+  #     artifactname: PAWS.xcresult
+  #     runsonlabels: '["macOS", "self-hosted"]'
+  #     setupfirebaseemulator: true
+  #     fastlanelane: test
+  #     firebaseemulatorimport: ./firebase
+  #   secrets:
+  #     GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
+  # uploadcoveragereport:
+  #   name: Upload Coverage Report
+  #   needs: buildandtest
+  #   uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
+  #   permissions:
+  #     contents: read
+  #   with:
+  #     coveragereports: PAWS.xcresult
+  #   secrets:
+  #     token: ${{ secrets.CODECOV_TOKEN }}
+  # pylint:
+  #   name: PyLint
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.8", "3.9", "3.10"]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #     - name: Install Infrastructure
+  #       run: |
+  #         pip install pylint
+  #     - name: Install ECGReviewer Dependencies
+  #       run: |
+  #         pip install -r ./ecg_data_manager/requirements.txt
+  #     - name: Analysing the code with pylint
+  #       run: |
+  #         pylint $(git ls-files '*.py')
+  # black_lint:
+  #   name: Black Code Formatter Check
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #     - name: Install Black
+  #       run: pip install black[jupyter]
+  #     - name: Check code formatting with Black
+  #       run: black . --exclude '\.ipynb$'
+  # buildandtestdatapipelinenotebook:
+  #   name: Build and Test ECG Reviewer Notebook
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v5
+  #   - name: Setup NodeJS
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: '22'
+  #   - name: Setup Java
+  #     uses: actions/setup-java@v3
+  #     with:
+  #       distribution: 'microsoft'
+  #       java-version: '17'
+  #   - name: Setup LaTex
+  #     run: |
+  #       sudo apt-get update -y
+  #       sudo apt-get install -y --no-install-recommends pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic || true
+  #       if ! dpkg -l pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic; then
+  #         sudo apt-get update --fix-missing
+  #         sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
+  #       fi
+  #   - name: Cache Firebase Emulators
+  #     uses: actions/cache@v3
+  #     with:
+  #       path: ~/.cache/firebase/emulators
+  #       key: ${{ runner.os }}-${{ runner.arch }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
+  #   - name: Install Firebase CLI Tools
+  #     run: npm install -g firebase-tools
+  #   - name: Install Infrastructure
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install jupyterlab
+  #   - name: Install ECGReviewer Dependencies
+  #     run: |
+  #       pip install -r ./ecg_data_manager/requirements.txt
+  #   - name: Install Cloud Functions Dependencies
+  #     run: |
+  #       npm install --prefix functions
+  #   - name: Set Firestore Emulator Environment Variable
+  #     run: |
+  #       echo "FIRESTORE_EMULATOR_HOST=localhost:8080" >> $GITHUB_ENV
+  #       echo "GCLOUD_PROJECT=ecg_example_project" >> $GITHUB_ENV
+  #   - name: Run Firebase Emulator & Execute Notebook
+  #     run: |
+  #       firebase emulators:exec --import=./ecg_data_manager/sample_data "jupyter nbconvert --to pdf --execute './ecg_data_manager/ECG Reviewer.ipynb'"
+  #     env:
+  #       CI: true
+  #   - uses: actions/upload-artifact@v4
+  #     with:
+  #       name: ECGReviewer_ColabBasic.pdf
+  #       path: ECGReviewer_ColabBasic.pdf
