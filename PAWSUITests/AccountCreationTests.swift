@@ -27,9 +27,9 @@ final class AccountCreationTests: XCTestCase {
     
     func testOnboardingFlow() throws {
         let app = XCUIApplication()
-        let email = "johndoe@stanford.edu"
+        let email = "johndoe\(Int.random(in: 0...42000))@stanford.edu"
         
-        try app.navigateOnboardingFlow(email: email, code: "gdxRWF6G")
+        try app.navigateOnboardingFlow(email: email, code: "QDXRWF6G")
 
         app.assertOnboardingComplete()
         app.assertStudyGroupAdult()
@@ -39,8 +39,8 @@ final class AccountCreationTests: XCTestCase {
 
 extension XCUIApplication {
     func navigateOnboardingFlow(
-        email: String = "johndoe@stanford.edu",
-        code: String = "gdxRWF6G",
+        email: String = "johndoe\(Int.random(in: 0...42000))@stanford.edu",
+        code: String = "QDXRWF6G",
         repeated skippedIfRepeated: Bool = false
     ) throws {
         try navigateOnboardingFlowWelcome()
@@ -78,11 +78,32 @@ extension XCUIApplication {
     }
     
     private func navigateOnboardingInvitationCode(code: String) throws {
-        XCTAssertTrue(staticTexts["Invitation Code"].waitForExistence(timeout: 5))
         PAWSUITests.snapshot("1InvitationCode")
-        try textFields["Invitation Code"].enter(value: code)
+        let alternativeInvitationCodes = ["ALAAVMVB", "QKGCPEQQ"]
+        try enterInvitationCode(withRemainingOptions: [code] + alternativeInvitationCodes)
+    }
+    
+    private func enterInvitationCode(withRemainingOptions: [String]) throws {
+        var withRemainingOptions = withRemainingOptions
+        let invitationCode = withRemainingOptions.removeFirst()
+        
+        XCTAssertTrue(staticTexts["Invitation Code"].waitForExistence(timeout: 5))
+        try textFields["Invitation Code"].enter(value: invitationCode)
         XCTAssertTrue(buttons["Redeem Invitation Code"].waitForExistence(timeout: 2))
         buttons["Redeem Invitation Code"].tap()
+        
+        let alert = alerts["Error"]
+        if alert.waitForExistence(timeout: 3.0) {
+            print("Warning: Initial invitation code is invalid, please esure to reset your simulator.")
+            alert.buttons["OK"].tap()
+            try textFields["Invitation Code"].delete(count: 8, dismissKeyboard: false)
+            
+            if !withRemainingOptions.isEmpty {
+                try enterInvitationCode(withRemainingOptions: withRemainingOptions)
+            } else {
+                XCTFail("Failed to redeem invitation code.")
+            }
+        }
         
         sleep(3)
     }
@@ -110,6 +131,8 @@ extension XCUIApplication {
         let dateWheel = datePicker.pickerWheels.element(boundBy: 1)
         XCTAssertTrue(dateWheel.waitForExistence(timeout: 2))
         dateWheel.adjust(toPickerWheelValue: "1970")
+        
+        staticTexts["Create a new Account"].tap()
         
         XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
         collectionViews.buttons["Signup"].tap()

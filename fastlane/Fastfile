@@ -32,6 +32,27 @@ platform :ios do
     )
   end
 
+  desc "Screenshots"
+  lane :screenshots do
+    snapshot(
+      derived_data_path: ".derivedData",
+      devices: [
+        "iPhone 15 Pro",
+        "iPhone SE (3rd generation)"
+      ],
+      languages: [
+         "en-US",
+      ],
+      scheme: "PAWS",
+      output_directory: "./fastlane/.screenshots",
+      clear_previous_screenshots: true,
+      erase_simulator: true,
+      override_status_bar: true,
+      concurrent_simulators: false,
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+    )
+  end
+
   desc "CodeQL"
   lane :codeql do
     build_app(
@@ -65,8 +86,8 @@ platform :ios do
     )
   end
 
-  desc "Publish a beta release to internal TestFlight testers"
-  lane :beta do
+  desc "Publish a release to TestFlight or the App Store depending on the environment"
+  lane :deploy do
     signin
     increment_build_number(
       {
@@ -79,13 +100,14 @@ platform :ios do
     environment = options[:environment] || "staging"
     
     if environment == "production"
+      screenshots
       deliver(
         submit_for_review: true,
         force: true,
         overwrite_screenshots: true,
         automatic_release: true,
-        metadata_path: "./metadata",
-        screenshots_path: "./screenshots"
+        metadata_path: "./fastlane/metadata",
+        screenshots_path: "./fastlane/screenshots"
       )
     else
       upload_to_testflight(

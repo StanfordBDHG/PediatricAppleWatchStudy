@@ -34,7 +34,7 @@ on:
         default: staging
 
 concurrency:
-  group: main
+  group: betadeployment
   cancel-in-progress: false
 
 jobs:
@@ -65,19 +65,20 @@ jobs:
       actions: read
       security-events: write
     secrets: inherit
-  # iosapptestflightdeployment:
-  #   name: iOS App TestFlight Deployment
-  #   needs: [determineenvironment, buildandtest]
-  #   uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-  #   permissions:
-  #     contents: read
-  #   with:
-  #     runsonlabels: '["macOS", "self-hosted"]'
-  #     environment: ${{ needs.determineenvironment.outputs.environment }}
-  #     googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
-  #     setupsigning: true
-  #     fastlanelane: beta
-  #   secrets: inherit
+  iosapptestflightdeployment:
+    name: iOS App TestFlight Deployment
+    needs: [determineenvironment, buildandtest]
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    permissions:
+      contents: read
+    with:
+      runsonlabels: '["macOS", "self-hosted"]'
+      environment: ${{ needs.determineenvironment.outputs.environment }}
+      googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
+      setupsigning: true
+      firebaseemulatorimport: ./firebase
+      fastlanelane: fastlane deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
+    secrets: inherit
   vars:
     name: Inject Environment Variables In Deployment Workflow
     needs: determineenvironment
@@ -90,7 +91,7 @@ jobs:
           echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
   deployfirebase:
     name: Deploy Firebase Project
-    needs: [determineenvironment, vars] # iosapptestflightdeployment
+    needs: [determineenvironment, vars, iosapptestflightdeployment]
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
     permissions:
       contents: read
