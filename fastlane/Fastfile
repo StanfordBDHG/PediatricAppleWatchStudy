@@ -35,7 +35,14 @@ platform :ios do
 
   desc "Screenshots"
   lane :screenshots do
-    build
+    build_app(
+      skip_archive: true,
+      skip_codesigning: true,
+      derived_data_path: ".derivedData",
+      configuration: "Debug",
+      sdk: "iphonesimulator",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+    )
     snapshot(
       test_without_building: true,
       derived_data_path: ".derivedData",
