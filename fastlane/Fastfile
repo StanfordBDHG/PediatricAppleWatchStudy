@@ -34,7 +34,9 @@ platform :ios do
 
   desc "Screenshots"
   lane :screenshots do
+    build
     snapshot(
+      test_without_building: true,
       derived_data_path: ".derivedData",
       devices: [
         "iPhone 15 Pro",
@@ -49,7 +51,7 @@ platform :ios do
       erase_simulator: true,
       override_status_bar: true,
       concurrent_simulators: false,
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+      stop_after_first_error: true
     )
   end
 
@@ -67,7 +69,7 @@ platform :ios do
   lane :build do
     build_app(
       derived_data_path: ".derivedData",
-      xcargs: "-skipPackagePluginValidation",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation",
       export_options: {
         provisioningProfiles: {
           "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS"

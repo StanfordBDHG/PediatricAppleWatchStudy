@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: MIT
 #
 
-name: Beta Deployment
+name: Deployment
 
 on:
   push:
@@ -34,7 +34,7 @@ on:
         default: staging
 
 concurrency:
-  group: betadeployment
+  group: deployment
   cancel-in-progress: false
 
 jobs:
