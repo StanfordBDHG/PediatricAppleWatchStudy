@@ -102,7 +102,7 @@ exports.beforecreated = beforeUserCreated(
           throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
         }
 
-        logger.info(`User Creation Permitted`);
+        logger.info("User Creation Permitted");
       } catch (error) {
         logger.error(`Error processing request: ${error.message}`);
         if (!error.code) {
