@@ -31,14 +31,6 @@ Build and test
 
 Screenshots
 
-### ios codeql
-
-```sh
-[bundle exec] fastlane ios codeql
-```
-
-CodeQL
-
 ### ios build
 
 ```sh
@@ -46,6 +38,14 @@ CodeQL
 ```
 
 Build app
+
+### ios archive
+
+```sh
+[bundle exec] fastlane ios archive
+```
+
+Archive app
 
 ### ios signin
 
