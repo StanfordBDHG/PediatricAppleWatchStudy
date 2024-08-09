@@ -76,10 +76,9 @@ jobs:
       environment: ${{ needs.determineenvironment.outputs.environment }}
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
-      firebaseemulatorimport: ./firebase
       setupfirebaseemulator: true
-      fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
       firebaseemulatorimport: ./firebase
+      fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
     secrets: inherit
   vars:
     name: Inject Environment Variables In Deployment Workflow
