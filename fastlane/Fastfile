@@ -12,7 +12,6 @@ platform :ios do
   before_all do
     ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "5"
     ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "6"
-    ENV["SNAPSHOT_SIMULATOR_WAIT_FOR_BOOT_TIMEOUT"] = "30"
   end
 
   desc "Build and test"
@@ -53,10 +52,8 @@ platform :ios do
          "en-US",
       ],
       scheme: "PAWS",
-      output_directory: "./fastlane/.screenshots",
+      output_directory: "./fastlane/screenshots",
       clear_previous_screenshots: true,
-      erase_simulator: true,
-      override_status_bar: true,
       concurrent_simulators: false,
       stop_after_first_error: true,
       skip_open_summary: true
@@ -119,6 +116,7 @@ platform :ios do
         force: true,
         overwrite_screenshots: true,
         automatic_release: true,
+        precheck_include_in_app_purchases: false,
         metadata_path: "./fastlane/metadata",
         screenshots_path: "./fastlane/screenshots"
       )
