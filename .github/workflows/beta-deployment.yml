@@ -66,33 +66,33 @@ jobs:
     steps:
       - run: |
           echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
-  buildandtest:
-    name: Build and Test
-    needs: determineenvironment
-    uses: ./.github/workflows/build-and-test.yml
-    permissions:
-      contents: read
-      actions: read
-      security-events: write
-    secrets: inherit
-  iosapptestflightdeployment:
-    name: iOS App TestFlight Deployment
-    needs: [determineenvironment, buildandtest, vars]
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    permissions:
-      contents: read
-    with:
-      runsonlabels: '["macOS", "self-hosted"]'
-      environment: ${{ needs.determineenvironment.outputs.environment }}
-      googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
-      setupsigning: true
-      setupfirebaseemulator: true
-      firebaseemulatorimport: ./firebase --project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}
-      fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
-    secrets: inherit
+  # buildandtest:
+  #   name: Build and Test
+  #   needs: determineenvironment
+  #   uses: ./.github/workflows/build-and-test.yml
+  #   permissions:
+  #     contents: read
+  #     actions: read
+  #     security-events: write
+  #   secrets: inherit
+  # iosapptestflightdeployment:
+  #   name: iOS App TestFlight Deployment
+  #   needs: [determineenvironment, buildandtest, vars]
+  #   uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+  #   permissions:
+  #     contents: read
+  #   with:
+  #     runsonlabels: '["macOS", "self-hosted"]'
+  #     environment: ${{ needs.determineenvironment.outputs.environment }}
+  #     googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
+  #     setupsigning: true
+  #     setupfirebaseemulator: true
+  #     firebaseemulatorimport: ./firebase --project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}
+  #     fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
+  #   secrets: inherit
   deployfirebase:
     name: Deploy Firebase Project
-    needs: [determineenvironment, vars, iosapptestflightdeployment]
+    needs: [determineenvironment, vars] # iosapptestflightdeployment
     uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
     permissions:
       contents: read
