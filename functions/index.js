@@ -61,7 +61,7 @@ exports.checkInvitationCode = https
               });
             });
 
-            logger.debug(`User (${userId}) successfully enrolled in study (PAWS) with invitation code: ${invitationCode}`);
+            logger.debug(`User (${userId}) successfully enrolled in the PAWS study with invitation code: ${invitationCode}`);
 
             return {};
           } catch (error) {
@@ -101,6 +101,8 @@ exports.beforecreated = beforeUserCreated(
         if (!userDoc.exists || userDoc.data().invitationCode !== invitationQuerySnapshot.docs[0].id) {
           throw new https.HttpsError("failed-precondition", "User document does not exist or contains incorrect invitation code.");
         }
+
+        logger.info(`User Creation Permitted`);
       } catch (error) {
         logger.error(`Error processing request: ${error.message}`);
         if (!error.code) {
