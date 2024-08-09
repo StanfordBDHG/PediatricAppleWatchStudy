@@ -41,6 +41,7 @@ platform :ios do
       xcargs: "-skipPackagePluginValidation -skipMacroValidation",
       build_for_testing: true
     )
+
     snapshot(
       test_without_building: true,
       derived_data_path: ".derivedData",
@@ -58,6 +59,11 @@ platform :ios do
       stop_after_first_error: true,
       skip_open_summary: true
     )
+    
+    # Workaround for https://github.com/fastlane/fastlane/issues/21759
+    Dir.glob("./screenshots/**/iPhone 15 Pro-*.png").each do |file|
+      sh("sips --resampleHeightWidth 2556 1179 '#{file}'")
+    end
   end
 
   desc "Build app"
