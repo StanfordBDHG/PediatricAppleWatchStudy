@@ -27,7 +27,7 @@ final class AccountCreationTests: XCTestCase {
     
     func testOnboardingFlow() throws {
         let app = XCUIApplication()
-        let email = "johndoe\(Int.random(in: 0...42000))@stanford.edu"
+        let email = "lelandstanford\(Int.random(in: 0...42000))@stanford.edu"
         
         try app.navigateOnboardingFlow(email: email, code: "QDXRWF6G")
 
@@ -39,7 +39,7 @@ final class AccountCreationTests: XCTestCase {
 
 extension XCUIApplication {
     func navigateOnboardingFlow(
-        email: String = "johndoe\(Int.random(in: 0...42000))@stanford.edu",
+        email: String = "lelandstanford\(Int.random(in: 0...42000))@stanford.edu",
         code: String = "QDXRWF6G",
         repeated skippedIfRepeated: Bool = false
     ) throws {
@@ -120,8 +120,8 @@ extension XCUIApplication {
         
         try collectionViews.textFields["E-Mail Address"].enter(value: email)
         try collectionViews.secureTextFields["Password"].enter(value: "HelloWorld")
-        try textFields["enter first name"].enter(value: "John")
-        try textFields["enter last name"].enter(value: "Doe")
+        try textFields["enter first name"].enter(value: "Leland")
+        try textFields["enter last name"].enter(value: "Stanford")
         let datePicker = datePickers.firstMatch
         XCTAssertTrue(datePicker.waitForExistence(timeout: 2))
         datePicker.tap()
@@ -132,7 +132,8 @@ extension XCUIApplication {
         XCTAssertTrue(dateWheel.waitForExistence(timeout: 2))
         dateWheel.adjust(toPickerWheelValue: "1970")
         
-        staticTexts["Create a new Account"].tap()
+        datePicker.tap()
+        swipeUp()
         
         XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
         collectionViews.buttons["Signup"].tap()
@@ -144,10 +145,10 @@ extension XCUIApplication {
         XCTAssertTrue(staticTexts["Consent"].waitForExistence(timeout: 5))
         
         XCTAssertTrue(staticTexts["First Name"].waitForExistence(timeout: 2))
-        try textFields["Enter your first name ..."].enter(value: "John")
+        try textFields["Enter your first name ..."].enter(value: "Leland")
         
         XCTAssertTrue(staticTexts["Last Name"].waitForExistence(timeout: 2))
-        try textFields["Enter your last name ..."].enter(value: "Doe")
+        try textFields["Enter your last name ..."].enter(value: "Stanford")
 
         XCTAssertTrue(scrollViews["Signature Field"].waitForExistence(timeout: 2))
         scrollViews["Signature Field"].swipeRight()
@@ -199,7 +200,7 @@ extension XCUIApplication {
         navigationBars.buttons["Your PAWS Account"].tap()
 
         XCTAssertTrue(staticTexts["Account Overview"].waitForExistence(timeout: 5.0))
-        XCTAssertTrue(staticTexts["John Doe"].exists)
+        XCTAssertTrue(staticTexts["Leland Stanford"].exists)
         XCTAssertTrue(staticTexts[email].exists)
         XCTAssertTrue(staticTexts["Gender Identity, Choose not to answer"].exists)
         PAWSUITests.snapshot("3AccountInformation")

@@ -418,8 +418,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F8256602C635AA300F65970 /* PBXTargetDependency */,
-				2F8256622C635AA300F65970 /* PBXTargetDependency */,
+				2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */,
+				2FDF443D2C65DB4A0075AFC1 /* PBXTargetDependency */,
 			);
 			name = PAWS;
 			packageProductDependencies = (
@@ -498,7 +498,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1520;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					653A254C283387FE005D4D48 = {
 						CreatedOnToolsVersion = 13.4;
@@ -651,13 +651,13 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2F8256602C635AA300F65970 /* PBXTargetDependency */ = {
+		2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 2F82565F2C635AA300F65970 /* SwiftPackageListJSONPlugin */;
+			productRef = 2FDF443A2C65DB4A0075AFC1 /* SwiftPackageListJSONPlugin */;
 		};
-		2F8256622C635AA300F65970 /* PBXTargetDependency */ = {
+		2FDF443D2C65DB4A0075AFC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 2F8256612C635AA300F65970 /* SwiftLintPlugin */;
+			productRef = 2FDF443C2C65DB4A0075AFC1 /* SwiftLintPlugin */;
 		};
 		653A255F28338800005D4D48 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -890,7 +890,6 @@
 		653A257528338800005D4D48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -910,7 +909,6 @@
 		653A257628338800005D4D48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -930,7 +928,6 @@
 		653A257828338800005D4D48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 637867499T;
@@ -949,7 +946,6 @@
 		653A257928338800005D4D48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 637867499T;
@@ -1140,16 +1136,6 @@
 			package = 2F49B7742980407B00BCB272 /* XCRemoteSwiftPackageReference "Spezi" */;
 			productName = Spezi;
 		};
-		2F82565F2C635AA300F65970 /* SwiftPackageListJSONPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */;
-			productName = "plugin:SwiftPackageListJSONPlugin";
-		};
-		2F8256612C635AA300F65970 /* SwiftLintPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
-			productName = "plugin:SwiftLintPlugin";
-		};
 		2FB099AE2A875DF100B20952 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2FE5DC9029EDD9C3004B9AB4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -1173,6 +1159,16 @@
 		2FBD738B2A3BD150004228E7 /* SpeziScheduler */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SpeziScheduler;
+		};
+		2FDF443A2C65DB4A0075AFC1 /* SwiftPackageListJSONPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */;
+			productName = "plugin:SwiftPackageListJSONPlugin";
+		};
+		2FDF443C2C65DB4A0075AFC1 /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
 		};
 		2FE5DC6329EDD883004B9AB4 /* SpeziAccount */ = {
 			isa = XCSwiftPackageProductDependency;
