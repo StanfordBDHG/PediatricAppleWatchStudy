@@ -1,0 +1,4 @@
+This is an app for the participants in the Pediatric Apple Watch Study.
+The Pediatric Apple Watch Study is designed to understand how the Apple Watch can be used to detect and follow heart conditions in children.
+
+Please only download if you were directed to do so by your healthcare provider. 

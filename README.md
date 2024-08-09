@@ -55,9 +55,6 @@ PAWS uses [Fastlane Snapshots](https://docs.fastlane.tools/getting-started/ios/s
 To generate new screenshots, you will likewise need to set the proper environment variables for your shell session.
 
 ```bash
-export FIRESTORE_EMULATOR_HOST="localhost:8080"
-export GCLOUD_PROJECT=<project_id>
-
 firebase emulators:start --import=./firebase
 ```
 

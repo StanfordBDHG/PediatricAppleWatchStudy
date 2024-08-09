@@ -34,21 +34,19 @@ struct InvitationCodeView: View {
                     .padding(.top, -8)
                     .padding(.bottom, -12)
                 Divider()
-                OnboardingActionsView(
-                    primaryText: "Redeem Invitation Code",
-                    primaryAction: {
-                        guard validation.validateSubviews() else {
-                            return
-                        }
-                    
-                        await verifyOnboardingCode()
-                    },
-                    secondaryText: "I Already Have an Account",
-                    secondaryAction: {
-                        try Auth.auth().signOut()
-                        onboardingNavigationPath.nextStep()
+                OnboardingActionsView("Redeem Invitation Code") {
+                    guard validation.validateSubviews() else {
+                        return
                     }
-                )
+                
+                    await verifyOnboardingCode()
+                }
+                    .disabled(invitationCode.isEmpty)
+                Button("I Already Have an Account") {
+                    try? Auth.auth().signOut()
+                    onboardingNavigationPath.nextStep()
+                }
+                    .padding(.top, -12)
             }
                 .padding(.horizontal)
                 .padding(.bottom)
@@ -90,7 +88,7 @@ struct InvitationCodeView: View {
     private var invitationCodeValidationRule: ValidationRule {
         ValidationRule(
             rule: { invitationCode in
-                invitationCode.count >= 8
+                invitationCode.isEmpty || invitationCode.count >= 8
             },
             message: "An invitation code is at least 8 characters long."
         )
