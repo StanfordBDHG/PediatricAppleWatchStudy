@@ -38,34 +38,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  determineenvironment:
-    name: Determine Environment
-    runs-on: ubuntu-latest
-    outputs:
-      environment: ${{ steps.set-env.outputs.environment }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Determine Environment
-        id: set-env
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "workflow_call" ]]; then
-            echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
-          else
-            echo "environment=staging" >> $GITHUB_OUTPUT
-          fi
-  vars:
-    name: Inject Environment Variables In Deployment Workflow
-    needs: determineenvironment
-    runs-on: ubuntu-latest
-    environment: ${{ needs.determineenvironment.outputs.environment }}
-    outputs:
-      FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
-    steps:
-      - run: |
-          echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
+  # determineenvironment:
+  #   name: Determine Environment
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     environment: ${{ steps.set-env.outputs.environment }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: Determine Environment
+  #       id: set-env
+  #       run: |
+  #         if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+  #           echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+  #         elif [[ "${{ github.event_name }}" == "workflow_call" ]]; then
+  #           echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+  #         else
+  #           echo "environment=staging" >> $GITHUB_OUTPUT
+  #         fi
+  # vars:
+  #   name: Inject Environment Variables In Deployment Workflow
+  #   needs: determineenvironment
+  #   runs-on: ubuntu-latest
+  #   environment: ${{ needs.determineenvironment.outputs.environment }}
+  #   outputs:
+  #     FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+  #   steps:
+  #     - run: |
+  #         echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
   # buildandtest:
   #   name: Build and Test
   #   needs: determineenvironment
@@ -77,7 +77,7 @@ jobs:
   #   secrets: inherit
   iosapptestflightdeployment:
     name: iOS App TestFlight Deployment
-    needs: [determineenvironment, vars] # buildandtest
+    # needs: [determineenvironment, vars] # buildandtest
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     permissions:
       contents: read
