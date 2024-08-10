@@ -111,7 +111,7 @@ platform :ios do
     signin
 
     if environment == "production"
-      unless app_in_review?
+      unless app_in_review
         screenshots
       end
     end
@@ -147,12 +147,33 @@ platform :ios do
     end
   end
 
+  lane :test_app_in_review do
+    UI.message("Calling app_in_review lane directly")
+    if app_in_review
+      UI.message("True")
+    else
+      UI.message("False")
+    end
+  end
 
-  private_lane :app_in_review? do
+  private_lane :app_in_review do
+    UI.message("Starting app_in_review? lane")
+  
     app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+    UI.message("App Identifier: #{app_identifier}")
+  
     app = Spaceship::ConnectAPI::App.find(app_identifier)
+    UI.message("Found app: #{app.name}")
+  
     version = app.get_live_app_store_version || app.get_edit_app_store_version
+    UI.message("App version: #{version.version_string}")
+  
     review_status = version.app_store_state
-    review_status == 'WAITING_FOR_REVIEW' || review_status == 'IN_REVIEW'
+    UI.message("App review status: #{review_status}")
+  
+    in_review = review_status == 'WAITING_FOR_REVIEW' || review_status == 'IN_REVIEW'
+    UI.message("Is the app in review? #{in_review}")
+  
+    in_review
   end
 end

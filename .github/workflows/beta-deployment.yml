@@ -86,9 +86,10 @@ jobs:
       environment: ${{ needs.determineenvironment.outputs.environment }}
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
-      setupfirebaseemulator: true
-      firebaseemulatorimport: ./firebase --project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}
-      fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
+      # setupfirebaseemulator: true
+      # firebaseemulatorimport: ./firebase --project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}
+      # fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
+      fastlanelane: test_app_in_review
     secrets: inherit
   deployfirebase:
     name: Deploy Firebase Project
