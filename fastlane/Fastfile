@@ -108,13 +108,14 @@ platform :ios do
   lane :deploy do |options|
     environment = options[:environment] || "staging"
 
+    signin
+
     if environment == "production"
       unless app_in_review?
         screenshots
       end
     end
     
-    signin
     increment_build_number(
       {
         build_number: latest_testflight_build_number + 1
