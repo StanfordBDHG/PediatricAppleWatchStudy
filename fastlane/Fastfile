@@ -109,9 +109,11 @@ platform :ios do
     environment = options[:environment] || "staging"
 
     if environment == "production"
-      screenshots
+      unless app_in_review?
+        screenshots
+      end
     end
-
+    
     signin
     increment_build_number(
       {
@@ -125,7 +127,7 @@ platform :ios do
       deliver(
         submit_for_review: true,
         force: true,
-        overwrite_screenshots: true,
+        overwrite_screenshots: !app_in_review?,
         automatic_release: true,
         precheck_include_in_app_purchases: false,
         metadata_path: "./fastlane/metadata",
@@ -142,5 +144,15 @@ platform :ios do
         changelog: commit[:message]
       )
     end
+  end
+
+
+  private_lane :app_in_review? do
+    app = Spaceship::Tunes::Application.find(ENV['APP_IDENTIFIER'])
+    version = app.edit_version || app.live_version
+    review_status = version.app_status
+    
+    # Check if the app's status indicates it's in review
+    return review_status == "waiting_for_review" || review_status == "in_review"
   end
 end
