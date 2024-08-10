@@ -108,17 +108,11 @@ platform :ios do
   lane :deploy do |options|
     environment = options[:environment] || "staging"
 
-    signin
-
     if environment == "production"
-      is_in_review = app_in_review
-      UI.message("Is the app in review? #{is_in_review}")
-
-      unless is_in_review
-        screenshots
-      end
+      screenshots
     end
-
+    
+    signin
     increment_build_number(
       {
         build_number: latest_testflight_build_number + 1
@@ -131,8 +125,8 @@ platform :ios do
       deliver(
         submit_for_review: true,
         force: true,
-        reject_if_possible: is_in_review,
-        overwrite_screenshots: !is_in_review,
+        reject_if_possible: true,
+        overwrite_screenshots: true,
         automatic_release: true,
         precheck_include_in_app_purchases: false,
         metadata_path: "./fastlane/metadata",
@@ -149,22 +143,5 @@ platform :ios do
         changelog: commit[:message]
       )
     end
-  end
-
-  private_lane :app_in_review do
-    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)  
-    app = Spaceship::ConnectAPI::App.find(app_identifier)
-    UI.message("Found app: #{app.name}")
-  
-    version = app.get_live_app_store_version || app.get_edit_app_store_version
-    UI.message("App version: #{version.version_string}")
-  
-    review_status = version.app_store_state
-    UI.message("App review status: #{review_status}")
-  
-    in_review = review_status == 'WAITING_FOR_REVIEW' || review_status == 'IN_REVIEW'
-    UI.message("Is the app in review? #{in_review}")
-  
-    in_review
   end
 end
