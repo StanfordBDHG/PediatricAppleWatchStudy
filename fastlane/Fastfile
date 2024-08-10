@@ -153,6 +153,6 @@ platform :ios do
     app = Spaceship::ConnectAPI::App.find(app_identifier)
     version = app.get_live_app_store_version || app.get_edit_app_store_version
     review_status = version.app_store_state
-    return review_status == 'WAITING_FOR_REVIEW' || review_status == 'IN_REVIEW'
+    review_status == 'WAITING_FOR_REVIEW' || review_status == 'IN_REVIEW'
   end
 end
