@@ -147,28 +147,8 @@ platform :ios do
     end
   end
 
-  lane :test_app_in_review do
-    app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_BASE64"],
-      is_key_content_base64: true
-    )
-    
-    UI.message("Calling app_in_review lane directly")
-    if app_in_review
-      UI.message("True")
-    else
-      UI.message("False")
-    end
-  end
-
   private_lane :app_in_review do
-    UI.message("Starting app_in_review? lane")
-  
-    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
-    UI.message("App Identifier: #{app_identifier}")
-  
+    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)  
     app = Spaceship::ConnectAPI::App.find(app_identifier)
     UI.message("Found app: #{app.name}")
   
