@@ -115,7 +115,7 @@ platform :ios do
         screenshots
       end
     end
-    
+
     increment_build_number(
       {
         build_number: latest_testflight_build_number + 1
@@ -149,11 +149,16 @@ platform :ios do
 
 
   private_lane :app_in_review? do
-    app = Spaceship::Tunes::Application.find(ENV['APP_IDENTIFIER'])
-    version = app.edit_version || app.live_version
-    review_status = version.app_status
-    
-    # Check if the app's status indicates it's in review
-    return review_status == "waiting_for_review" || review_status == "in_review"
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.create(
+      key_id: ENV['APP_STORE_CONNECT_KEY_ID'],
+      issuer_id: ENV['APP_STORE_CONNECT_ISSUER_ID'],
+      filepath: ENV['APP_STORE_CONNECT_API_KEY_PATH']
+    )
+
+    app = Spaceship::ConnectAPI::App.find(app_identifier)
+    version = app.get_live_app_store_version || app.get_edit_app_store_version
+
+    review_status = version.app_store_state
+    return review_status == 'WAITING_FOR_REVIEW' || review_status == 'IN_REVIEW'
   end
 end
