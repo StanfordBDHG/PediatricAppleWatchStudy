@@ -149,6 +149,7 @@ platform :ios do
 
 
   private_lane :app_in_review? do
+    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
     app = Spaceship::ConnectAPI::App.find(app_identifier)
     version = app.get_live_app_store_version || app.get_edit_app_store_version
     review_status = version.app_store_state
