@@ -113,11 +113,11 @@ struct InvitationCodeView: View {
                 try await Auth.auth().signInAnonymously()
                 let checkInvitationCode = Functions.functions().httpsCallable("checkInvitationCode")
                 
-                let result = try await checkInvitationCode.call(["invitationCode": invitationCode])
+                _ = try await checkInvitationCode.call(["invitationCode": invitationCode])
                 Logger().info("Inviation Code Verification Successful")
             }
             
-            await onboardingNavigationPath.nextStep()
+            onboardingNavigationPath.nextStep()
         } catch let error as NSError {
             if let errorCode = FunctionsErrorCode(rawValue: error.code) {
                 // Handle Firebase-specific errors.
