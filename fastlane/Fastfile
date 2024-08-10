@@ -32,8 +32,47 @@ platform :ios do
     )
   end
 
-  desc "CodeQL"
-  lane :codeql do
+  desc "Screenshots"
+  lane :screenshots do
+    run_tests(
+      destination: "generic/platform=iOS Simulator",
+      configuration: "Debug",
+      derived_data_path: ".derivedData",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation",
+      build_for_testing: true
+    )
+
+    snapshot(
+      test_without_building: true,
+      derived_data_path: ".derivedData",
+      devices: [
+        "iPhone 15 Pro",
+        "iPhone SE (3rd generation)"
+      ],
+      languages: [
+         "en-US",
+      ],
+      scheme: "PAWS",
+      output_directory: "./fastlane/screenshots",
+      clear_previous_screenshots: true,
+      concurrent_simulators: false,
+      stop_after_first_error: true,
+      skip_open_summary: true
+    )
+    
+    # Workaround for https://github.com/fastlane/fastlane/issues/21759 and 
+    Dir.glob("./screenshots/**/iPhone 15 Pro-*.png").each do |file|
+      sh("sips --resampleHeightWidth 2778 1284 '#{file}'")
+    end
+
+    # Scale to 1242 x 2208 as there are no iOS 18 Simulators supporting this screen size.
+    Dir.glob("./screenshots/**/iPhone SE (3rd generation)-*.png").each do |file|
+      sh("sips --resampleHeightWidth 2208 1242 '#{file}'")
+    end
+  end
+
+  desc "Build app"
+  lane :build do
     build_app(
       skip_archive: true,
       skip_codesigning: true,
@@ -42,11 +81,11 @@ platform :ios do
     )
   end
 
-  desc "Build app"
-  lane :build do
+  desc "Archive app"
+  lane :archive do
     build_app(
       derived_data_path: ".derivedData",
-      xcargs: "-skipPackagePluginValidation",
+      xcargs: "-skipPackagePluginValidation -skipMacroValidation",
       export_options: {
         provisioningProfiles: {
           "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS"
@@ -65,24 +104,44 @@ platform :ios do
     )
   end
 
-  desc "Publish a beta release to internal TestFlight testers"
-  lane :beta do
+  desc "Publish a release to TestFlight or the App Store depending on the environment"
+  lane :deploy do |options|
+    environment = options[:environment] || "staging"
+
+    if environment == "production"
+      screenshots
+    end
+    
     signin
     increment_build_number(
       {
         build_number: latest_testflight_build_number + 1
       }
     )
-    build
+    archive
     commit = last_git_commit
-    upload_to_testflight(
-      distribute_external: true,
-      groups: [
-        "External Testers"
-      ],
-      submit_beta_review: true,
-      notify_external_testers: true,
-      changelog: commit[:message]
-    )
+    
+    if environment == "production"
+      deliver(
+        submit_for_review: true,
+        force: true,
+        reject_if_possible: true,
+        overwrite_screenshots: true,
+        automatic_release: true,
+        precheck_include_in_app_purchases: false,
+        metadata_path: "./fastlane/metadata",
+        screenshots_path: "./fastlane/screenshots"
+      )
+    else
+      upload_to_testflight(
+        distribute_external: true,
+        groups: [
+          "External Testers"
+        ],
+        submit_beta_review: true,
+        notify_external_testers: true,
+        changelog: commit[:message]
+      )
+    end
   end
 end

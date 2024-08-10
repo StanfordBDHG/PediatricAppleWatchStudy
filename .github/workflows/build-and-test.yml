@@ -38,7 +38,7 @@ jobs:
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
       codeql: true
-      fastlanelane: codeql
+      fastlanelane: build
     permissions:
       security-events: write
       actions: read
@@ -147,4 +147,3 @@ jobs:
       with:
         name: ECGReviewer_ColabBasic.pdf
         path: ECGReviewer_ColabBasic.pdf
-  
