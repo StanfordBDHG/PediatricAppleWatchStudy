@@ -111,7 +111,10 @@ platform :ios do
     signin
 
     if environment == "production"
-      unless app_in_review
+      is_in_review = app_in_review
+      UI.message("Is the app in review? #{is_in_review}")
+      
+      unless is_in_review
         screenshots
       end
     end
@@ -128,7 +131,7 @@ platform :ios do
       deliver(
         submit_for_review: true,
         force: true,
-        overwrite_screenshots: !app_in_review?,
+        overwrite_screenshots: !is_in_review,
         automatic_release: true,
         precheck_include_in_app_purchases: false,
         metadata_path: "./fastlane/metadata",
