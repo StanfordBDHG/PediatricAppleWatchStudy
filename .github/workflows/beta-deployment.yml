@@ -83,7 +83,7 @@ jobs:
       contents: read
     with:
       runsonlabels: '["macOS", "self-hosted"]'
-      environment: ${{ needs.determineenvironment.outputs.environment }}
+      # environment: ${{ needs.determineenvironment.outputs.environment }}
       googleserviceinfoplistpath: 'PAWS/Supporting Files/GoogleService-Info.plist'
       setupsigning: true
       # setupfirebaseemulator: true
@@ -91,14 +91,14 @@ jobs:
       # fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
       fastlanelane: test_app_in_review
     secrets: inherit
-  deployfirebase:
-    name: Deploy Firebase Project
-    needs: [determineenvironment, vars, iosapptestflightdeployment]
-    uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
-    permissions:
-      contents: read
-    with:
-      environment: ${{ needs.determineenvironment.outputs.environment }}
-      arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
-    secrets:
-      GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
+  # deployfirebase:
+  #   name: Deploy Firebase Project
+  #   needs: [determineenvironment, vars, iosapptestflightdeployment]
+  #   uses: StanfordBDHG/.github/.github/workflows/firebase-deploy.yml@v2
+  #   permissions:
+  #     contents: read
+  #   with:
+  #     environment: ${{ needs.determineenvironment.outputs.environment }}
+  #     arguments: '--project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}'
+  #   secrets:
+  #     GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
