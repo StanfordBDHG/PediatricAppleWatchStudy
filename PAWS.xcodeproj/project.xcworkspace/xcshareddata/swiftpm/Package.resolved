@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/Spezi",
       "state" : {
-        "revision" : "d87e3d8104a0732c0e294e9ae6354db4a7058800",
-        "version" : "1.6.0"
+        "revision" : "6599bac38f8d4908a1c7807b55d0c85434634c92",
+        "version" : "1.7.0"
       }
     },
     {
@@ -177,8 +177,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziContact.git",
       "state" : {
-        "revision" : "494b776f8c98d771e4a609a1fb706097dba4c030",
-        "version" : "1.0.0"
+        "revision" : "8dd7cb426e79f30ced23f37e438c0ca38bfe9a47",
+        "version" : "1.0.2"
       }
     },
     {
@@ -213,8 +213,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziOnboarding",
       "state" : {
-        "revision" : "8d6dda3501720a1952573439b21a503cbecd9e0f",
-        "version" : "1.2.0"
+        "revision" : "ec570fe5b26bd80a0ee7bc047ae680767621aaa4",
+        "version" : "1.2.1"
       }
     },
     {
@@ -222,8 +222,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziScheduler.git",
       "state" : {
-        "revision" : "eed3980f20b01a788720c869010e3fe2fbfcd1fd",
-        "version" : "0.8.2"
+        "revision" : "896eb442eb2941f9b2f7721c3ac871373934142a",
+        "version" : "0.8.3"
       }
     },
     {
@@ -231,8 +231,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziStorage.git",
       "state" : {
-        "revision" : "9d04bc622c65002aee704b4de5735970a6e19f46",
-        "version" : "1.1.0"
+        "revision" : "099e05983eaf5315d3e5ddc67c9c44c96387e403",
+        "version" : "1.1.2"
       }
     },
     {
@@ -240,8 +240,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziViews.git",
       "state" : {
-        "revision" : "ff61e6594677572df051b96905cc2a7a12cffd10",
-        "version" : "1.5.0"
+        "revision" : "427f4f3a7acb0e00ea11c4c3ca7b60e36d2557a0",
+        "version" : "1.6.0"
       }
     },
     {
@@ -321,8 +321,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions.git",
       "state" : {
-        "revision" : "cc2705fde81978eacd5496e14c9caf58909e2322",
-        "version" : "0.4.12"
+        "revision" : "f54334604408ed3fe52887e46d6be85e83ec2da0",
+        "version" : "0.4.13"
       }
     },
     {
@@ -339,8 +339,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTRuntimeAssertions",
       "state" : {
-        "revision" : "7ce28015c0bee62b523a860e343e3d6b7ec40fda",
-        "version" : "1.1.1"
+        "revision" : "f560ec8410af032dd485ca9386e8c2b5d3e1a1f8",
+        "version" : "1.1.3"
       }
     },
     {
