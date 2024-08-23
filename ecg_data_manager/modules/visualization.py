@@ -335,11 +335,9 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 ax=axs[i],
             )
 
-        user_id = row[ColumnNames.USER_ID.value]
-        heart_rate = int(row[ColumnNames.HEART_RATE.value])
-        ecg_interpretation = row[
-            ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
-        ]
+        user_id = row[ColumnNames.USER_ID.value] if row[ColumnNames.USER_ID.value] is not None else "Unknown"
+        heart_rate = int(row[ColumnNames.HEART_RATE.value]) if row[ColumnNames.HEART_RATE.value] is not None else "Unknown"
+        ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None else "Unknown"
 
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
@@ -929,11 +927,9 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
                 ax=axs[i],
             )
 
-        user_id = row[ColumnNames.USER_ID.value]
-        heart_rate = int(row[ColumnNames.HEART_RATE.value])
-        ecg_interpretation = row[
-            ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value
-        ]
+        user_id = row[ColumnNames.USER_ID.value] if row[ColumnNames.USER_ID.value] is not None else "Unknown"
+        heart_rate = int(row[ColumnNames.HEART_RATE.value]) if row[ColumnNames.HEART_RATE.value] is not None else "Unknown"
+        ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None else "Unknown"
 
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
