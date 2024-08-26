@@ -63,7 +63,7 @@ exports.checkInvitationCode = https
 
             logger.debug(`User (${userId}) successfully enrolled in the PAWS study with invitation code: ${invitationCode}`);
 
-            return {};
+            return {"invitationCode": invitationCode};
           } catch (error) {
             logger.error(`Error processing request: ${error.message}`);
             if (!error.code) {
