@@ -60,15 +60,13 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             }
             
             // Unfortunately we have to support compiler with explicity type annotations on slower machines & the CI.
-            let voltageMeasurementsComponentsCount = electrocardiogramObservation.component?.count(
-                where: { (component: FHIRObservationComponent) -> Bool in
-                    component.code.coding?.contains(where: { (coding: FHIRCoding) -> Bool in
-                        coding.code?.value?.string == ecgCode.code && coding.system?.value?.url == ecgCode.system
-                    }) ?? false
-                }
-            )
+            let voltageMeasurementsComponentsCount = electrocardiogramObservation.component?.filter { component in
+                component.code.coding?.contains(where: { coding in
+                    coding.code?.value?.string == ecgCode.code && coding.system?.value?.url == ecgCode.system
+                }) ?? false
+            }.count ?? 0
             
-            return (voltageMeasurementsComponentsCount ?? 0) >= 3
+            return voltageMeasurementsComponentsCount >= 3
         }
         
         if snapshot.exists,
