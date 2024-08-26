@@ -152,7 +152,7 @@ Copy the `ECGExporter` and `ECGReviewer` notebooks in Colab Enterprise, uncommen
 ## Continous Integration Setup
 
 The project supports different GitHub environments (`development`, `staging`, and `production`).
-- The Firebase proejct ID needs to be saved as a GitHub variable with the name `FIREBASE_PROJECT_ID` for the different deployment environments.
+- The Firebase project ID needs to be saved as a GitHub variable with the name `FIREBASE_PROJECT_ID` for the different deployment environments.
 - The service account key needs to be added to the GitHub secrets as `GOOGLE_APPLICATION_CREDENTIALS_BASE64` in a base64 encoding to enable the beta deployment.
 - To report code coverage, a CodeCov token should be added as a `CODECOV_TOKEN` environment secret.
 - The Firebase Google plist needs to be stored as a base64 encoded secret named `GOOGLE_SERVICE_INFO_PLIST_BASE64`.
