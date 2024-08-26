@@ -1027,8 +1027,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordBDHG/HealthKitOnFHIR.git";
 			requirement = {
-				branch = feature/ecgPrecision;
-				kind = branch;
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.2.10;
 			};
 		};
 		2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
