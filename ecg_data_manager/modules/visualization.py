@@ -336,14 +336,13 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
             )
 
         user_id = (
-            row[ColumnNames.USER_ID.value] 
-            if row[ColumnNames.USER_ID.value] is not None 
+            row[ColumnNames.USER_ID.value]
+            if row[ColumnNames.USER_ID.value] is not None
             else "Unknown"
         )
-
         heart_rate = (
-            int(row[ColumnNames.HEART_RATE.value]) 
-            if row[ColumnNames.HEART_RATE.value] is not None 
+            int(row[ColumnNames.HEART_RATE.value])
+            if row[ColumnNames.HEART_RATE.value] is not None
             else "Unknown"
         )
         ecg_interpretation = (
@@ -607,7 +606,6 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                         "saved successfully.✓</span>"
                     )
                     display(data_saved_html)
-
                 else:
                     print(
                         "ECG has already been reviewed. No further review is required."
@@ -941,17 +939,15 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
             )
 
         user_id = (
-            row[ColumnNames.USER_ID.value] 
-            if row[ColumnNames.USER_ID.value] is not None 
+            row[ColumnNames.USER_ID.value]
+            if row[ColumnNames.USER_ID.value] is not None
             else "Unknown"
         )
-
         heart_rate = (
-            int(row[ColumnNames.HEART_RATE.value]) 
-            if row[ColumnNames.HEART_RATE.value] is not None 
+            int(row[ColumnNames.HEART_RATE.value])
+            if row[ColumnNames.HEART_RATE.value] is not None
             else "Unknown"
         )
-
         ecg_interpretation = (
             row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
             if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None
