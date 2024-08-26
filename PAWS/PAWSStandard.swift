@@ -10,7 +10,6 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKitOnFHIR
-import enum ModelsR4.ResourceProxy
 import OSLog
 import PDFKit
 import Spezi
@@ -24,9 +23,9 @@ import SwiftUI
 
 
 actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, OnboardingConstraint, AccountNotifyConstraint, AccountStorageConstraint {
-    @Dependency private var firebaseConfiguration: ConfigureFirebaseApp
-    @Dependency private var accountStorage: FirestoreAccountStorage?
-    @Dependency private var ecgStorage: ECGModule
+    @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
+    @Dependency(FirestoreAccountStorage.self) private var accountStorage: FirestoreAccountStorage?
+    @Dependency(ECGModule.self) private var ecgStorage
 
     private let logger = Logger(subsystem: "PAWS", category: "Standard")
     

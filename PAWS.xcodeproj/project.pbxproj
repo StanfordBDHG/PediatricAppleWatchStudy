@@ -16,6 +16,7 @@
 		2F65B44E2A3B8B0600A36932 /* NotificationPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F65B44D2A3B8B0600A36932 /* NotificationPermissions.swift */; };
 		2FA0BFED2ACC977500E0EF83 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2FA0BFEC2ACC977500E0EF83 /* Localizable.xcstrings */; };
 		2FA25D492B8402A70016E4C7 /* HKElectrocardiogram+SupplementaryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA25D482B8402A70016E4C7 /* HKElectrocardiogram+SupplementaryData.swift */; };
+		2FA7EC1C2C7C1CFB00D674AA /* FHIRTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7EC1B2C7C1CFB00D674AA /* FHIRTypes.swift */; };
 		2FB099AF2A875DF100B20952 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB099AE2A875DF100B20952 /* FirebaseAuth */; };
 		2FB099B12A875DF100B20952 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB099B02A875DF100B20952 /* FirebaseFirestore */; };
 		2FB099B32A875DF100B20952 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB099B22A875DF100B20952 /* FirebaseFirestoreSwift */; };
@@ -110,6 +111,7 @@
 		2F65B44D2A3B8B0600A36932 /* NotificationPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissions.swift; sourceTree = "<group>"; };
 		2FA0BFEC2ACC977500E0EF83 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2FA25D482B8402A70016E4C7 /* HKElectrocardiogram+SupplementaryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKElectrocardiogram+SupplementaryData.swift"; sourceTree = "<group>"; };
+		2FA7EC1B2C7C1CFB00D674AA /* FHIRTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FHIRTypes.swift; sourceTree = "<group>"; };
 		2FAEC07F297F583900C11C42 /* PAWS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PAWS.entitlements; sourceTree = "<group>"; };
 		2FBF63322C2CF491002F4AC1 /* Firestore+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Firestore+User.swift"; sourceTree = "<group>"; };
 		2FC94CD4298B0A1D009C8209 /* PAWS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PAWS.xctestplan; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				2FE5DC4429EDD7F2004B9AB4 /* CodableArray+RawRepresentable.swift */,
 				B2433E1C2BCF60C800D7C798 /* Contact+PersonNameComponents.swift */,
 				2FBF63322C2CF491002F4AC1 /* Firestore+User.swift */,
+				2FA7EC1B2C7C1CFB00D674AA /* FHIRTypes.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -418,8 +421,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				2F15E22E2C7C3F6A006584DD /* PBXTargetDependency */,
 				2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */,
-				2FDF443D2C65DB4A0075AFC1 /* PBXTargetDependency */,
 			);
 			name = PAWS;
 			packageProductDependencies = (
@@ -623,6 +626,7 @@
 				B2F7F1E22BA549A900BE93BE /* InvitationCodeError.swift in Sources */,
 				2FE5DC3629EDD7CA004B9AB4 /* HealthKitPermissions.swift in Sources */,
 				2F65B44E2A3B8B0600A36932 /* NotificationPermissions.swift in Sources */,
+				2FA7EC1C2C7C1CFB00D674AA /* FHIRTypes.swift in Sources */,
 				5661552E2AB854C000209B80 /* PackageHelper.swift in Sources */,
 				2FE5DC2629EDD38A004B9AB4 /* Contacts.swift in Sources */,
 				2FA25D492B8402A70016E4C7 /* HKElectrocardiogram+SupplementaryData.swift in Sources */,
@@ -651,13 +655,13 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2F15E22E2C7C3F6A006584DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 2F15E22D2C7C3F6A006584DD /* SwiftLintPlugin */;
+		};
 		2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 2FDF443A2C65DB4A0075AFC1 /* SwiftPackageListJSONPlugin */;
-		};
-		2FDF443D2C65DB4A0075AFC1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 2FDF443C2C65DB4A0075AFC1 /* SwiftLintPlugin */;
 		};
 		653A255F28338800005D4D48 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1024,7 +1028,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/HealthKitOnFHIR.git";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.7;
+				minimumVersion = 0.2.10;
 			};
 		};
 		2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
@@ -1126,6 +1130,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2F15E22D2C7C3F6A006584DD /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
+		};
 		2F3D4ABB2A4E7C290068FB2F /* SpeziScheduler */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2F3D4ABA2A4E7C290068FB2F /* XCRemoteSwiftPackageReference "SpeziScheduler" */;
@@ -1164,11 +1173,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */;
 			productName = "plugin:SwiftPackageListJSONPlugin";
-		};
-		2FDF443C2C65DB4A0075AFC1 /* SwiftLintPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
-			productName = "plugin:SwiftLintPlugin";
 		};
 		2FE5DC6329EDD883004B9AB4 /* SpeziAccount */ = {
 			isa = XCSwiftPackageProductDependency;

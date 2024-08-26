@@ -17,7 +17,7 @@ import SwiftUI
 
 @Observable
 class EnrollmentGroup: Module, EnvironmentAccessible {
-    @ObservationIgnored @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
+    @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var configureFirebaseApp
     private var dateOfBirth: Date?
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     private var snapshotListener: ListenerRegistration?
