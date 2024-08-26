@@ -9,8 +9,8 @@
 import FirebaseAuth
 import FirebaseFirestore
 import HealthKit
+import HealthKitOnFHIR
 import OSLog
-import enum ModelsR4.ResourceProxy
 import Spezi
 import SpeziFirebaseConfiguration
 import SpeziHealthKit
@@ -18,10 +18,14 @@ import SpeziLocalStorage
 import UserNotifications
 
 
+@globalActor fileprivate actor ECGModuleActor: GlobalActor {
+    static let shared = ECGModuleActor()
+}
+
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
-    @ObservationIgnored @Dependency private var firebaseConfiguration: ConfigureFirebaseApp
-    @ObservationIgnored @Dependency private var healthKit: HealthKit
+    @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
+    @ObservationIgnored @Dependency(HealthKit.self) private var healthKit
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
@@ -48,13 +52,31 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func isUploaded(_ electrocardiogram: HKElectrocardiogram, reuploadIfNeeded: Bool = false) async throws -> Bool {
         let documentReference = try await Firestore.firestore().healthKitCollectionReference.document(electrocardiogram.uuid.uuidString)
         let snapshot = try await documentReference.getDocument()
-
-        guard !snapshot.exists else {
+        
+        /// This function is intended to re-upload ECGs that have not been completely uploaded. Could be removed in the future.
+        func voltageComplete(_ electrocardiogramObservation: FHIRObservation) -> Bool {
+            guard let ecgCode = HKElectrocardiogramMapping.default.voltageMeasurements.codings.first else {
+                return false
+            }
+            
+            let voltageMeasurementsComponentsCount = electrocardiogramObservation.component?.count(where: { component in
+                return component.code.coding?.contains(where: { coding in
+                    coding.code?.value?.string == ecgCode.code && coding.system?.value?.url == ecgCode.system
+                }) ?? false
+            })
+            
+            return (voltageMeasurementsComponentsCount ?? 0) >= 3
+        }
+        
+        if snapshot.exists,
+           let electrocardiogramObservation = try? snapshot.data(as: FHIRObservation.self),
+           voltageComplete(electrocardiogramObservation) {
             return true
         }
         
         if reuploadIfNeeded {
-            try await documentReference.setData(from: try electrocardiogram.resource)
+            await upload(electrocardiogram: electrocardiogram)
+            logger.log("Uploaded Missing ECG: \(electrocardiogram.id)")
             return true
         }
         
@@ -83,7 +105,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         let samples = try await queryDescriptor.result(for: healthStore)
         
         self.electrocardiograms = samples
-        try await self.uploadUnuploadedECGs()
+        await self.uploadUnuploadedECGs()
     }
     
     
@@ -132,6 +154,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
     }
     
+    @ECGModuleActor
     func remove(sample id: HKSample.ID) async throws {
         electrocardiograms.removeAll(where: { $0.uuid == id })
         try await Firestore.firestore().healthKitCollectionReference.document(id.uuidString).delete()
@@ -139,6 +162,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     // MARK: - Private Helper Functions
+    @ECGModuleActor
     private func insert(electrocardiogram: HKElectrocardiogram) {
         electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
         electrocardiograms.append(electrocardiogram)
@@ -181,9 +205,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     private func upload(sample: HKSample, force: Bool = false) async throws {
-        let resource: ResourceProxy
+        let resource: FHIRResourceProxy
         if let electrocardiogram = sample as? HKElectrocardiogram {
-            self.insert(electrocardiogram: electrocardiogram)
+            await self.insert(electrocardiogram: electrocardiogram)
             
             guard try await !self.isUploaded(electrocardiogram) || force else {
                 return
@@ -192,7 +216,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             async let symptoms = try electrocardiogram.symptoms(from: healthStore)
             async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
             
-            resource = ResourceProxy(
+            resource = FHIRResourceProxy(
                 with: try await electrocardiogram.observation(
                     symptoms: symptoms,
                     voltageMeasurements: voltageMeasurements
@@ -205,14 +229,14 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         try await Firestore.firestore().healthKitCollectionReference.document(sample.id.uuidString).setData(from: resource)
     }
     
-    private func uploadUnuploadedECGs() async throws {
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for ecg in electrocardiograms where try await !isUploaded(ecg) {
+    private func uploadUnuploadedECGs() async {
+        await withTaskGroup(of: Void.self) { group in
+            for ecg in electrocardiograms {
                 group.addTask { [weak self] in
                     do {
                         try await self?.upload(sample: ecg)
                     } catch {
-                        self?.logger.log("Could not access HealthKit sample: \(error)")
+                        self?.logger.log("Could not upload ECG: \(error)")
                         await self?.addECGMessage(for: ecg, error: error)
                     }
                 }

@@ -47,16 +47,16 @@ struct ECGRecording: View {
             }
             .padding()
         }
-        .task {
-            guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
-                return
+            .task {
+                guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
+                    return
+                }
+                
+                self.symptoms = symptoms
+                
+                if !FeatureFlags.disableFirebase {
+                    self.isUploaded = (try? await ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)) ?? false
+                }
             }
-            
-            self.symptoms = symptoms
-            
-            if !FeatureFlags.disableFirebase {
-                self.isUploaded = (try? await ecgModule.isUploaded(electrocardiogram, reuploadIfNeeded: true)) ?? false
-            }
-        }
     }
 }

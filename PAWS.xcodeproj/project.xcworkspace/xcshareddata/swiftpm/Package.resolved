@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/HealthKitOnFHIR.git",
       "state" : {
-        "revision" : "b0cfe35a2263a517b22196b559d2dd1d1e2afcd9",
-        "version" : "0.2.9"
+        "branch" : "feature/ecgPrecision",
+        "revision" : "4465c3b01d6fa8dda2fb2bf9e5254b804bfb29ba"
       }
     },
     {

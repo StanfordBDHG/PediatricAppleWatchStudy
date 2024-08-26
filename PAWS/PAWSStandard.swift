@@ -10,7 +10,6 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import HealthKitOnFHIR
-import enum ModelsR4.ResourceProxy
 import OSLog
 import PDFKit
 import Spezi
