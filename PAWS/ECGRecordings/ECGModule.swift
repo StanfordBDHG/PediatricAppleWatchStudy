@@ -18,7 +18,7 @@ import SpeziLocalStorage
 import UserNotifications
 
 
-@globalActor fileprivate actor ECGModuleActor: GlobalActor {
+@globalActor private actor ECGModuleActor: GlobalActor {
     static let shared = ECGModuleActor()
 }
 
@@ -60,7 +60,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             }
             
             let voltageMeasurementsComponentsCount = electrocardiogramObservation.component?.count(where: { component in
-                return component.code.coding?.contains(where: { coding in
+                component.code.coding?.contains(where: { coding in
                     coding.code?.value?.string == ecgCode.code && coding.system?.value?.url == ecgCode.system
                 }) ?? false
             })

@@ -421,6 +421,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2F15E22A2C7C35BC006584DD /* PBXTargetDependency */,
 				2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */,
 			);
 			name = PAWS;
@@ -654,6 +655,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2F15E22A2C7C35BC006584DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 2F15E2292C7C35BC006584DD /* SwiftLintPlugin */;
+		};
 		2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 2FDF443A2C65DB4A0075AFC1 /* SwiftPackageListJSONPlugin */;
@@ -1125,6 +1130,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2F15E2292C7C35BC006584DD /* SwiftLintPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
+			productName = "plugin:SwiftLintPlugin";
+		};
 		2F3D4ABB2A4E7C290068FB2F /* SpeziScheduler */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2F3D4ABA2A4E7C290068FB2F /* XCRemoteSwiftPackageReference "SpeziScheduler" */;
