@@ -23,28 +23,27 @@ class PAWSDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: PAWSStandard()) {
             if !FeatureFlags.disableFirebase {
-                AccountConfiguration(configuration: [
-                    .requires(\.userId),
-                    .requires(\.name),
-                    .requires(\.dateOfBirth),
-                    .collects(\.genderIdentity)
-                ])
-
-                if FeatureFlags.useFirebaseEmulator {
-                    FirebaseAccountConfiguration(
-                        authenticationMethods: [.emailAndPassword, .signInWithApple],
-                        emulatorSettings: (host: "localhost", port: 9099)
-                    )
-                } else {
-                    FirebaseAccountConfiguration(authenticationMethods: [.emailAndPassword, .signInWithApple])
-                }
+                AccountConfiguration(
+                    service: FirebaseAccountService(providers: [.emailAndPassword, .signInWithApple], emulatorSettings: accountEmulator),
+                    storageProvider: FirestoreAccountStorage(
+                        storeIn: Firestore.firestore().userCollectionReference,
+                        mapping: [
+                            "DateOfBirthKey": AccountKeys.dateOfBirth
+                        ]
+                    ),
+                    configuration: [
+                        .requires(\.userId),
+                        .requires(\.name),
+                        .requires(\.dateOfBirth),
+                        .collects(\.genderIdentity)
+                    ]
+                )
                 firestore
                 if FeatureFlags.useFirebaseEmulator {
                     FirebaseStorageConfiguration(emulatorSettings: (host: "localhost", port: 9199))
                 } else {
                     FirebaseStorageConfiguration()
                 }
-                FirestoreAccountStorage(storeIn: Firestore.firestore().userCollectionReference)
             }
 
             if HKHealthStore.isHealthDataAvailable() {
@@ -57,6 +56,13 @@ class PAWSDelegate: SpeziAppDelegate {
         }
     }
     
+    private var accountEmulator: (host: String, port: Int)? {
+        if FeatureFlags.useFirebaseEmulator {
+            (host: "localhost", port: 9099)
+        } else {
+            nil
+        }
+    }
     
     private var firestore: SpeziFirestore.Firestore {
         let settings = FirestoreSettings()

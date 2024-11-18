@@ -37,28 +37,28 @@ struct AccountOnboarding: View {
 }
 
 
-#if DEBUG
-#Preview("Account Onboarding SignIn") {
-    OnboardingStack {
-        AccountOnboarding()
-    }
-        .previewWith {
-            AccountConfiguration {
-                MockUserIdPasswordAccountService()
-            }
-        }
-}
-
-#Preview("Account Onboarding") {
-    let details = AccountDetails.Builder()
-        .set(\.userId, value: "lelandstanford@stanford.edu")
-        .set(\.name, value: PersonNameComponents(givenName: "Leland", familyName: "Stanford"))
-    
-    return OnboardingStack {
-        AccountOnboarding()
-    }
-        .previewWith {
-            AccountConfiguration(building: details, active: MockUserIdPasswordAccountService())
-        }
-}
-#endif
+//#if DEBUG
+//#Preview("Account Onboarding SignIn") {
+//    OnboardingStack {
+//        AccountOnboarding()
+//    }
+//        .previewWith {
+//            AccountConfiguration {
+//                MockUserIdPasswordAccountService()
+//            }
+//        }
+//}
+//
+//#Preview("Account Onboarding") {
+//    let details = AccountDetails.Builder()
+//        .set(\.userId, value: "lelandstanford@stanford.edu")
+//        .set(\.name, value: PersonNameComponents(givenName: "Leland", familyName: "Stanford"))
+//    
+//    return OnboardingStack {
+//        AccountOnboarding()
+//    }
+//        .previewWith {
+//            AccountConfiguration(building: details, active: MockUserIdPasswordAccountService())
+//        }
+//}
+//#endif

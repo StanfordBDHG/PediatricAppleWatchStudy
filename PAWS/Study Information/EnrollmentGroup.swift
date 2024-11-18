@@ -18,19 +18,15 @@ import SwiftUI
 @Observable
 class EnrollmentGroup: Module, EnvironmentAccessible {
     @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var configureFirebaseApp
-    private var dateOfBirth: Date?
+    private var dateOfBirth: Date? {
+        didSet {
+            recalcualteStudyGroup()
+        }
+    }
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     private var snapshotListener: ListenerRegistration?
 
-
-    var studyType: StudyType? {
-        guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
-              let dateOfBirth,
-              let yearsOfAge = Calendar.current.dateComponents([.year], from: dateOfBirth, to: enrollmentDate).year else {
-            return nil
-        }
-        return yearsOfAge >= 18 ? .adult : .pediatric
-    }
+    var studyType: StudyType?
     
     
     func configure() {
@@ -59,5 +55,14 @@ class EnrollmentGroup: Module, EnvironmentAccessible {
                     self?.dateOfBirth = dobTimestamp?.dateValue()
                 }
             }
+    }
+    
+    private func recalcualteStudyGroup() {
+        guard let enrollmentDate = Auth.auth().currentUser?.metadata.creationDate,
+              let dateOfBirth,
+              let yearsOfAge = Calendar.current.dateComponents([.year], from: dateOfBirth, to: enrollmentDate).year else {
+            return
+        }
+        studyType = yearsOfAge >= 18 ? .adult : .pediatric
     }
 }

@@ -63,18 +63,18 @@ struct OnboardingFlow: View {
 }
 
 
-#if DEBUG
-#Preview {
-    OnboardingFlow()
-        .environment(Account(MockUserIdPasswordAccountService()))
-        .previewWith(standard: PAWSStandard()) {
-            OnboardingDataSource()
-            HealthKit()
-            AccountConfiguration {
-                MockUserIdPasswordAccountService()
-            }
-
-            PAWSScheduler()
-        }
-}
-#endif
+//#if DEBUG
+//#Preview {
+//    OnboardingFlow()
+//        .environment(Account(MockUserIdPasswordAccountService()))
+//        .previewWith(standard: PAWSStandard()) {
+//            OnboardingDataSource()
+//            HealthKit()
+//            AccountConfiguration {
+//                MockUserIdPasswordAccountService()
+//            }
+//
+//            PAWSScheduler()
+//        }
+//}
+//#endif

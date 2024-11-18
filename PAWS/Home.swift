@@ -17,10 +17,6 @@ struct HomeView: View {
         case studyInformation
         case mockUpload
     }
-    
-    static var accountEnabled: Bool {
-        !FeatureFlags.disableFirebase && !FeatureFlags.skipOnboarding
-    }
 
 
     @AppStorage(StorageKeys.homeTabSelection) private var selectedTab = Tabs.schedule
@@ -48,35 +44,34 @@ struct HomeView: View {
             .sheet(isPresented: $presentingAccount) {
                 AccountSheet()
             }
-            .accountRequired(Self.accountEnabled) {
+            .accountRequired(!FeatureFlags.disableFirebase && !FeatureFlags.skipOnboarding) {
                 AccountSheet()
             }
-            .verifyRequiredAccountDetails(Self.accountEnabled)
     }
 }
 
 
-#if DEBUG
-#Preview {
-    let details = AccountDetails.Builder()
-        .set(\.userId, value: "lelandstanford@stanford.edu")
-        .set(\.name, value: PersonNameComponents(givenName: "Leland", familyName: "Stanford"))
-    
-    return HomeView()
-        .previewWith(standard: PAWSStandard()) {
-            PAWSScheduler()
-            AccountConfiguration(building: details, active: MockUserIdPasswordAccountService())
-        }
-}
-
-#Preview {
-    CommandLine.arguments.append("--disableFirebase")
-    return HomeView()
-        .previewWith(standard: PAWSStandard()) {
-            PAWSScheduler()
-            AccountConfiguration {
-                MockUserIdPasswordAccountService()
-            }
-        }
-}
-#endif
+//#if DEBUG
+//#Preview {
+//    var details = AccountDetails()
+//    details.userId = "lelandstanford@stanford.edu"
+//    details.name = PersonNameComponents(givenName: "Leland", familyName: "Stanford")
+//        
+//    return HomeView()
+//        .previewWith(standard: PAWSStandard()) {
+//            PAWSScheduler()
+//            AccountConfiguration(service: InMemoryAccountService(), activeDetails: details)
+//        }
+//}
+//
+//#Preview {
+//    CommandLine.arguments.append("--disableFirebase")
+//    return HomeView()
+//        .previewWith(standard: PAWSStandard()) {
+//            PAWSScheduler()
+//            AccountConfiguration {
+//                MockUserIdPasswordAccountService()
+//            }
+//        }
+//}
+//#endif
