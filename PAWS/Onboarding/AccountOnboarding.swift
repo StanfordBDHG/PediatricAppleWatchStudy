@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SpeziAccount
+@_spi(TestingSupport) import SpeziAccount
 import SpeziOnboarding
 import SwiftUI
 
@@ -37,28 +37,26 @@ struct AccountOnboarding: View {
 }
 
 
-//#if DEBUG
-//#Preview("Account Onboarding SignIn") {
-//    OnboardingStack {
-//        AccountOnboarding()
-//    }
-//        .previewWith {
-//            AccountConfiguration {
-//                MockUserIdPasswordAccountService()
-//            }
-//        }
-//}
-//
-//#Preview("Account Onboarding") {
-//    let details = AccountDetails.Builder()
-//        .set(\.userId, value: "lelandstanford@stanford.edu")
-//        .set(\.name, value: PersonNameComponents(givenName: "Leland", familyName: "Stanford"))
-//    
-//    return OnboardingStack {
-//        AccountOnboarding()
-//    }
-//        .previewWith {
-//            AccountConfiguration(building: details, active: MockUserIdPasswordAccountService())
-//        }
-//}
-//#endif
+#if DEBUG
+#Preview("Account Onboarding SignIn") {
+    OnboardingStack {
+        AccountOnboarding()
+    }
+        .previewWith {
+            AccountConfiguration(service: InMemoryAccountService())
+        }
+}
+
+#Preview("Account Onboarding") {
+    var details = AccountDetails()
+    details.userId = "lelandstanford@stanford.edu"
+    details.name = PersonNameComponents(givenName: "Leland", familyName: "Stanford")
+
+    return OnboardingStack {
+        AccountOnboarding()
+    }
+        .previewWith {
+            AccountConfiguration(service: InMemoryAccountService(), activeDetails: details)
+        }
+}
+#endif

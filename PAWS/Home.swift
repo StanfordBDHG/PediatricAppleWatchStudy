@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SpeziAccount
+@_spi(TestingSupport) import SpeziAccount
 import SwiftUI
 
 
@@ -51,27 +51,28 @@ struct HomeView: View {
 }
 
 
-//#if DEBUG
-//#Preview {
-//    var details = AccountDetails()
-//    details.userId = "lelandstanford@stanford.edu"
-//    details.name = PersonNameComponents(givenName: "Leland", familyName: "Stanford")
-//        
-//    return HomeView()
-//        .previewWith(standard: PAWSStandard()) {
-//            PAWSScheduler()
-//            AccountConfiguration(service: InMemoryAccountService(), activeDetails: details)
-//        }
-//}
-//
-//#Preview {
-//    CommandLine.arguments.append("--disableFirebase")
-//    return HomeView()
-//        .previewWith(standard: PAWSStandard()) {
-//            PAWSScheduler()
-//            AccountConfiguration {
-//                MockUserIdPasswordAccountService()
-//            }
-//        }
-//}
-//#endif
+#if DEBUG
+#Preview {
+    var details = AccountDetails()
+    details.userId = "lelandstanford@stanford.edu"
+    details.name = PersonNameComponents(givenName: "Leland", familyName: "Stanford")
+    
+    return HomeView()
+        .previewWith(standard: PAWSStandard()) {
+            EnrollmentGroup()
+            PAWSScheduler()
+            AccountConfiguration(service: InMemoryAccountService(), activeDetails: details)
+        }
+}
+
+#Preview {
+    CommandLine.arguments.append("--disableFirebase")
+    
+    return HomeView()
+        .previewWith(standard: PAWSStandard()) {
+            EnrollmentGroup()
+            PAWSScheduler()
+            AccountConfiguration(service: InMemoryAccountService())
+        }
+}
+#endif

@@ -94,7 +94,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
         
         guard await healthKit.authorized else {
-            logger.error("HealthKit permissions not yet provided.") 
+            logger.error("HealthKit permissions not yet provided.")
             return
         }
 
