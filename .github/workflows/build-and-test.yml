@@ -35,7 +35,7 @@ jobs:
       contents: read
   buildandtest:
     name: Build and Test
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2.1.10
     permissions:
       contents: read
     with:
