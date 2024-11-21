@@ -64,6 +64,14 @@ jobs:
     steps:
       - run: |
           echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
+  staticanaylsis:
+    name: Static Analysis
+    uses: ./.github/workflows/static-analysis.yml
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    secrets: inherit
   buildandtest:
     name: Build and Test
     needs: determineenvironment

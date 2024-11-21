@@ -96,7 +96,7 @@ extension XCUIApplication {
         if alert.waitForExistence(timeout: 3.0) {
             print("Warning: Initial invitation code is invalid, please esure to reset your simulator.")
             alert.buttons["OK"].tap()
-            try textFields["Invitation Code"].delete(count: 8, dismissKeyboard: false)
+            try textFields["Invitation Code"].delete(count: 8, options: .disableKeyboardDismiss)
             
             if !withRemainingOptions.isEmpty {
                 try enterInvitationCode(withRemainingOptions: withRemainingOptions)
@@ -135,9 +135,14 @@ extension XCUIApplication {
         datePicker.tap()
         swipeUp()
         
-        XCTAssertTrue(collectionViews.buttons["Signup"].waitForExistence(timeout: 2))
         collectionViews.buttons["Signup"].tap()
+        
+        sleep(1)
 
+        if collectionViews.buttons["Signup"].waitForExistence(timeout: 2) {
+            collectionViews.buttons["Signup"].tap()
+        }
+        
         sleep(3)
     }
     

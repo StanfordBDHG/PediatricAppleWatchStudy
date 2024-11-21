@@ -14,6 +14,8 @@
 //            the new SnapshotHelper.swift
 // -----------------------------------------------------
 
+// periphery:ignore:all
+
 import Foundation
 import XCTest
 

@@ -20,7 +20,7 @@ platform :ios do
       skip_build: true,
       derived_data_path: ".derivedData",
       code_coverage: true,
-      devices: ["iPhone 15 Pro"],
+      devices: ["iPhone 16 Pro"],
       force_quit_simulator: true,
       reset_simulator: true,
       prelaunch_simulator: false,
@@ -46,8 +46,7 @@ platform :ios do
       test_without_building: true,
       derived_data_path: ".derivedData",
       devices: [
-        "iPhone 15 Pro",
-        "iPhone SE (3rd generation)"
+        "iPhone 16 Pro"
       ],
       languages: [
          "en-US",
@@ -61,13 +60,8 @@ platform :ios do
     )
     
     # Workaround for https://github.com/fastlane/fastlane/issues/21759 and 
-    Dir.glob("./screenshots/**/iPhone 15 Pro-*.png").each do |file|
+    Dir.glob("./screenshots/**/iPhone 16 Pro-*.png").each do |file|
       sh("sips --resampleHeightWidth 2778 1284 '#{file}'")
-    end
-
-    # Scale to 1242 x 2208 as there are no iOS 18 Simulators supporting this screen size.
-    Dir.glob("./screenshots/**/iPhone SE (3rd generation)-*.png").each do |file|
-      sh("sips --resampleHeightWidth 2208 1242 '#{file}'")
     end
   end
 

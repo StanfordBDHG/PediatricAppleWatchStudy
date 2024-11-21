@@ -117,7 +117,7 @@ struct InvitationCodeView: View {
                 Logger().info("Inviation Code Verification Successful")
             }
             
-            await onboardingNavigationPath.nextStep()
+            onboardingNavigationPath.nextStep()
         } catch let error as NSError {
             if let errorCode = FunctionsErrorCode(rawValue: error.code) {
                 // Handle Firebase-specific errors.

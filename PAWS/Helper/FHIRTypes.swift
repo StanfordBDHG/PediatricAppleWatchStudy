@@ -11,5 +11,3 @@ import ModelsR4
 
 typealias FHIRObservation = ModelsR4.Observation
 typealias FHIRResourceProxy = ModelsR4.ResourceProxy
-typealias FHIRObservationComponent = ModelsR4.ObservationComponent
-typealias FHIRCoding = ModelsR4.Coding

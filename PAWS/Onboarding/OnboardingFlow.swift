@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SpeziAccount
+@_spi(TestingSupport) import SpeziAccount
 import SpeziFirebaseAccount
 import SpeziHealthKit
 import SpeziOnboarding
@@ -66,14 +66,10 @@ struct OnboardingFlow: View {
 #if DEBUG
 #Preview {
     OnboardingFlow()
-        .environment(Account(MockUserIdPasswordAccountService()))
         .previewWith(standard: PAWSStandard()) {
             OnboardingDataSource()
             HealthKit()
-            AccountConfiguration {
-                MockUserIdPasswordAccountService()
-            }
-
+            AccountConfiguration(service: InMemoryAccountService())
             PAWSScheduler()
         }
 }

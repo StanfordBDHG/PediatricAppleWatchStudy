@@ -34,7 +34,7 @@ exports.checkInvitationCode = https
           logger.debug(`User (${userId}) -> PAWS, InvitationCode ${invitationCode}`);
 
           try {
-            // Based on https://github.com/StanfordSpezi/SpeziStudyApplication/blob/main/functions/index.js
+            // Based on https://github.com/StanfordSpezi/SpeziStudyApplication/blob/main/functions/index.js'
             const invitationCodeRef = firestore.doc(`invitationCodes/${invitationCode}`);
             const invitationCodeDoc = await invitationCodeRef.get();
 

@@ -13,6 +13,7 @@ import SwiftUI
 /// - Note: The `OnboardingConsentView` exports the signed consent form as PDF to the Spezi `Standard`, necessitating the conformance of the `Standard` to the `OnboardingConstraint`.
 struct Consent: View {
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    // periphery:ignore - The periphery warning here is a false positive, the value us stored using @AppStorage.
     @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     
