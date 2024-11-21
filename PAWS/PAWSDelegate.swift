@@ -28,7 +28,8 @@ class PAWSDelegate: SpeziAppDelegate {
                     storageProvider: FirestoreAccountStorage(
                         storeIn: Firestore.firestore().userCollectionReference,
                         mapping: [
-                            "DateOfBirthKey": AccountKeys.dateOfBirth
+                            "DateOfBirthKey": AccountKeys.dateOfBirth,
+                            "GenderIdentityKey": AccountKeys.genderIdentity
                         ]
                     ),
                     configuration: [
