@@ -14,28 +14,13 @@ on:
   workflow_call:
 
 concurrency:
-  group: build-${{ github.ref }}
+  group: Build-and-Test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  reuse_action:
-    name: REUSE Compliance Check
-    uses: StanfordBDHG/.github/.github/workflows/reuse.yml@v2
-    permissions:
-      contents: read
-  swiftlint:
-    name: SwiftLint
-    uses: StanfordBDHG/.github/.github/workflows/swiftlint.yml@v2
-    permissions:
-      contents: read
-  markdownlinkcheck:
-    name: Markdown Link Check
-    uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@v2
-    permissions:
-      contents: read
   buildandtest:
     name: Build and Test
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2.1.10
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     permissions:
       contents: read
     with:
@@ -56,34 +41,6 @@ jobs:
       coveragereports: PAWS.xcresult
     secrets:
       token: ${{ secrets.CODECOV_TOKEN }}
-  pylint:
-    name: PyLint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Install Infrastructure
-        run: |
-          pip install pylint
-      - name: Install ECGReviewer Dependencies
-        run: |
-          pip install -r ./ecg_data_manager/requirements.txt
-      - name: Analysing the code with pylint
-        run: |
-          pylint $(git ls-files '*.py')
-  black_lint:
-    name: Black Code Formatter Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Install Black
-        run: pip install black[jupyter]
-      - name: Check code formatting with Black
-        run: black . --exclude '\.ipynb$'
   buildandtestdatapipelinenotebook:
     name: Build and Test ECG Reviewer Notebook
     runs-on: ubuntu-latest
