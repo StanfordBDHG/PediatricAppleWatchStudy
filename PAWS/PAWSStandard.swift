@@ -21,7 +21,8 @@ import SpeziOnboarding
 import SwiftUI
 
 
-actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, ConsentConstraint {
+actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, ConsentConstraint, AccountNotifyConstraint {
+    // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
     @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
     @Dependency(ECGModule.self) private var ecgStorage
 
@@ -60,12 +61,17 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Consen
     
 
     // MARK: - AccountNotifyConstraint
-    func deletedAccount() async throws {
-        do {
-            // delete all user associated data
-            try await Firestore.firestore().userDocumentReference.delete()
-        } catch {
-            logger.error("Could not delete user document: \(error)")
+    func respondToEvent(_ event: AccountNotifications.Event) async {
+        switch event {
+        case .deletingAccount:
+            do {
+                // delete all user associated data
+                try await Firestore.firestore().userDocumentReference.delete()
+            } catch {
+                logger.error("Could not delete user document: \(error)")
+            }
+        default:
+            break
         }
     }
     

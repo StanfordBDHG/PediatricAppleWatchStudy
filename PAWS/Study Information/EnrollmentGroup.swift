@@ -17,7 +17,8 @@ import SwiftUI
 
 @Observable
 class EnrollmentGroup: Module, EnvironmentAccessible {
-    @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var configureFirebaseApp
+    // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
+    @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
     private var dateOfBirth: Date? {
         didSet {
             recalcualteStudyGroup()

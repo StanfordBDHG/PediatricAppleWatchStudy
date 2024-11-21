@@ -24,6 +24,7 @@ import UserNotifications
 
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
+    // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
     @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
     @ObservationIgnored @Dependency(HealthKit.self) private var healthKit
     

@@ -61,32 +61,6 @@ extension HKElectrocardiogram {
         }
     }
 
-    private func precedingSamples(
-        forType type: HKSampleType,
-        sortDescriptors: [SortDescriptor<HKSample>] = [SortDescriptor(\.startDate)],
-        limit: Int? = nil
-    ) async throws -> [HKSample] {
-        let store = HKHealthStore()
-        let queryDescriptor = HKSampleQueryDescriptor(
-            predicates: [.sample(type: type, predicate: self.fiveMinutePredicate)],
-            sortDescriptors: sortDescriptors,
-            limit: limit
-        )
-        
-        // If something is available in last 5 minutes since recording, return those samples.
-        if let result = try? await queryDescriptor.result(for: store), !result.isEmpty {
-            return result
-        }
-        
-        // Otherwise, request the last 24 hours of samples.
-        let extendedQueryDescriptor = HKSampleQueryDescriptor(
-            predicates: [.sample(type: type, predicate: self.oneDayPredicate)],
-            sortDescriptors: sortDescriptors,
-            limit: limit
-        )
-        
-        return try await extendedQueryDescriptor.result(for: store)
-    }
     
     private func precedingSamples(
         forType type: HKQuantityType,
