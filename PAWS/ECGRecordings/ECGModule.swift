@@ -6,15 +6,16 @@
 // SPDX-License-Identifier: MIT
 //
 
-import FirebaseAuth
 import FirebaseFirestore
 import HealthKit
 import HealthKitOnFHIR
 import OSLog
 import Spezi
+import SpeziAccount
 import SpeziFirebaseConfiguration
 import SpeziHealthKit
 import SpeziLocalStorage
+import SwiftUI
 import UserNotifications
 
 
@@ -24,27 +25,41 @@ import UserNotifications
 
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
-    // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
-    @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
+    @ObservationIgnored @Dependency(Account.self) private var account: Account?
+    @ObservationIgnored @Dependency(AccountNotifications.self) private var accountNotifications: AccountNotifications?
     @ObservationIgnored @Dependency(HealthKit.self) private var healthKit
+    @ObservationIgnored @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
+    
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
-    private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
+    private var notificationsTask: Task<Void, Never>?
     
     
     required init() { }
     
     
     func configure() {
-        authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            guard user != nil, let self else {
-                return
+        if let accountNotifications {
+            notificationsTask = Task.detached { @MainActor [weak self] in
+                for await event in accountNotifications.events {
+                    guard let self else {
+                        return
+                    }
+                    
+                    Task {
+                        try await self.reloadECGs()
+                    }
+                }
             }
-            
+        }
+        
+        if let healthKitStartDate {
             Task {
-                try await self.reloadECGs()
+                var details = AccountDetails()
+                details.dateOfEnrollment = healthKitStartDate
+                account?.supplyUserDetails(details)
             }
         }
     }
@@ -89,7 +104,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
     /// - Throws: An error if the user is not authenticated.
     func reloadECGs() async throws {
-        guard let user = Auth.auth().currentUser else {
+        guard let user = await account?.signedIn else {
             logger.error("User not authenticated")
             return
         }
@@ -98,8 +113,12 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             logger.error("HealthKit permissions not yet provided.")
             return
         }
-
-        let samplePredicate = HKQuery.predicateForSamples(withStart: user.metadata.creationDate, end: .now, options: .strictStartDate)
+        
+        let samplePredicate = await HKQuery.predicateForSamples(
+            withStart: account?.details?.creationDate ?? .now,
+            end: .now,
+            options: .strictStartDate
+        )
         let queryDescriptor = HKSampleQueryDescriptor(
             predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
             sortDescriptors: []
