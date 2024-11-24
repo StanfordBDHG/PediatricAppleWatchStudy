@@ -43,7 +43,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func configure() {
         if let accountNotifications {
             notificationsTask = Task.detached { @MainActor [weak self] in
-                for await event in accountNotifications.events {
+                for await _ in accountNotifications.events {
                     guard let self else {
                         return
                     }
@@ -52,14 +52,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                         try await self.reloadECGs()
                     }
                 }
-            }
-        }
-        
-        if let healthKitStartDate {
-            Task {
-                var details = AccountDetails()
-                details.dateOfEnrollment = healthKitStartDate
-                account?.supplyUserDetails(details)
             }
         }
     }
@@ -104,8 +96,15 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
     /// - Throws: An error if the user is not authenticated.
     func reloadECGs() async throws {
-        guard let user = await account?.signedIn else {
+        guard await account?.signedIn ?? false else {
             logger.error("User not authenticated")
+            return
+        }
+        
+        // Ensure that the HealthKit start date is set correctly based on the date of enrollment.
+        healthKitStartDate = await account?.details?.dateOfEnrollment
+        guard let healthKitStartDate = healthKitStartDate else {
+            logger.error("No valid enrollment date; can not query healthkit data")
             return
         }
         
@@ -114,8 +113,8 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        let samplePredicate = await HKQuery.predicateForSamples(
-            withStart: account?.details?.creationDate ?? .now,
+        let samplePredicate = HKQuery.predicateForSamples(
+            withStart: healthKitStartDate,
             end: .now,
             options: .strictStartDate
         )
