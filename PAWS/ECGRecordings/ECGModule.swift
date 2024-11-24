@@ -225,6 +225,11 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     private func upload(sample: HKSample, force: Bool = false) async throws {
+        // We do not upload any samples before the date of enrollment.
+        guard let dateOfEnrollment = await account?.details?.dateOfEnrollment, sample.endDate > dateOfEnrollment else {
+            return
+        }
+        
         let resource: FHIRResourceProxy
         if let electrocardiogram = sample as? HKElectrocardiogram {
             await self.insert(electrocardiogram: electrocardiogram)
