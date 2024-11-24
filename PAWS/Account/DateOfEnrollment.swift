@@ -42,7 +42,7 @@ private struct EntryView: DataEntryView {
     @Binding private var value: Date
     
     var body: some View {
-        EmptyView()
+        DisplayView(value)
     }
 
     init(_ value: Binding<Date>) {

@@ -36,7 +36,8 @@ class PAWSDelegate: SpeziAppDelegate {
                         .requires(\.userId),
                         .requires(\.name),
                         .requires(\.dateOfBirth),
-                        .collects(\.genderIdentity)
+                        .collects(\.genderIdentity),
+                        .supports(\.dateOfEnrollment)
                     ]
                 )
                 firestore
