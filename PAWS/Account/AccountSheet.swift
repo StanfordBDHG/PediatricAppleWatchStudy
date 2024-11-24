@@ -17,6 +17,8 @@ struct AccountSheet: View {
     @Environment(Account.self) private var account
     @Environment(\.accountRequired) var accountRequired
     
+    @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
+    
     @State var isInSetup = false
     
     
@@ -32,7 +34,9 @@ struct AccountSheet: View {
                         }
                     }
                 } else {
-                    AccountSetup { _ in
+                    AccountSetup { details in
+                        healthKitStartDate = details.dateOfEnrollment
+                        
                         dismiss() // we just signed in, dismiss the account setup sheet
                     } header: {
                         AccountSetupHeader()
