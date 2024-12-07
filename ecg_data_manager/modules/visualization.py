@@ -351,6 +351,8 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
             else "Unknown"
         )
 
+        symptoms = row.get("Symptoms", "No symptoms reported.")
+
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
             value=f"<b style='font-size: larger;'><span style='color: blue;'>{group_class}</span> "
@@ -360,6 +362,9 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         heart_rate_html = widgets.HTML(
             value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
         )
+
+        symptoms_html = widgets.HTML(value=f"<b style='font-size: larger;'>Symptoms: {symptoms}</b>")
+
         interpretation_html = widgets.HTML(
             value="<b style='font-size: larger;'>Classification: "
         )
@@ -374,7 +379,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         interpretation_html.value += "</b>"
 
-        display(user_id_html, heart_rate_html, interpretation_html)
+        display(user_id_html, heart_rate_html, symptoms_html, interpretation_html)
 
         # Add review status
         diagnosis_collection_ref = (
@@ -506,7 +511,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         return widgets_box
 
-    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-arguments, too-many-positional-arguments
+    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-arguments
         self,
         user_id,
         document_id,
