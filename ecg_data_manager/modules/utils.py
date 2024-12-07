@@ -94,7 +94,8 @@ def fetch_symptoms_single(observation_data: dict) -> dict:
 
     Returns:
         dict: A dictionary with 'UserId', 'ResourceId', and 'Symptoms' if symptoms are present.
-              Returns an empty dictionary if no symptoms are present or if SymptomsStatus is not 'present'.
+              Returns an empty dictionary if no symptoms are present or if SymptomsStatus is 
+              not 'present'.
     """
     components = observation_data.get("component", [])
     user_id = observation_data.get(ColumnNames.USER_ID.value)
@@ -126,18 +127,17 @@ def fetch_symptoms_single(observation_data: dict) -> dict:
                 ColumnNames.RESOURCE_ID.value: resource_id,
                 "Symptoms": ", ".join(symptoms),
             }
-        else:
-            return {
-                ColumnNames.USER_ID.value: user_id,
-                ColumnNames.RESOURCE_ID.value: resource_id,
-                "Symptoms": "No symptoms.",
-            }
-    else:
         return {
             ColumnNames.USER_ID.value: user_id,
             ColumnNames.RESOURCE_ID.value: resource_id,
             "Symptoms": "No symptoms.",
         }
+
+    return {
+        ColumnNames.USER_ID.value: user_id,
+        ColumnNames.RESOURCE_ID.value: resource_id,
+        "Symptoms": "No symptoms.",
+    }
 
 
 def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
