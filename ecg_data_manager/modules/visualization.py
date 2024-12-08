@@ -507,7 +507,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         return widgets_box
 
-    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-arguments
+    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-positional-arguments
         self,
         user_id,
         document_id,
