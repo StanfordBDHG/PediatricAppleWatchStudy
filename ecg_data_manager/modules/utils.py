@@ -85,9 +85,9 @@ def process_ecg_data(db: Client, data: pd.DataFrame) -> pd.DataFrame:
 
 def fetch_symptoms_single(observation_data: dict) -> dict:
     """
-    Extracts symptoms information from the components array of a single observation data dictionary where
-    HKElectrocardiogram.SymptomsStatus is 'present'. Returns 'UserId', 'ResourceId', and 'Symptoms'.
-    This data is suitable for merging with a main DataFrame.
+    Extracts symptoms information from the components array of a single observation data
+    dictionary where HKElectrocardiogram.SymptomsStatus is 'present'. Returns 'UserId',
+    'ResourceId', and 'Symptoms'. This data is suitable for merging with a main DataFrame.
 
     Args:
         observation_data: A dictionary containing observation data.
@@ -121,11 +121,23 @@ def fetch_symptoms_single(observation_data: dict) -> dict:
             in comp.get("code", {}).get("coding", [{}])[0].get("code", "")
         ]
         if symptoms:  # Check if symptoms list is not empty
-            return {ColumnNames.USER_ID.value: user_id, ColumnNames.RESOURCE_ID.value: resource_id, "Symptoms": ', '.join(symptoms)}
+            return {
+                ColumnNames.USER_ID.value: user_id,
+                ColumnNames.RESOURCE_ID.value: resource_id,
+                "Symptoms": ", ".join(symptoms),
+            }
         else:
-            return {ColumnNames.USER_ID.value: user_id, ColumnNames.RESOURCE_ID.value: resource_id, "Symptoms": "No symptoms."}
+            return {
+                ColumnNames.USER_ID.value: user_id,
+                ColumnNames.RESOURCE_ID.value: resource_id,
+                "Symptoms": "No symptoms.",
+            }
     else:
-        return {ColumnNames.USER_ID.value: user_id, ColumnNames.RESOURCE_ID.value: resource_id, "Symptoms": "No symptoms."}
+        return {
+            ColumnNames.USER_ID.value: user_id,
+            ColumnNames.RESOURCE_ID.value: resource_id,
+            "Symptoms": "No symptoms.",
+        }
 
 
 def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
@@ -178,9 +190,11 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
                 observation_data[ColumnNames.RESOURCE_ID.value] = doc.id
 
                 # Extract effective period start time
-                effective_start = observation_data.get('effectivePeriod', {}).get('start', '')
+                effective_start = observation_data.get("effectivePeriod", {}).get(
+                    "start", ""
+                )
                 if effective_start:
-                    observation_data['EffectiveDateTimeHHMM'] = effective_start
+                    observation_data["EffectiveDateTimeHHMM"] = effective_start
 
                 # Extract symptoms information HERE
                 symptoms_info = fetch_symptoms_single(observation_data)
