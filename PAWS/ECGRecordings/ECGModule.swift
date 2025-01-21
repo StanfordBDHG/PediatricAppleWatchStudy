@@ -37,7 +37,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     private var notificationsTask: Task<Void, Never>?
     
     
-    private var healthKitSamplesEndDateCutoffBasedOnDateOfEnrollment: Date {
+    private var healthKitSamplesEndDateCutoff: Date {
         get async throws {
             // Waiting until Spezi Account loads the account details.
             let loadingStartDate = Date.now
@@ -134,7 +134,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
         
         let samplePredicate = try await HKQuery.predicateForSamples(
-            withStart: healthKitSamplesEndDateCutoffBasedOnDateOfEnrollment,
+            withStart: healthKitSamplesEndDateCutoff,
             end: .now,
             options: .strictStartDate
         )
@@ -246,7 +246,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     private func upload(sample: HKSample, force: Bool = false) async throws {
         // We do not upload any samples before the date of enrollment.
-        guard try await sample.endDate > healthKitSamplesEndDateCutoffBasedOnDateOfEnrollment else {
+        guard try await sample.endDate > healthKitSamplesEndDateCutoff else {
             return
         }
         
