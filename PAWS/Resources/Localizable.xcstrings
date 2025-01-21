@@ -183,17 +183,6 @@
     "Close" : {
 
     },
-    "CLOSE" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Close"
-          }
-        }
-      }
-    },
     "CONSENT_LOADING_ERROR" : {
       "localizations" : {
         "en" : {
@@ -217,41 +206,15 @@
         }
       }
     },
-    "CONTRIBUTIONS_LIST_DESCRIPTION" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The following list contains all Swift Package dependencies of the PAWS Application."
-          }
-        }
-      }
-    },
-    "CONTRIBUTIONS_LIST_FOOTER" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please refer to the individual repository links for packages without license labels."
-          }
-        }
-      }
-    },
-    "CONTRIBUTIONS_LIST_HEADER" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Packages"
-          }
-        }
-      }
-    },
     "Date of Enrollment" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date of Enrollment"
+          }
+        }
+      }
     },
     "ECG Recording" : {
 
@@ -582,17 +545,6 @@
     },
     "Redeem Invitation Code" : {
 
-    },
-    "Repository Link" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repository Link"
-          }
-        }
-      }
     },
     "SCOTT_CERESNAK_BIO" : {
       "localizations" : {

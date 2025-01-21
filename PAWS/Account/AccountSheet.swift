@@ -17,6 +17,7 @@ struct AccountSheet: View {
     @Environment(Account.self) private var account
     @Environment(\.accountRequired) var accountRequired
     
+    // periphery:ignore - Uses @AppStorage
     @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     @State var isInSetup = false

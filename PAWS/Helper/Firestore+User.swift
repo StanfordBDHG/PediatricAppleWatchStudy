@@ -13,6 +13,7 @@ import FirebaseFirestore
 extension FirebaseFirestore.Firestore {
     enum FirestoreError: Error {
         case userNotAuthenticatedYet
+        case userDetailsNotLoading
     }
     
     

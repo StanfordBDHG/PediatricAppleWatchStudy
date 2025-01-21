@@ -9,7 +9,3 @@
 project: PAWS.xcodeproj
 schemes:
 - PAWS
-targets:
-- PAWS
-- PAWSTests
-- PAWSUITests

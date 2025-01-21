@@ -27,7 +27,7 @@ private struct DisplayView: DataDisplayView {
     }
 
     var body: some View {
-        ListRow(AccountKeys.dateOfBirth.name) {
+        ListRow(AccountKeys.dateOfEnrollment.name) {
             Text(value.formatted(formatStyle))
         }
     }

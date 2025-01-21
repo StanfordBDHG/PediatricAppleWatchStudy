@@ -15,8 +15,8 @@ struct ECGRecordingsList: View {
     
     
     var body: some View {
-        NavigationStack {
-            GeometryReader { geometry in
+        GeometryReader { geometry in
+            NavigationStack {
                 ScrollView {
                     if ecgModule.electrocardiograms.isEmpty {
                         ContentUnavailableView {
@@ -24,7 +24,7 @@ struct ECGRecordingsList: View {
                         } description: {
                             Text("New ECG Recordings will be displayed here.")
                         }
-                            .frame(minHeight: geometry.size.height)
+                            .frame(minHeight: geometry.size.height - 100)
                     }
                     VStack(spacing: 16) {
                         ForEach(ecgModule.electrocardiograms) { electrocardiogram in
@@ -34,16 +34,16 @@ struct ECGRecordingsList: View {
                         .padding(.vertical)
                 }
                     .scrollBounceBehavior(.always)
-            }
-                .toolbar {
-                    if AccountButton.shouldDisplay {
-                        AccountButton(isPresented: $presentingAccount)
+                    .toolbar {
+                        if AccountButton.shouldDisplay {
+                            AccountButton(isPresented: $presentingAccount)
+                        }
                     }
-                }
-                .navigationTitle(String(localized: "ECG Recordings"))
-                .refreshable {
-                    try? await ecgModule.reloadECGs()
-                }
+                    .navigationTitle(String(localized: "ECG Recordings"))
+                    .refreshable {
+                        try? await ecgModule.reloadECGs()
+                    }
+            }
         }
     }
     

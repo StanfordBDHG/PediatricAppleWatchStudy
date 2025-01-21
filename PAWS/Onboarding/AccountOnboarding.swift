@@ -13,6 +13,7 @@ import SwiftUI
 
 struct AccountOnboarding: View {
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    // periphery:ignore - Uses @AppStorage
     @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     

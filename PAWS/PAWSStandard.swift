@@ -24,6 +24,7 @@ import SwiftUI
 actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, ConsentConstraint, AccountNotifyConstraint {
     // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
     @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
+    // periphery:ignore - Uses @AppStorage
     @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     @Dependency(ECGModule.self) private var ecgStorage
 
