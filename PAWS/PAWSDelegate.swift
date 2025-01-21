@@ -83,7 +83,7 @@ class PAWSDelegate: SpeziAppDelegate {
     
     private var healthKit: HealthKit {
         @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date = .now
-        print("healthKitStartDate: \(healthKitStartDate). Now: \(Date.now)")
+        
         // Collection starts at the time the user consents and lasts for 6 months.
         let sharedPredicate = HKQuery.predicateForSamples(
             withStart: healthKitStartDate,
