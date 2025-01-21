@@ -12,11 +12,11 @@ import SpeziViews
 import SwiftUI
 
 
+// swiftlint:disable file_types_order
 private struct DisplayView: DataDisplayView {
     private let value: Date
 
-    @Environment(\.locale)
-    private var locale
+    @Environment(\.locale) private var locale
 
     private var formatStyle: Date.FormatStyle {
         .init()
@@ -60,10 +60,9 @@ extension AccountDetails {
         displayView: DisplayView.self,
         entryView: EntryView.self
     )
-    public var dateOfEnrollment: Date?
+    public var dateOfEnrollment: Date? // swiftlint:disable:this attributes
 }
 
 
 @KeyEntry(\.dateOfEnrollment)
 extension AccountKeys {}
-
