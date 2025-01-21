@@ -7,11 +7,9 @@
 #
 
 """
-This module provides classes and associated functions for viewing, filtering, and 
-analyzing ECG data. The primary class, ECGDataViewer, allows users to interact with 
-ECG data through a graphical interface, enabling the review, diagnosis, and visualization 
-of ECG recordings. The module also includes functions for plotting single lead ECGs and 
-configuring the appearance of the plots.
+This module provides classes and functions for viewing, filtering, and analyzing ECG data. The
+primary class, ECGDataViewer, allows users to interact with  ECG data through a graphical interface,
+enabling the review, diagnosis, and visualization of ECG recordings.
 """
 
 # Standard library imports
@@ -351,6 +349,8 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
             else "Unknown"
         )
 
+        symptoms = row.get("Symptoms", "No symptoms reported.")
+
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
             value=f"<b style='font-size: larger;'><span style='color: blue;'>{group_class}</span> "
@@ -360,11 +360,15 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         heart_rate_html = widgets.HTML(
             value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
         )
+
+        symptoms_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'>Symptoms: {symptoms}</b>"
+        )
+
         interpretation_html = widgets.HTML(
             value="<b style='font-size: larger;'>Classification: "
         )
 
-        # Conditional color for non-sinusRhythm classifications
         if ecg_interpretation != SINUS_RHYTHM:
             interpretation_html.value += (
                 f"<span style='color: red;'>{ecg_interpretation}</span>"
@@ -374,7 +378,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         interpretation_html.value += "</b>"
 
-        display(user_id_html, heart_rate_html, interpretation_html)
+        display(user_id_html, heart_rate_html, symptoms_html, interpretation_html)
 
         # Add review status
         diagnosis_collection_ref = (
@@ -474,7 +478,6 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 )
             )
 
-            # Hide the widgets if not all selections have been made
             initials = (
                 self.initials_dropdown.value
                 if self.initials_dropdown.value != WidgetStrings.OTHER.value
@@ -489,10 +492,8 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 tracing_quality_dropdown.layout.visibility = "hidden"
                 notes_textarea.layout.visibility = "hidden"
 
-        # Attach the hide_widgets function to the button's on_click event
         save_button.on_click(hide_widgets)
 
-        # Display the widgets
         widgets_box = widgets.VBox(
             [
                 diagnosis_dropdown,
