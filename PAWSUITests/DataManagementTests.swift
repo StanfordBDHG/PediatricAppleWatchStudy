@@ -22,11 +22,13 @@ final class DataManagementTests: XCTestCase {
         await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
+    @MainActor
     func testPullToRefresh() throws {
         let app = XCUIApplication()
         try app.navigateOnboardingFlow(email: "lelandstanford\(Int.random(in: 0...42000))@stanford.edu", code: "XKDYV3DF")
         
-        try self.exitAppAndOpenHealth(.electrocardiograms)
+        let healthApp = XCUIApplication.healthApp()
+        try launchAndAddSample(healthApp: healthApp, .electrocardiogram())
         app.activate()
         
         let initialECGText = app.staticTexts["ECG Recording"]
@@ -47,13 +49,13 @@ final class DataManagementTests: XCTestCase {
         
         // Now return to the Health app, and add some more ECGs before capturing a screenshot (for App Store).
         for _ in 0..<4 where UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT") {
-            try self.exitAppAndOpenHealth(.electrocardiograms)
+            try launchAndAddSample(healthApp: healthApp, .electrocardiogram())
         }
         
         app.activate()
         
         Task {
-            await PAWSUITests.snapshot("2Home")
+            PAWSUITests.snapshot("2Home")
         }
     }
 }

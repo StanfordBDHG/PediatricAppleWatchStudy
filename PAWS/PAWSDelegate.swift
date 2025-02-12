@@ -29,14 +29,16 @@ class PAWSDelegate: SpeziAppDelegate {
                         storeIn: Firestore.firestore().userCollectionReference,
                         mapping: [
                             "DateOfBirthKey": AccountKeys.dateOfBirth,
-                            "GenderIdentityKey": AccountKeys.genderIdentity
+                            "GenderIdentityKey": AccountKeys.genderIdentity,
+                            "dateOfEnrollment": AccountKeys.dateOfEnrollment
                         ]
                     ),
                     configuration: [
                         .requires(\.userId),
                         .requires(\.name),
                         .requires(\.dateOfBirth),
-                        .collects(\.genderIdentity)
+                        .collects(\.genderIdentity),
+                        .supports(\.dateOfEnrollment)
                     ]
                 )
                 firestore
@@ -82,7 +84,7 @@ class PAWSDelegate: SpeziAppDelegate {
     private var healthKit: HealthKit {
         @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date = .now
         
-        // Collection starts at the time the user consents and lasts for 1 month.
+        // Collection starts at the time the user consents and lasts for 6 months.
         let sharedPredicate = HKQuery.predicateForSamples(
             withStart: healthKitStartDate,
             end: Calendar.current.date(byAdding: DateComponents(month: 6), to: healthKitStartDate),
@@ -103,7 +105,7 @@ class PAWSDelegate: SpeziAppDelegate {
             CollectSample(
                 HKQuantityType(.heartRate),
                 predicate: sharedPredicate,
-                deliverySetting: .background(saveAnchor: true)
+                deliverySetting: .manual(safeAnchor: false)
             )
             CollectSample(
                 HKQuantityType(.vo2Max),

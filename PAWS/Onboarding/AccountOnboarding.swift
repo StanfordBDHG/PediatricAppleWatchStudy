@@ -13,10 +13,14 @@ import SwiftUI
 
 struct AccountOnboarding: View {
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    // periphery:ignore - Uses @AppStorage
+    @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     
     var body: some View {
-        AccountSetup { _ in
+        AccountSetup { details in
+            healthKitStartDate = details.dateOfEnrollment
+            
             Task {
                 // Placing the nextStep() call inside this task will ensure that the sheet dismiss animation is
                 // played till the end before we navigate to the next step.

@@ -65,6 +65,20 @@ platform :ios do
     end
   end
 
+  desc "CodeQL"
+  lane :codeql do
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "320" # CodeQL runs on GitHub CI. We need much higher timeout here.
+    build_app(
+      skip_archive: true,
+      skip_codesigning: true,
+      derived_data_path: ".derivedData",
+      xcargs: [
+        "-skipPackagePluginValidation",
+        "-skipMacroValidation"
+      ]
+    )
+  end
+
   desc "Build app"
   lane :build do
     build_app(

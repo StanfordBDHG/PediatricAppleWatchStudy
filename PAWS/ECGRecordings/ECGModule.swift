@@ -6,15 +6,16 @@
 // SPDX-License-Identifier: MIT
 //
 
-import FirebaseAuth
 import FirebaseFirestore
 import HealthKit
 import HealthKitOnFHIR
 import OSLog
 import Spezi
+import SpeziAccount
 import SpeziFirebaseConfiguration
 import SpeziHealthKit
 import SpeziLocalStorage
+import SwiftUI
 import UserNotifications
 
 
@@ -24,27 +25,60 @@ import UserNotifications
 
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
-    // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
-    @ObservationIgnored @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
+    @ObservationIgnored @Dependency(Account.self) private var account: Account?
+    @ObservationIgnored @Dependency(AccountNotifications.self) private var accountNotifications: AccountNotifications?
     @ObservationIgnored @Dependency(HealthKit.self) private var healthKit
+    @ObservationIgnored @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
+    
     
     private(set) var electrocardiograms: [HKElectrocardiogram] = []
-    private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
+    private var notificationsTask: Task<Void, Never>?
+    
+    
+    private var healthKitSamplesEndDateCutoff: Date {
+        get async throws {
+            // Waiting until Spezi Account loads the account details.
+            let loadingStartDate = Date.now
+            while await account?.details?.dateOfEnrollment == nil || loadingStartDate.distance(to: .now) > 2.0 {
+                logger.debug("Loading DateOfEnrollment ...")
+                try await Task.sleep(for: .seconds(0.05))
+            }
+            
+            // Ensure that the HealthKit start date is set correctly based on the date of enrollment.
+            guard let healthKitStartDate = await account?.details?.dateOfEnrollment else {
+                logger.error("Not able to load date of enrollment; falling back to the locally stored date of enrollment.")
+                
+                guard let healthKitStartDate = self.healthKitStartDate else {
+                    logger.error("No locally stored date of enrollment. Can not load samples.")
+                    throw FirebaseFirestore.Firestore.FirestoreError.userDetailsNotLoading
+                }
+                
+                return healthKitStartDate
+            }
+            
+            self.healthKitStartDate = healthKitStartDate
+            return healthKitStartDate
+        }
+    }
     
     
     required init() { }
     
     
     func configure() {
-        authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
-            guard user != nil, let self else {
-                return
-            }
-            
-            Task {
-                try await self.reloadECGs()
+        if let accountNotifications {
+            notificationsTask = Task.detached { @MainActor [weak self] in
+                for await _ in accountNotifications.events {
+                    guard let self else {
+                        return
+                    }
+                    
+                    Task {
+                        try await self.reloadECGs()
+                    }
+                }
             }
         }
     }
@@ -89,7 +123,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
     /// - Throws: An error if the user is not authenticated.
     func reloadECGs() async throws {
-        guard let user = Auth.auth().currentUser else {
+        guard await account?.signedIn ?? false else {
             logger.error("User not authenticated")
             return
         }
@@ -98,8 +132,12 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             logger.error("HealthKit permissions not yet provided.")
             return
         }
-
-        let samplePredicate = HKQuery.predicateForSamples(withStart: user.metadata.creationDate, end: .now, options: .strictStartDate)
+        
+        let samplePredicate = try await HKQuery.predicateForSamples(
+            withStart: healthKitSamplesEndDateCutoff,
+            end: .now,
+            options: .strictStartDate
+        )
         let queryDescriptor = HKSampleQueryDescriptor(
             predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
             sortDescriptors: []
@@ -207,6 +245,11 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     private func upload(sample: HKSample, force: Bool = false) async throws {
+        // We do not upload any samples before the date of enrollment.
+        guard try await sample.endDate > healthKitSamplesEndDateCutoff else {
+            return
+        }
+        
         let resource: FHIRResourceProxy
         if let electrocardiogram = sample as? HKElectrocardiogram {
             await self.insert(electrocardiogram: electrocardiogram)

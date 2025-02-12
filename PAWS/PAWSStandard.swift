@@ -24,6 +24,8 @@ import SwiftUI
 actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, ConsentConstraint, AccountNotifyConstraint {
     // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
     @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
+    // periphery:ignore - Uses @AppStorage
+    @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     @Dependency(ECGModule.self) private var ecgStorage
 
     private let logger = Logger(subsystem: "PAWS", category: "Standard")
@@ -65,11 +67,14 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Consen
         switch event {
         case .deletingAccount:
             do {
+                healthKitStartDate = nil
                 // delete all user associated data
                 try await Firestore.firestore().userDocumentReference.delete()
             } catch {
                 logger.error("Could not delete user document: \(error)")
             }
+        case .disassociatingAccount:
+            healthKitStartDate = nil
         default:
             break
         }
