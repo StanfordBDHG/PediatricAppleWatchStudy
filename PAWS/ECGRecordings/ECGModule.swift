@@ -264,7 +264,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             resource = FHIRResourceProxy(
                 with: try await electrocardiogram.observation(
                     symptoms: symptoms,
-                    voltageMeasurements: voltageMeasurements.map({ ($0.timeOffset, $0.voltage) })
+                    voltageMeasurements: voltageMeasurements.map { ($0.timeOffset, $0.voltage) }
                 )
             )
         } else {

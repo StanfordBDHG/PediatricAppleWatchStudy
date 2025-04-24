@@ -13,8 +13,8 @@ import SpeziScheduler
 extension Scheduler {
     func scheduleReminders(time: DateComponents) async throws {
         // We discard all other date components:
-        let hours = time.hour.map({ [$0] }) ?? []
-        let minutes = time.minute.map({ [$0] }) ?? []
+        let hours = time.hour.map { [$0] }?? []
+        let minutes = time.minute.map { [$0] }?? []
         
         try createOrUpdateTask(
             id: "PAWS Reminder",
