@@ -20,7 +20,9 @@ platform :ios do
       skip_build: true,
       derived_data_path: ".derivedData",
       code_coverage: true,
-      devices: ["iPhone 16 Pro"],
+      devices: [
+        "iPhone 16 Pro"
+      ],
       force_quit_simulator: true,
       reset_simulator: true,
       prelaunch_simulator: false,
@@ -45,6 +47,7 @@ platform :ios do
     snapshot(
       test_without_building: true,
       derived_data_path: ".derivedData",
+      ios_version: "18.2", # Temporary workaround for https://github.com/fastlane/fastlane/issues/29481.
       devices: [
         "iPhone 16 Pro"
       ],

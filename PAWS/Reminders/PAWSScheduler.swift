@@ -10,27 +10,20 @@ import Foundation
 import SpeziScheduler
 
 
-/// A `Scheduler` using the ``PAWSTaskContext`` to schedule and manage tasks and events in the
-/// PAWS.
-typealias PAWSScheduler = Scheduler<PAWSTaskContext>
-
-
-extension PAWSScheduler {
+extension Scheduler {
     func scheduleReminders(time: DateComponents) async throws {
         // We discard all other date components:
-        let dateComponents = DateComponents(hour: time.hour, minute: time.minute)
+        let hours = time.hour.map({ [$0] }) ?? []
+        let minutes = time.minute.map({ [$0] }) ?? []
         
-        await schedule(
-            task: Task(
-                title: String(localized: "Friendly reminder to record your ECG!"),
-                description: String(localized: "Thank you for participating in the PAWS study!"),
-                schedule: Schedule(
-                    start: Calendar.current.startOfDay(for: .now),
-                    repetition: .matching(dateComponents),
-                    end: .numberOfEvents(7)
-                ),
-                notifications: true,
-                context: PAWSTaskContext.reminder
+        try createOrUpdateTask(
+            id: "PAWS Reminder",
+            title: "Friendly reminder to record your ECG!",
+            instructions: "Thank you for participating in the PAWS study!",
+            category: .custom("Reminder"),
+            schedule: .init(
+                startingAt: Calendar.current.startOfDay(for: .now),
+                recurrence: .daily(calendar: .current, end: .afterOccurrences(7), hours: hours, minutes: minutes)
             )
         )
     }

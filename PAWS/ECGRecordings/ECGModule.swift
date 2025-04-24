@@ -128,7 +128,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        guard await healthKit.authorized else {
+        guard healthKit.isFullyAuthorized else {
             logger.error("HealthKit permissions not yet provided.")
             return
         }
@@ -223,7 +223,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             for sampleType in HKElectrocardiogram.correlatedSymptomTypes {
                 let queryDescriptor = HKSampleQueryDescriptor(
                     predicates: [
-                        .sample(type: sampleType, predicate: predicate)
+                        .sample(type: sampleType.hkSampleType, predicate: predicate)
                     ],
                     sortDescriptors: [
                         SortDescriptor(\.endDate, order: .reverse)
@@ -258,17 +258,17 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                 return
             }
             
-            async let symptoms = try electrocardiogram.symptoms(from: healthStore)
+            async let symptoms = try electrocardiogram.symptoms(from: healthKit)
             async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
             
             resource = FHIRResourceProxy(
                 with: try await electrocardiogram.observation(
                     symptoms: symptoms,
-                    voltageMeasurements: voltageMeasurements
+                    voltageMeasurements: voltageMeasurements.map({ ($0.timeOffset, $0.voltage) })
                 )
             )
         } else {
-            resource = try sample.resource
+            resource = try sample.resource()
         }
         
         try await Firestore.firestore().healthKitCollectionReference.document(sample.id.uuidString).setData(from: resource)

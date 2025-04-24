@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import HealthKit
+import SpeziHealthKit
 import SwiftUI
 
 
@@ -15,6 +15,7 @@ struct ECGRecording: View {
     @State var symptoms: HKElectrocardiogram.Symptoms = [:]
     @State var isUploaded = false
     @Environment(ECGModule.self) var ecgModule
+    @Environment(HealthKit.self) var healthKit
     
     
     var body: some View {
@@ -48,7 +49,7 @@ struct ECGRecording: View {
             .padding()
         }
             .task {
-                guard let symptoms = try? await electrocardiogram.symptoms(from: HKHealthStore()) else {
+                guard let symptoms = try? await electrocardiogram.symptoms(from: healthKit) else {
                     return
                 }
                 

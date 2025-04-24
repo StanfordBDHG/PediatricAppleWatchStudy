@@ -6,14 +6,17 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziNotifications
 import SpeziOnboarding
 import SpeziScheduler
 import SwiftUI
 
 
 struct NotificationPermissions: View {
-    @Environment(PAWSScheduler.self) private var scheduler
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    
+    @Environment(Scheduler.self) private var scheduler
+    @Environment(\.requestNotificationAuthorization) private var requestNotificationAuthorization
     
     @State private var notificationProcessing = false
     @State private var selectedTime = Calendar.current.date(bySettingHour: 19, minute: 0, second: 0, of: .now) ?? .now
@@ -49,15 +52,15 @@ struct NotificationPermissions: View {
                         do {
                             notificationProcessing = true
                             
-                            let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
-                            try await scheduler.scheduleReminders(time: dateComponents)
-                            
                             // Notification Authorization is not available in the preview simulator.
                             if ProcessInfo.processInfo.isPreviewSimulator {
                                 try await _Concurrency.Task.sleep(for: .seconds(5))
                             } else {
-                                try await scheduler.requestLocalNotificationAuthorization()
+                                try await requestNotificationAuthorization(options: [.alert, .sound, .badge])
                             }
+                            
+                            let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
+                            try await scheduler.scheduleReminders(time: dateComponents)
                         } catch {
                             print("Could not request notification permissions.")
                         }
@@ -81,7 +84,7 @@ struct NotificationPermissions: View {
         NotificationPermissions()
     }
         .previewWith {
-            PAWSScheduler()
+            Scheduler()
         }
 }
 #endif

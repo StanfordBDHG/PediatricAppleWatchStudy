@@ -53,7 +53,7 @@ class PAWSDelegate: SpeziAppDelegate {
                 healthKit
             }
             
-            PAWSScheduler()
+            Scheduler()
             OnboardingDataSource()
             EnrollmentGroup()
         }
@@ -92,40 +92,12 @@ class PAWSDelegate: SpeziAppDelegate {
         )
         
         return HealthKit {
-            CollectSample(
-                HKQuantityType.electrocardiogramType(),
-                predicate: sharedPredicate,
-                deliverySetting: .background(saveAnchor: false)
-            )
-            CollectSamples(
-                Set(HKElectrocardiogram.correlatedSymptomTypes),
-                predicate: sharedPredicate,
-                deliverySetting: .background(saveAnchor: true)
-            )
-            CollectSample(
-                HKQuantityType(.heartRate),
-                predicate: sharedPredicate,
-                deliverySetting: .manual(safeAnchor: false)
-            )
-            CollectSample(
-                HKQuantityType(.vo2Max),
-                predicate: sharedPredicate,
-                deliverySetting: .manual(safeAnchor: false)
-            )
-            CollectSample(
-                HKQuantityType(.physicalEffort),
-                predicate: sharedPredicate,
-                deliverySetting: .manual(safeAnchor: false)
-            )
-            CollectSample(
-                HKQuantityType(.stepCount),
-                predicate: sharedPredicate,
-                deliverySetting: .manual(safeAnchor: false)
-            )
-            CollectSample(
-                HKQuantityType(.activeEnergyBurned),
-                predicate: sharedPredicate,
-                deliverySetting: .manual(safeAnchor: false)
+            CollectSample(.electrocardiogram, continueInBackground: true, predicate: sharedPredicate)
+            for correlatedSymptomType in HKElectrocardiogram.correlatedSymptomTypes {
+                CollectSample(correlatedSymptomType, continueInBackground: true, predicate: sharedPredicate)
+            }
+            RequestReadAccess(
+                quantity: [.heartRate, .vo2Max, .physicalEffort, .stepCount, .activeEnergyBurned]
             )
         }
     }

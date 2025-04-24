@@ -7,6 +7,7 @@
 //
 
 @_spi(TestingSupport) import SpeziAccount
+import SpeziScheduler
 import SwiftUI
 
 
@@ -60,7 +61,7 @@ struct HomeView: View {
     return HomeView()
         .previewWith(standard: PAWSStandard()) {
             EnrollmentGroup()
-            PAWSScheduler()
+            Scheduler()
             AccountConfiguration(service: InMemoryAccountService(), activeDetails: details)
         }
 }
@@ -71,7 +72,7 @@ struct HomeView: View {
     return HomeView()
         .previewWith(standard: PAWSStandard()) {
             EnrollmentGroup()
-            PAWSScheduler()
+            Scheduler()
             AccountConfiguration(service: InMemoryAccountService())
         }
 }
