@@ -133,38 +133,19 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        let samplePredicate = try await HKQuery.predicateForSamples(
-            withStart: healthKitSamplesEndDateCutoff,
-            end: .now,
-            options: .strictStartDate
+        self.electrocardiograms = try await healthKit.query(
+            .electrocardiogram,
+            timeRange: .since(healthKitSamplesEndDateCutoff)
         )
-        let queryDescriptor = HKSampleQueryDescriptor(
-            predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
-            sortDescriptors: []
-        )
-        let samples = try await queryDescriptor.result(for: healthStore)
-        
-        self.electrocardiograms = samples
         await self.uploadUnuploadedECGs()
     }
     
     
     // MARK: - ECG & HealthKit Data Management
     func upload(electrocardiogram: HKElectrocardiogram) async {
-        var supplementalMetrics: [HKSample] = []
-        
         do {
             try await upload(sample: electrocardiogram)
-            
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPulseRates) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPhysicalEffort) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingStepCount) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingActiveEnergy) ?? [])
-            
-            if let precedingVo2Max = try? await electrocardiogram.precedingVo2Max {
-                supplementalMetrics.append(precedingVo2Max)
-            }
-            
+            let supplementalMetrics = try await healthKit.supplementalMetrics(for: electrocardiogram)
             for supplementalMetric in supplementalMetrics {
                 do {
                     try await upload(sample: supplementalMetric)
@@ -221,17 +202,17 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             let predicate = HKQuery.predicateForObjectsAssociated(electrocardiogram: electrocardiogram)
             
             for sampleType in HKElectrocardiogram.correlatedSymptomTypes {
-                let queryDescriptor = HKSampleQueryDescriptor(
-                    predicates: [
-                        .sample(type: sampleType.hkSampleType, predicate: predicate)
-                    ],
-                    sortDescriptors: [
+                let categorySamples = try await healthKit.query(
+                    sampleType,
+                    timeRange: .ever,
+                    sortedBy: [
                         SortDescriptor(\.endDate, order: .reverse)
-                    ]
+                    ],
+                    predicate: predicate
                 )
                 
-                sampleLoop: for sample in try await queryDescriptor.result(for: healthStore) {
-                    guard let categorySample = sample as? HKCategorySample, categorySample.id == correlatedCategorySample.id else {
+                sampleLoop: for categorySample in categorySamples {
+                    guard categorySample.id == correlatedCategorySample.id else {
                         continue sampleLoop
                     }
                     
