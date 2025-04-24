@@ -7,6 +7,8 @@
 //
 
 import XCTest
+import XCTHealthKit
+
 
 final class DataManagementTests: XCTestCase {
     override func setUp() async throws {
@@ -27,7 +29,7 @@ final class DataManagementTests: XCTestCase {
         let app = XCUIApplication()
         try app.navigateOnboardingFlow(email: "lelandstanford\(Int.random(in: 0...42000))@stanford.edu", code: "XKDYV3DF")
         
-        let healthApp = XCUIApplication.healthApp()
+        let healthApp = XCUIApplication.healthApp
         try launchAndAddSample(healthApp: healthApp, .electrocardiogram())
         app.activate()
         
