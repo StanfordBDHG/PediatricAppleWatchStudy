@@ -163,8 +163,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
         do {
             guard let updatedElectrocardiogram = try await self.electrocardiogram(
-                correlatedWith: categorySample,
-                from: healthStore
+                correlatedWith: categorySample
             ) else {
                 return
             }
@@ -191,8 +190,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     }
     
     private func electrocardiogram(
-        correlatedWith correlatedCategorySample: HKCategorySample,
-        from healthStore: HKHealthStore
+        correlatedWith correlatedCategorySample: HKCategorySample
     ) async throws -> HKElectrocardiogram? {
         electrocardiogramLoop: for electrocardiogram in electrocardiograms {
             guard electrocardiogram.symptomsStatus == .present else {

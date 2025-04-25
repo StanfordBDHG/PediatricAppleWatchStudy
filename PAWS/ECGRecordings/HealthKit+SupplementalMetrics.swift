@@ -9,25 +9,6 @@
 import SpeziHealthKit
 
 
-extension HKElectrocardiogram {
-    fileprivate var oneDayPredicate: NSPredicate {
-        HKQuery.predicateForSamples(
-            withStart: Calendar.current.date(byAdding: .day, value: -1, to: self.startDate), // 24 hours before recording.
-            end: self.startDate,
-            options: .strictStartDate
-        )
-    }
-    
-    fileprivate var fiveMinutePredicate: NSPredicate {
-        HKQuery.predicateForSamples(
-            withStart: Calendar.current.date(byAdding: .minute, value: -5, to: self.startDate), // 5 minutes before recording.
-            end: self.startDate,
-            options: .strictStartDate
-        )
-    }
-}
-
-
 extension HealthKit {
     func supplementalMetrics(for electrocardiogram: HKElectrocardiogram) async throws -> [HKSample] {
         var collectedSupplementalMetrics: [HKSample] = []
