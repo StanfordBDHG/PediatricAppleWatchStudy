@@ -43,21 +43,31 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Consen
     
     
     // MARK: - HealthKitConstraint
-    func add(sample: HKSample) async {
-        if let electrocardiogram = sample as? HKElectrocardiogram {
-            await ecgStorage.upload(electrocardiogram: electrocardiogram)
-        } else if let categorySample = sample as? HKCategorySample {
-            await ecgStorage.updateElectrocardiogram(basedOn: categorySample)
-        } else {
-            logger.log("Request to upload unidentified HealthKit Sample: \(sample)")
+    func handleNewSamples<Sample>(
+        _ addedSamples: some Collection<Sample>,
+        ofType sampleType: SampleType<Sample>
+    ) async {
+        for sample in addedSamples {
+            if let electrocardiogram = sample as? HKElectrocardiogram {
+                await ecgStorage.upload(electrocardiogram: electrocardiogram)
+            } else if let categorySample = sample as? HKCategorySample {
+                await ecgStorage.updateElectrocardiogram(basedOn: categorySample)
+            } else {
+                logger.log("Request to upload unidentified HealthKit Sample: \(sample)")
+            }
         }
     }
     
-    func remove(sample: HKDeletedObject) async {
-        do {
-            try await ecgStorage.remove(sample: sample.uuid)
-        } catch {
-            logger.error("Could not remove HealthKit sample: \(error)")
+    func handleDeletedObjects<Sample>(
+        _ deletedObjects: some Collection<HKDeletedObject>,
+        ofType sampleType: SampleType<Sample>
+    ) async {
+        for sample in deletedObjects {
+            do {
+                try await ecgStorage.remove(sample: sample.uuid)
+            } catch {
+                logger.error("Could not remove HealthKit sample: \(error)")
+            }
         }
     }
     

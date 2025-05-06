@@ -10,14 +10,17 @@
 import SpeziFirebaseAccount
 import SpeziHealthKit
 import SpeziOnboarding
+import SpeziScheduler
 import SwiftUI
 
 
 /// Displays an multi-step onboarding flow for the PAWS.
 struct OnboardingFlow: View {
-    @Environment(HealthKit.self) private var healthKitDataSource
-    @Environment(PAWSScheduler.self) private var scheduler
-
+    @Environment(HealthKit.self) private var healthKit
+    
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.notificationSettings) private var notificationSettings
+    
     @AppStorage(StorageKeys.onboardingFlowComplete) private var completedOnboardingFlow = false
     
     @State private var localNotificationAuthorization = false
@@ -28,8 +31,7 @@ struct OnboardingFlow: View {
         if ProcessInfo.processInfo.isPreviewSimulator {
             return false
         }
-        
-        return healthKitDataSource.authorized
+        return healthKit.isFullyAuthorized
     }
     
     
@@ -55,8 +57,14 @@ struct OnboardingFlow: View {
                 NotificationPermissions()
             }
         }
-            .task {
-                localNotificationAuthorization = await scheduler.localNotificationAuthorization
+            .onChange(of: scenePhase, initial: true) {
+                guard case .active = scenePhase else {
+                    return
+                }
+
+                _Concurrency.Task {
+                    localNotificationAuthorization = await notificationSettings().authorizationStatus == .authorized
+                }
             }
             .interactiveDismissDisabled(!completedOnboardingFlow)
     }
@@ -70,7 +78,7 @@ struct OnboardingFlow: View {
             OnboardingDataSource()
             HealthKit()
             AccountConfiguration(service: InMemoryAccountService())
-            PAWSScheduler()
+            Scheduler()
         }
 }
 #endif

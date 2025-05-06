@@ -128,43 +128,24 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        guard await healthKit.authorized else {
+        guard healthKit.isFullyAuthorized else {
             logger.error("HealthKit permissions not yet provided.")
             return
         }
         
-        let samplePredicate = try await HKQuery.predicateForSamples(
-            withStart: healthKitSamplesEndDateCutoff,
-            end: .now,
-            options: .strictStartDate
+        self.electrocardiograms = try await healthKit.query(
+            .electrocardiogram,
+            timeRange: .since(healthKitSamplesEndDateCutoff)
         )
-        let queryDescriptor = HKSampleQueryDescriptor(
-            predicates: [HKSamplePredicate<HKElectrocardiogram>.electrocardiogram(samplePredicate)],
-            sortDescriptors: []
-        )
-        let samples = try await queryDescriptor.result(for: healthStore)
-        
-        self.electrocardiograms = samples
         await self.uploadUnuploadedECGs()
     }
     
     
     // MARK: - ECG & HealthKit Data Management
     func upload(electrocardiogram: HKElectrocardiogram) async {
-        var supplementalMetrics: [HKSample] = []
-        
         do {
             try await upload(sample: electrocardiogram)
-            
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPulseRates) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingPhysicalEffort) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingStepCount) ?? [])
-            supplementalMetrics.append(contentsOf: (try? await electrocardiogram.precedingActiveEnergy) ?? [])
-            
-            if let precedingVo2Max = try? await electrocardiogram.precedingVo2Max {
-                supplementalMetrics.append(precedingVo2Max)
-            }
-            
+            let supplementalMetrics = try await healthKit.supplementalMetrics(for: electrocardiogram)
             for supplementalMetric in supplementalMetrics {
                 do {
                     try await upload(sample: supplementalMetric)
@@ -182,8 +163,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func updateElectrocardiogram(basedOn categorySample: HKCategorySample) async {
         do {
             guard let updatedElectrocardiogram = try await self.electrocardiogram(
-                correlatedWith: categorySample,
-                from: healthStore
+                correlatedWith: categorySample
             ) else {
                 return
             }
@@ -210,8 +190,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     }
     
     private func electrocardiogram(
-        correlatedWith correlatedCategorySample: HKCategorySample,
-        from healthStore: HKHealthStore
+        correlatedWith correlatedCategorySample: HKCategorySample
     ) async throws -> HKElectrocardiogram? {
         electrocardiogramLoop: for electrocardiogram in electrocardiograms {
             guard electrocardiogram.symptomsStatus == .present else {
@@ -221,17 +200,17 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             let predicate = HKQuery.predicateForObjectsAssociated(electrocardiogram: electrocardiogram)
             
             for sampleType in HKElectrocardiogram.correlatedSymptomTypes {
-                let queryDescriptor = HKSampleQueryDescriptor(
-                    predicates: [
-                        .sample(type: sampleType, predicate: predicate)
-                    ],
-                    sortDescriptors: [
+                let categorySamples = try await healthKit.query(
+                    sampleType,
+                    timeRange: .ever,
+                    sortedBy: [
                         SortDescriptor(\.endDate, order: .reverse)
-                    ]
+                    ],
+                    predicate: predicate
                 )
                 
-                sampleLoop: for sample in try await queryDescriptor.result(for: healthStore) {
-                    guard let categorySample = sample as? HKCategorySample, categorySample.id == correlatedCategorySample.id else {
+                sampleLoop: for categorySample in categorySamples {
+                    guard categorySample.id == correlatedCategorySample.id else {
                         continue sampleLoop
                     }
                     
@@ -258,17 +237,17 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                 return
             }
             
-            async let symptoms = try electrocardiogram.symptoms(from: healthStore)
+            async let symptoms = try electrocardiogram.symptoms(from: healthKit)
             async let voltageMeasurements = try electrocardiogram.voltageMeasurements(from: healthStore)
             
             resource = FHIRResourceProxy(
                 with: try await electrocardiogram.observation(
                     symptoms: symptoms,
-                    voltageMeasurements: voltageMeasurements
+                    voltageMeasurements: voltageMeasurements.map { ($0.timeOffset, $0.voltage) }
                 )
             )
         } else {
-            resource = try sample.resource
+            resource = try sample.resource()
         }
         
         try await Firestore.firestore().healthKitCollectionReference.document(sample.id.uuidString).setData(from: resource)
