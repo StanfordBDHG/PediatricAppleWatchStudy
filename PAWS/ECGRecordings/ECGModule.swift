@@ -41,7 +41,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         get async throws {
             // Waiting until Spezi Account loads the account details.
             let loadingStartDate = Date.now
-            while await account?.details?.dateOfEnrollment == nil || loadingStartDate.distance(to: .now) > 2.0 {
+            while !(await account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 2.0) {
                 logger.debug("Loading DateOfEnrollment ...")
                 try await Task.sleep(for: .seconds(0.05))
             }
