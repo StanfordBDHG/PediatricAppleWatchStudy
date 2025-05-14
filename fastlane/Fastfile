@@ -119,9 +119,10 @@ platform :ios do
   lane :deploy do |options|
     environment = options[:environment] || "staging"
 
-    if environment == "production"
-      screenshots
-    end
+    ## Re-enable once we want to deploy to the app store.
+    # if environment == "production"
+    #   screenshots
+    # end
     
     signin
     increment_build_number(
@@ -133,15 +134,25 @@ platform :ios do
     commit = last_git_commit
     
     if environment == "production"
-      deliver(
-        submit_for_review: true,
-        force: true,
-        reject_if_possible: true,
-        overwrite_screenshots: true,
-        automatic_release: true,
-        precheck_include_in_app_purchases: false,
-        metadata_path: "./fastlane/metadata",
-        screenshots_path: "./fastlane/screenshots"
+      ## Re-enable once we want to deploy to the app store.
+      # deliver(
+      #   submit_for_review: true,
+      #   force: true,
+      #   reject_if_possible: true,
+      #   overwrite_screenshots: true,
+      #   automatic_release: true,
+      #   precheck_include_in_app_purchases: false,
+      #   metadata_path: "./fastlane/metadata",
+      #   screenshots_path: "./fastlane/screenshots"
+      # )
+      upload_to_testflight(
+        distribute_external: true,
+        groups: [
+          "Production"
+        ],
+        submit_beta_review: true,
+        notify_external_testers: true,
+        changelog: commit[:message]
       )
     else
       upload_to_testflight(

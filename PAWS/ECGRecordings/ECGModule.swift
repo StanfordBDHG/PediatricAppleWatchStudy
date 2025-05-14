@@ -19,7 +19,7 @@ import SwiftUI
 import UserNotifications
 
 
-@globalActor private actor ECGModuleActor: GlobalActor {
+@globalActor actor ECGModuleActor: GlobalActor {
     static let shared = ECGModuleActor()
 }
 
