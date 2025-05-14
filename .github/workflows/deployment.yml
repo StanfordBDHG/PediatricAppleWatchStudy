@@ -24,6 +24,17 @@ on:
           - development
           - staging
           - production
+      version:
+        description: |
+          The semantic version of the app that should be released.
+        required: true
+        type: string
+      releasenotes:
+        description: |
+          Release notes of what changed in this version.
+        required: false
+        type: string
+        default: Bug fixes and performance improvements.
   workflow_call:
     inputs:
       environment:
@@ -32,6 +43,17 @@ on:
         required: false
         type: string
         default: staging
+      version:
+        description: |
+          The semantic version of the app that should be released.
+        required: true
+        type: string
+      releasenotes:
+        description: |
+          Release notes of what changed in this version.
+        required: false
+        type: string
+        default: Bug fixes and performance improvements.
 
 concurrency:
   group: deployment
@@ -42,17 +64,19 @@ jobs:
     name: Determine Environment
     runs-on: ubuntu-latest
     outputs:
-      environment: ${{ steps.set-env.outputs.environment }}
+      environment: ${{ steps.determineenvironment.outputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Determine Environment
-        id: set-env
+        id: determineenvironment
         run: |
           if [[ -z "${{ inputs.environment }}" ]]; then
             echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "environment: staging"
           else
             echo "environment=${{ inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "environment: ${{ inputs.environment }}"
           fi
   vars:
     name: Inject Environment Variables In Deployment Workflow
@@ -61,25 +85,33 @@ jobs:
     environment: ${{ needs.determineenvironment.outputs.environment }}
     outputs:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+      version: ${{ steps.script.outputs.version }}
     steps:
-      - run: |
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+        with:
+          semver_only: true
+          initial_version: "2.0.0"
+      - id: script
+        run: |
+          echo "Injecting Environment Variables In Deployment Workflow ..."
           echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
-  staticanaylsis:
-    name: Static Analysis
-    uses: ./.github/workflows/static-analysis.yml
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
-    secrets: inherit
+          if [[ -z "${{ inputs.version }}" ]]; then
+            echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "version: ${{ steps.get-latest-tag.outputs.tag }}"
+          else
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "version: ${{ inputs.version }}"
+          fi
+          echo "releasenotes: ${{ inputs.releasenotes }}"
   buildandtest:
     name: Build and Test
     needs: determineenvironment
     uses: ./.github/workflows/build-and-test.yml
     permissions:
       contents: read
-      actions: read
-      security-events: write
     secrets: inherit
   iosapptestflightdeployment:
     name: iOS App TestFlight Deployment
@@ -94,7 +126,7 @@ jobs:
       setupsigning: true
       setupfirebaseemulator: true
       firebaseemulatorimport: ./firebase --project ${{ needs.vars.outputs.FIREBASE_PROJECT_ID }}
-      fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}"
+      fastlanelane: deploy environment:"${{ needs.determineenvironment.outputs.environment }}" versionname:"${{ needs.vars.outputs.version }}" releasenotes:"${{ inputs.releasenotes }}"
     secrets: inherit
   deployfirebase:
     name: Deploy Firebase Project

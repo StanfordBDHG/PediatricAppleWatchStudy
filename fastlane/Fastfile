@@ -1,5 +1,5 @@
 #
-# This source file is part of the PAWS application based on the Stanford Spezi Template Application project
+# This source file is part of the ENGAGE-HF based on the Stanford Spezi Template Application project
 #
 # SPDX-FileCopyrightText: 2023 Stanford University
 #
@@ -7,6 +7,16 @@
 #
 
 default_platform(:ios)
+
+APP_CONFIG = {
+  default_environment: "staging",
+  default_app_identifier: "edu.stanford.cs342.2023.paws",
+  default_provisioningProfile: "CS342 2023 PAWS",
+  default_version_name: "1.0.0",
+  default_release_notes: "Bug fixes and performance improvements.",
+  scheme: "PAWS",
+  plist_path: "PAWS/Supporting Files/Info.plist"
+}.freeze
 
 platform :ios do
   before_all do
@@ -20,17 +30,16 @@ platform :ios do
       skip_build: true,
       derived_data_path: ".derivedData",
       code_coverage: true,
-      devices: [
-        "iPhone 16 Pro"
-      ],
-      force_quit_simulator: true,
-      reset_simulator: true,
-      prelaunch_simulator: false,
+      devices: ["iPhone 16 Plus"],
+      disable_slide_to_type: false,
       concurrent_workers: 1,
       max_concurrent_simulators: 1,
       result_bundle: true,
       output_directory: ".",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+      xcargs: [
+        "-skipPackagePluginValidation",
+        "-skipMacroValidation"
+      ]
     )
   end
 
@@ -40,21 +49,23 @@ platform :ios do
       destination: "generic/platform=iOS Simulator",
       configuration: "Debug",
       derived_data_path: ".derivedData",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation",
+      xcargs: [
+        "-skipPackagePluginValidation",
+        "-skipMacroValidation"
+      ],
       build_for_testing: true
     )
 
     snapshot(
       test_without_building: true,
       derived_data_path: ".derivedData",
-      ios_version: "18.2", # Temporary workaround for https://github.com/fastlane/fastlane/issues/29481.
       devices: [
-        "iPhone 16 Pro"
+        "iPhone 16 Plus"
       ],
       languages: [
          "en-US",
       ],
-      scheme: "PAWS",
+      scheme: APP_CONFIG[:scheme],
       output_directory: "./fastlane/screenshots",
       clear_previous_screenshots: true,
       concurrent_simulators: false,
@@ -63,8 +74,8 @@ platform :ios do
     )
     
     # Workaround for https://github.com/fastlane/fastlane/issues/21759 and 
-    Dir.glob("./screenshots/**/iPhone 16 Pro-*.png").each do |file|
-      sh("sips --resampleHeightWidth 2778 1284 '#{file}'")
+    Dir.glob("./screenshots/**/iPhone 16 Plus-*.png").each do |file|
+      sh("sips --resampleHeightWidth 2796 1290 '#{file}'")
     end
   end
 
@@ -72,6 +83,7 @@ platform :ios do
   lane :codeql do
     ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "320" # CodeQL runs on GitHub CI. We need much higher timeout here.
     build_app(
+      scheme: APP_CONFIG[:scheme],
       skip_archive: true,
       skip_codesigning: true,
       derived_data_path: ".derivedData",
@@ -85,21 +97,37 @@ platform :ios do
   desc "Build app"
   lane :build do
     build_app(
+      scheme: APP_CONFIG[:scheme],
       skip_archive: true,
       skip_codesigning: true,
       derived_data_path: ".derivedData",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation"
+      xcargs: [
+        "-skipPackagePluginValidation",
+        "-skipMacroValidation"
+      ]
     )
   end
 
   desc "Archive app"
-  lane :archive do
+  lane :archive do |options|
+    appidentifier = options[:appidentifier].to_s.strip.empty? ? APP_CONFIG[:default_app_identifier] : options[:appidentifier]
+    provisioningProfile = options[:provisioningProfile].to_s.strip.empty? ? APP_CONFIG[:default_provisioningProfile] : options[:provisioningProfile]
+    
+    update_app_identifier(
+      plist_path: APP_CONFIG[:plist_path],
+      app_identifier: appidentifier
+    )
+
     build_app(
+      scheme: APP_CONFIG[:scheme],
       derived_data_path: ".derivedData",
-      xcargs: "-skipPackagePluginValidation -skipMacroValidation",
+      xcargs: [
+        "-skipPackagePluginValidation",
+        "-skipMacroValidation"
+      ],
       export_options: {
         provisioningProfiles: {
-          "edu.stanford.cs342.2023.paws" => "CS342 2023 PAWS"
+          appidentifier => provisioningProfile
         }
       }
     )
@@ -117,35 +145,74 @@ platform :ios do
 
   desc "Publish a release to TestFlight or the App Store depending on the environment"
   lane :deploy do |options|
-    environment = options[:environment] || "staging"
+    environment = options[:environment].to_s.strip.empty? ? APP_CONFIG[:default_environment] : options[:environment]
+    appidentifier = options[:appidentifier].to_s.strip.empty? ? APP_CONFIG[:default_app_identifier] : options[:appidentifier]
+    provisioningProfile = options[:provisioningProfile].to_s.strip.empty? ? APP_CONFIG[:default_provisioningProfile] : options[:provisioningProfile]
+    versionname = options[:versionname].to_s.strip.empty? ? APP_CONFIG[:default_version_name] : options[:versionname]
+    releasenotes = options[:releasenotes].to_s.strip.empty? ? APP_CONFIG[:default_release_notes] : options[:releasenotes]
+
+    UI.message("Using environment: #{environment}")
+    UI.message("Using app identifier: #{appidentifier}")
+    UI.message("Using provisioning profile: #{provisioningProfile}")
+    UI.message("Using version name: #{versionname}")
+    UI.message("Using release notes: #{releasenotes}")
+
+    releasenotes = releasenotes.gsub('\u2019', "'")
 
     if environment == "production"
-      screenshots
+      increment_version_number(
+        version_number: versionname
+      )
     end
     
     signin
-    increment_build_number(
-      {
-        build_number: latest_testflight_build_number + 1
-      }
+    latest_build_number = latest_testflight_build_number(
+      app_identifier: appidentifier
     )
-    archive
+    increment_build_number(
+      build_number: latest_build_number + 1
+    )
+    archive(
+      appidentifier: appidentifier,
+      provisioningProfile: provisioningProfile,
+    )
     commit = last_git_commit
     
     if environment == "production"
-      deliver(
-        submit_for_review: true,
-        force: true,
-        reject_if_possible: true,
-        overwrite_screenshots: true,
-        automatic_release: true,
-        precheck_include_in_app_purchases: false,
-        metadata_path: "./fastlane/metadata",
-        screenshots_path: "./fastlane/screenshots"
+      ## Re-enable once we want to deploy to the app store.
+      # deliver(
+      #   app_identifier: appidentifier,
+      #   release_notes: {
+      #     'en-US' => releasenotes
+      #   },
+      #   submit_for_review: true,
+      #   force: true,
+      #   reject_if_possible: true,
+      #   overwrite_screenshots: true,
+      #   automatic_release: true,
+      #   precheck_include_in_app_purchases: false,
+      #   metadata_path: "./fastlane/metadata",
+      #   screenshots_path: "./fastlane/screenshots"
+      # )
+      upload_to_testflight(
+        app_identifier: appidentifier,
+        distribute_external: true,
+        reject_build_waiting_for_review: true,
+        expire_previous_builds: false,
+        groups: [
+          "Production"
+        ],
+        submit_beta_review: true,
+        notify_external_testers: true,
+        changelog: releasenotes
       )
     else
+      ## Set expire_previous_builds to true once we release to the app store.
       upload_to_testflight(
+        app_identifier: appidentifier,
         distribute_external: true,
+        reject_build_waiting_for_review: true,
+        expire_previous_builds: false,
         groups: [
           "External Testers"
         ],

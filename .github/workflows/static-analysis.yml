@@ -1,7 +1,7 @@
 #
-# This source file is part of the PAWS application based on the Stanford Spezi Template Application project
+# This source file is part of the Stanford Spezi open source project
 #
-# SPDX-FileCopyrightText: 2023 Stanford University
+# SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
 #
 # SPDX-License-Identifier: MIT
 #
@@ -50,7 +50,6 @@ jobs:
     with:
       codeql: true
       fastlanelane: codeql
-      xcodeversion: "16.1" # Temporary workaround for: https://github.com/actions/runner-images/issues/11335. Remove when resolved.
   pylint:
     name: PyLint
     runs-on: ubuntu-latest

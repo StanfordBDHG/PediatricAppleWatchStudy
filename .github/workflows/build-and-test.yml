@@ -26,9 +26,9 @@ jobs:
     with:
       artifactname: PAWS.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
-      setupfirebaseemulator: true
       fastlanelane: test
       firebaseemulatorimport: ./firebase
+      setupfirebaseemulator: true
     secrets:
       GOOGLE_APPLICATION_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_BASE64 }}
   uploadcoveragereport:
