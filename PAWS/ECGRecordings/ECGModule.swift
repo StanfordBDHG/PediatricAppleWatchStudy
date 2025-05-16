@@ -19,7 +19,7 @@ import SwiftUI
 import UserNotifications
 
 
-@Observable @MainActor
+@Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @Dependency(Account.self) private var account: Account?
     @ObservationIgnored @Dependency(AccountNotifications.self) private var accountNotifications: AccountNotifications?
@@ -27,7 +27,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     
-    private(set) var electrocardiograms: [HKElectrocardiogram] = []
+    private(set) var electrocardiograms: Set<HKElectrocardiogram> = []
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
     private var notificationsTask: Task<Void, Never>?
@@ -37,13 +37,13 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         get async throws {
             // Waiting until Spezi Account loads the account details.
             let loadingStartDate = Date.now
-            while !(account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 0.2) {
+            while await !(account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 0.2) {
                 logger.debug("Loading DateOfEnrollment ...")
                 try await Task.sleep(for: .seconds(0.01))
             }
             
             // Ensure that the HealthKit start date is set correctly based on the date of enrollment.
-            guard let healthKitStartDate = account?.details?.dateOfEnrollment else {
+            guard let healthKitStartDate = await account?.details?.dateOfEnrollment else {
                 logger.error("Not able to load date of enrollment; falling back to the locally stored date of enrollment.")
                 
                 guard let healthKitStartDate = self.healthKitStartDate else {
@@ -136,9 +136,11 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        self.electrocardiograms = try await healthKit.query(
-            .electrocardiogram,
-            timeRange: .since(healthKitSamplesEndDateCutoff)
+        self.electrocardiograms = Set(
+            try await healthKit.query(
+                .electrocardiogram,
+                timeRange: .since(healthKitSamplesEndDateCutoff)
+            )
         )
         
         guard account?.signedIn ?? false else {
@@ -185,7 +187,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     @MainActor
     func remove(sample id: HKSample.ID) async throws {
-        electrocardiograms.removeAll(where: { $0.uuid == id })
+        if let index = electrocardiograms.firstIndex(where: { $0.uuid == id }) {
+            electrocardiograms.remove(at: index)
+        }
         try await Firestore.firestore().healthKitCollectionReference.document(id.uuidString).delete()
     }
     
@@ -193,9 +197,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     // MARK: - Private Helper Functions
     @MainActor
     private func insert(electrocardiogram: HKElectrocardiogram) {
-        electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
-        electrocardiograms.append(electrocardiogram)
-        electrocardiograms.sort(by: { $0.endDate > $1.endDate })
+        electrocardiograms.insert(electrocardiogram)
     }
     
     private func electrocardiogram(
@@ -240,7 +242,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         
         let resource: FHIRResourceProxy
         if let electrocardiogram = sample as? HKElectrocardiogram {
-            self.insert(electrocardiogram: electrocardiogram)
+            await self.insert(electrocardiogram: electrocardiogram)
             
             guard try await !self.isUploaded(electrocardiogram) || force else {
                 return

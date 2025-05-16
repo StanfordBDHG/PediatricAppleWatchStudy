@@ -27,7 +27,7 @@ struct ECGRecordingsList: View {
                             .frame(minHeight: geometry.size.height - 100)
                     }
                     VStack(spacing: 16) {
-                        ForEach(ecgModule.electrocardiograms) { electrocardiogram in
+                        ForEach(ecgModule.electrocardiograms.sorted(by: { $0.endDate > $1.endDate })) { electrocardiogram in
                             ECGRecording(electrocardiogram: electrocardiogram)
                         }
                     }
@@ -42,7 +42,6 @@ struct ECGRecordingsList: View {
                     .navigationTitle(String(localized: "ECG Recordings"))
                     .refreshable {
                         try? await ecgModule.reloadECGs()
-                        try? await Task.sleep(for: .seconds(0.25))
                     }
             }
         }
