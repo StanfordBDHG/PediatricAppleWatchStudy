@@ -27,6 +27,11 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageName</key>
+		<string></string>
+	</dict>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -45,5 +50,9 @@
 	<string>This message should never appear. Please adjust this when you start using speecg information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This message should never appear. Please adjust this when you start using speecg information. We have to put this in here as ResearchKit has the possibility to use it and not putting it here returns an error on AppStore Connect.</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
 </dict>
 </plist>
