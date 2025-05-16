@@ -126,6 +126,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     /// Reloads the ECGs by checking if the user is authenticated.
     /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
     /// - Throws: An error if the user is not authenticated.
+    @ECGModuleActor
     func reloadECGs() async throws {
         // Waiting until the HealthKit module loads all authorization requirements.
         let loadingStartDate = Date.now

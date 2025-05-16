@@ -99,8 +99,13 @@ jobs:
           echo "Injecting Environment Variables In Deployment Workflow ..."
           echo "Injecting Environment Variables In Deployment Workflow: ${{ vars.FIREBASE_PROJECT_ID }}"
           if [[ -z "${{ inputs.version }}" ]]; then
-            echo "version=${{ steps.get-latest-tag.outputs.tag }}" >> $GITHUB_OUTPUT
-            echo "version: ${{ steps.get-latest-tag.outputs.tag }}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.get-latest-tag.outputs.tag }}"
+
+            PATCH=$((PATCH + 1))
+            NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+
+            echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "version: $NEW_VERSION"
           else
             echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
             echo "version: ${{ inputs.version }}"
