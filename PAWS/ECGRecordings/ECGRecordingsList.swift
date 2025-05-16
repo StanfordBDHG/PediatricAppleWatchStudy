@@ -42,6 +42,7 @@ struct ECGRecordingsList: View {
                     .navigationTitle(String(localized: "ECG Recordings"))
                     .refreshable {
                         try? await ecgModule.reloadECGs()
+                        try? await Task.sleep(for: .seconds(0.25))
                     }
             }
         }
