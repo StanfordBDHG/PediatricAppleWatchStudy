@@ -41,9 +41,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         get async throws {
             // Waiting until Spezi Account loads the account details.
             let loadingStartDate = Date.now
-            while !(await account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 2.0) {
+            while !(await account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 0.2) {
                 logger.debug("Loading DateOfEnrollment ...")
-                try await Task.sleep(for: .seconds(0.05))
+                try await Task.sleep(for: .seconds(0.01))
             }
             
             // Ensure that the HealthKit start date is set correctly based on the date of enrollment.
@@ -68,6 +68,10 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     
     func configure() {
+        Task {
+            try await self.reloadECGs()
+        }
+        
         if let accountNotifications {
             notificationsTask = Task.detached { @MainActor [weak self] in
                 for await _ in accountNotifications.events {
@@ -123,9 +127,11 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
     /// - Throws: An error if the user is not authenticated.
     func reloadECGs() async throws {
-        guard await account?.signedIn ?? false else {
-            logger.error("User not authenticated")
-            return
+        // Waiting until the HealthKit module loads all authorization requirements.
+        let loadingStartDate = Date.now
+        while !(healthKit.configurationState == .completed || loadingStartDate.distance(to: .now) > 0.2) {
+            logger.debug("Loading HealthKit Module ...")
+            try await Task.sleep(for: .seconds(0.01))
         }
         
         guard healthKit.isFullyAuthorized else {
@@ -137,6 +143,12 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             .electrocardiogram,
             timeRange: .since(healthKitSamplesEndDateCutoff)
         )
+        
+        guard await account?.signedIn ?? false else {
+            logger.error("User not authenticated")
+            return
+        }
+        
         await self.uploadUnuploadedECGs()
     }
     
