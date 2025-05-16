@@ -25,7 +25,7 @@ final class DataManagementTests: XCTestCase {
     }
     
     @MainActor
-    func testPullToRefresh() throws {
+    func testPullToRefresh() async throws {
         let app = XCUIApplication()
         try app.navigateOnboardingFlow(email: "lelandstanford\(Int.random(in: 0...42000))@stanford.edu", code: "XKDYV3DF")
         
@@ -37,12 +37,13 @@ final class DataManagementTests: XCTestCase {
         XCTAssertTrue(initialECGText.waitForExistence(timeout: 2))
         
         // Simulate pull to refresh.
+        try await Task.sleep(for: .seconds(2))
         let ecgTableView = app.scrollViews.firstMatch
         XCTAssertTrue(ecgTableView.waitForExistence(timeout: 2))
         ecgTableView.press(forDuration: 0, thenDragTo: app.tabBars.firstMatch)
         
         // Allow some time for the refresh to complete.
-        sleep(2)
+        try await Task.sleep(for: .seconds(2))
         
         // Validate that the same ECG is still present after the refresh.
         let refreshedECGText = app.staticTexts["ECG Recording"]
