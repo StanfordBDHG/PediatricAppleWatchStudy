@@ -27,7 +27,7 @@ struct ECGRecordingsList: View {
                             .frame(minHeight: geometry.size.height - 100)
                     }
                     VStack(spacing: 16) {
-                        ForEach(ecgModule.electrocardiograms) { electrocardiogram in
+                        ForEach(ecgModule.electrocardiograms.sorted(by: { $0.endDate > $1.endDate })) { electrocardiogram in
                             ECGRecording(electrocardiogram: electrocardiogram)
                         }
                     }

@@ -19,10 +19,6 @@ import SwiftUI
 import UserNotifications
 
 
-@globalActor actor ECGModuleActor: GlobalActor {
-    static let shared = ECGModuleActor()
-}
-
 @Observable
 class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @Dependency(Account.self) private var account: Account?
@@ -31,7 +27,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     
-    private(set) var electrocardiograms: [HKElectrocardiogram] = []
+    @MainActor private(set) var electrocardiograms: Set<HKElectrocardiogram> = []
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
     private var notificationsTask: Task<Void, Never>?
@@ -41,9 +37,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         get async throws {
             // Waiting until Spezi Account loads the account details.
             let loadingStartDate = Date.now
-            while !(await account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 2.0) {
+            while await account?.details?.dateOfEnrollment == nil && abs(loadingStartDate.distance(to: .now)) < 0.5 {
                 logger.debug("Loading DateOfEnrollment ...")
-                try await Task.sleep(for: .seconds(0.05))
+                try await Task.sleep(for: .seconds(0.02))
             }
             
             // Ensure that the HealthKit start date is set correctly based on the date of enrollment.
@@ -64,10 +60,14 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     }
     
     
-    required init() { }
+    nonisolated required init() { }
     
     
     func configure() {
+        Task {
+            try await self.reloadECGs()
+        }
+        
         if let accountNotifications {
             notificationsTask = Task.detached { @MainActor [weak self] in
                 for await _ in accountNotifications.events {
@@ -122,10 +122,13 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     /// Reloads the ECGs by checking if the user is authenticated.
     /// If the user is authenticated, it sets a sample predicate for the HealthKit query based on the user's account creation date and the current date.
     /// - Throws: An error if the user is not authenticated.
+    @MainActor
     func reloadECGs() async throws {
-        guard await account?.signedIn ?? false else {
-            logger.error("User not authenticated")
-            return
+        // Waiting until the HealthKit module loads all authorization requirements.
+        let loadingStartDate = Date.now
+        while healthKit.configurationState != .completed && abs(loadingStartDate.distance(to: .now)) < 0.5 {
+            logger.debug("Loading HealthKit Module ...")
+            try await Task.sleep(for: .seconds(0.02))
         }
         
         guard healthKit.isFullyAuthorized else {
@@ -133,10 +136,29 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        self.electrocardiograms = try await healthKit.query(
-            .electrocardiogram,
-            timeRange: .since(healthKitSamplesEndDateCutoff)
+        self.electrocardiograms = Set(
+            try await healthKit.query(
+                .electrocardiogram,
+                timeRange: .since(healthKitSamplesEndDateCutoff)
+            )
         )
+        
+        // Somehow HealthKit sometimes returns an empty query at random intervals; we at least give it a second try if it is empty.
+        if self.electrocardiograms.isEmpty {
+            try? await Task.sleep(for: .seconds(0.5))
+            self.electrocardiograms = Set(
+                try await healthKit.query(
+                    .electrocardiogram,
+                    timeRange: .since(healthKitSamplesEndDateCutoff)
+                )
+            )
+        }
+        
+        guard account?.signedIn ?? false else {
+            logger.error("User not authenticated")
+            return
+        }
+        
         await self.uploadUnuploadedECGs()
     }
     
@@ -174,25 +196,25 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         }
     }
     
-    @ECGModuleActor
+    @MainActor
     func remove(sample id: HKSample.ID) async throws {
-        electrocardiograms.removeAll(where: { $0.uuid == id })
+        if let index = electrocardiograms.firstIndex(where: { $0.uuid == id }) {
+            electrocardiograms.remove(at: index)
+        }
         try await Firestore.firestore().healthKitCollectionReference.document(id.uuidString).delete()
     }
     
     
     // MARK: - Private Helper Functions
-    @ECGModuleActor
+    @MainActor
     private func insert(electrocardiogram: HKElectrocardiogram) {
-        electrocardiograms.removeAll(where: { $0.uuid == electrocardiogram.id })
-        electrocardiograms.append(electrocardiogram)
-        electrocardiograms.sort(by: { $0.endDate > $1.endDate })
+        electrocardiograms.insert(electrocardiogram)
     }
     
     private func electrocardiogram(
         correlatedWith correlatedCategorySample: HKCategorySample
     ) async throws -> HKElectrocardiogram? {
-        electrocardiogramLoop: for electrocardiogram in electrocardiograms {
+        electrocardiogramLoop: for electrocardiogram in await electrocardiograms {
             guard electrocardiogram.symptomsStatus == .present else {
                 continue electrocardiogramLoop
             }
@@ -255,7 +277,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     private func uploadUnuploadedECGs() async {
         await withTaskGroup(of: Void.self) { group in
-            for ecg in electrocardiograms {
+            for ecg in await electrocardiograms {
                 group.addTask { [weak self] in
                     do {
                         try await self?.upload(sample: ecg)

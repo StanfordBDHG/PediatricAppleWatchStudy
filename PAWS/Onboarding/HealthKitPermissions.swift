@@ -16,6 +16,8 @@ struct HealthKitPermissions: View {
     @Environment(ECGModule.self) private var ecgModule
     @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
     
+    // periphery:ignore - Uses @AppStorage
+    @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     @State private var healthKitProcessing = false
     
     
@@ -53,7 +55,10 @@ struct HealthKitPermissions: View {
                             print("Could not request HealthKit permissions.")
                         }
                         healthKitProcessing = false
+                        
+                        healthKitStartDate = .now
                         try? await ecgModule.reloadECGs()
+                        
                         onboardingNavigationPath.nextStep()
                     }
                 )
