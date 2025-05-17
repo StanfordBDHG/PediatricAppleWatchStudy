@@ -27,7 +27,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
     
-    private(set) var electrocardiograms: Set<HKElectrocardiogram> = []
+    @MainActor private(set) var electrocardiograms: Set<HKElectrocardiogram> = []
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
     private var notificationsTask: Task<Void, Never>?
@@ -203,7 +203,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     private func electrocardiogram(
         correlatedWith correlatedCategorySample: HKCategorySample
     ) async throws -> HKElectrocardiogram? {
-        electrocardiogramLoop: for electrocardiogram in electrocardiograms {
+        electrocardiogramLoop: for electrocardiogram in await electrocardiograms {
             guard electrocardiogram.symptomsStatus == .present else {
                 continue electrocardiogramLoop
             }
@@ -266,7 +266,7 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     
     private func uploadUnuploadedECGs() async {
         await withTaskGroup(of: Void.self) { group in
-            for ecg in electrocardiograms {
+            for ecg in await electrocardiograms {
                 group.addTask { [weak self] in
                     do {
                         try await self?.upload(sample: ecg)
