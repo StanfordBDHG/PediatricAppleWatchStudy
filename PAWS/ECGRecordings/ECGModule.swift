@@ -37,9 +37,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
         get async throws {
             // Waiting until Spezi Account loads the account details.
             let loadingStartDate = Date.now
-            while await !(account?.details?.dateOfEnrollment != nil || loadingStartDate.distance(to: .now) > 0.2) {
+            while await account?.details?.dateOfEnrollment == nil && abs(loadingStartDate.distance(to: .now)) < 0.5 {
                 logger.debug("Loading DateOfEnrollment ...")
-                try await Task.sleep(for: .seconds(0.01))
+                try await Task.sleep(for: .seconds(0.02))
             }
             
             // Ensure that the HealthKit start date is set correctly based on the date of enrollment.
@@ -126,9 +126,9 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     func reloadECGs() async throws {
         // Waiting until the HealthKit module loads all authorization requirements.
         let loadingStartDate = Date.now
-        while !(healthKit.configurationState == .completed || loadingStartDate.distance(to: .now) > 0.2) {
+        while healthKit.configurationState != .completed && abs(loadingStartDate.distance(to: .now)) < 0.5 {
             logger.debug("Loading HealthKit Module ...")
-            try await Task.sleep(for: .seconds(0.01))
+            try await Task.sleep(for: .seconds(0.02))
         }
         
         guard healthKit.isFullyAuthorized else {
@@ -142,6 +142,17 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
                 timeRange: .since(healthKitSamplesEndDateCutoff)
             )
         )
+        
+        // Somehow HealthKit sometimes returns an empty query at random intervals; we at least give it a second try if it is empty.
+        if self.electrocardiograms.isEmpty {
+            try? await Task.sleep(for: .seconds(0.5))
+            self.electrocardiograms = Set(
+                try await healthKit.query(
+                    .electrocardiogram,
+                    timeRange: .since(healthKitSamplesEndDateCutoff)
+                )
+            )
+        }
         
         guard account?.signedIn ?? false else {
             logger.error("User not authenticated")
