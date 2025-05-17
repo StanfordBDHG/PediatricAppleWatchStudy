@@ -55,7 +55,7 @@ platform :ios do
       ],
       build_for_testing: true
     )
-
+    
     snapshot(
       test_without_building: true,
       derived_data_path: ".derivedData",
@@ -159,12 +159,18 @@ platform :ios do
 
     releasenotes = releasenotes.gsub('\u2019', "'")
 
-    if environment == "production"
+    currentversion = get_version_number()
+    UI.message("Current version: #{currentversion}")
+
+    if Gem::Version.new(versionname) > Gem::Version.new(currentversion)
       increment_version_number(
         version_number: versionname
       )
+      UI.message("Version bumped to #{versionname}")
+    else
+      UI.message("No version bump needed. Current version (#{currentversion}) is greater than or equal to desired version (#{versionname}).")
     end
-    
+
     signin
     latest_build_number = latest_testflight_build_number(
       app_identifier: appidentifier
@@ -177,7 +183,7 @@ platform :ios do
       provisioningProfile: provisioningProfile,
     )
     commit = last_git_commit
-    
+
     if environment == "production"
       ## Re-enable once we want to deploy to the app store.
       # deliver(
