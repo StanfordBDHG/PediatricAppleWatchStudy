@@ -124,7 +124,7 @@ extension XCUIApplication {
         try textFields["enter last name"].enter(value: "Stanford")
         let datePicker = datePickers.firstMatch
         XCTAssertTrue(datePicker.waitForExistence(timeout: 2))
-        datePicker.tap()
+        datePicker.coordinate(withNormalizedOffset: .init(dx: 0.9, dy: 0.5)).tap()
         let dateButton = datePicker.buttons.firstMatch
         XCTAssertTrue(dateButton.waitForExistence(timeout: 2))
         dateButton.tap()
