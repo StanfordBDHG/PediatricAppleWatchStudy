@@ -195,8 +195,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziAccount.git",
       "state" : {
-        "revision" : "b85bd877f7fedc9866981590e4ac715adb0ff81f",
-        "version" : "2.3.1"
+        "branch" : "feature/swift62",
+        "revision" : "5cb5dd493dd0649f852f25b6f381747ef72940a5"
       }
     },
     {

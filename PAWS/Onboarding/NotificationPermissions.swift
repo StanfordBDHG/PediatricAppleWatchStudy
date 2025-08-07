@@ -56,7 +56,7 @@ struct NotificationPermissions: View {
                             if ProcessInfo.processInfo.isPreviewSimulator {
                                 try await _Concurrency.Task.sleep(for: .seconds(5))
                             } else {
-                                try await requestNotificationAuthorization(options: [.alert, .sound, .badge])
+                                _ = try await requestNotificationAuthorization(options: [.alert, .sound, .badge])
                             }
                             
                             let dateComponents = Calendar.current.dateComponents([.hour, .minute], from: selectedTime)
