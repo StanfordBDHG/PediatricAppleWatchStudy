@@ -9,11 +9,12 @@
 import SpeziNotifications
 import SpeziOnboarding
 import SpeziScheduler
+import SpeziViews
 import SwiftUI
 
 
 struct NotificationPermissions: View {
-    @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    @Environment(ManagedNavigationStack.Path.self) private var managedNavigationStack
     
     @Environment(Scheduler.self) private var scheduler
     @Environment(\.requestNotificationAuthorization) private var requestNotificationAuthorization
@@ -24,7 +25,7 @@ struct NotificationPermissions: View {
     
     var body: some View {
         OnboardingView(
-            contentView: {
+            content: {
                 VStack {
                     Image(systemName: "pawprint.circle.fill")
                         .resizable()
@@ -45,7 +46,8 @@ struct NotificationPermissions: View {
                         .padding(.vertical)
                         .accessibilityHidden(true)
                 }
-            }, actionView: {
+            },
+            footer: {
                 OnboardingActionsView(
                     "NOTIFICATION_PERMISSIONS_BUTTON",
                     action: {
@@ -66,7 +68,7 @@ struct NotificationPermissions: View {
                         }
                         notificationProcessing = false
                         
-                        onboardingNavigationPath.nextStep()
+                        managedNavigationStack.nextStep()
                     }
                 )
             }
@@ -80,7 +82,7 @@ struct NotificationPermissions: View {
 
 #if DEBUG
 #Preview {
-    OnboardingStack {
+    ManagedNavigationStack {
         NotificationPermissions()
     }
         .previewWith {

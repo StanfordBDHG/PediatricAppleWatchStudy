@@ -6,44 +6,61 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziConsent
 import SpeziOnboarding
+import SpeziViews
 import SwiftUI
 
 
 /// - Note: The `OnboardingConsentView` exports the signed consent form as PDF to the Spezi `Standard`, necessitating the conformance of the `Standard` to the `OnboardingConstraint`.
 struct Consent: View {
-    @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    @Environment(ManagedNavigationStack.Path.self) private var managedNavigationStack
+    @Environment(PAWSStandard.self) private var standard: PAWSStandard
     
-    
-    private var consentDocument: Data {
-        guard let path = Bundle.main.url(forResource: "ConsentDocument", withExtension: "md"),
-              let data = try? Data(contentsOf: path) else {
-            return Data(String(localized: "CONSENT_LOADING_ERROR").utf8)
-        }
-        return data
-    }
+    @State private var consentDocument: ConsentDocument?
+    @State private var viewState: ViewState = .idle
     
     
     var body: some View {
         OnboardingConsentView(
-            markdown: {
-                consentDocument
-            },
-            action: {
-                onboardingNavigationPath.nextStep()
+            consentDocument: consentDocument,
+            viewState: $viewState
+        ) {
+            guard let consentDocument else {
+                return
             }
-        )
+            
+            try await standard.store(consentDocument: consentDocument)
+            managedNavigationStack.nextStep()
+        }
+        .viewStateAlert(state: $viewState)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                ConsentShareButton(
+                    consentDocument: consentDocument,
+                    viewState: $viewState
+                )
+            }
+        }
+        .task {
+            do {
+                guard let url = Bundle.main.url(forResource: "ConsentDocument", withExtension: "md") else {
+                    fatalError("Consent document not found in main bundle.")
+                }
+                consentDocument = try ConsentDocument(contentsOf: url)
+            } catch {
+                viewState = .error(AnyLocalizedError(error: error))
+            }
+        }
     }
 }
 
 
 #if DEBUG
 #Preview {
-    OnboardingStack {
+    ManagedNavigationStack {
         Consent()
     }
-        .previewWith(standard: PAWSStandard()) {
-            OnboardingDataSource()
-        }
+        .previewWith(standard: PAWSStandard()) {}
 }
 #endif

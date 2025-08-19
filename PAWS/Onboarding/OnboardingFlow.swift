@@ -11,6 +11,7 @@ import SpeziFirebaseAccount
 import SpeziHealthKit
 import SpeziOnboarding
 import SpeziScheduler
+import SpeziViews
 import SwiftUI
 
 
@@ -36,7 +37,7 @@ struct OnboardingFlow: View {
     
     
     var body: some View {
-        OnboardingStack(onboardingFlowComplete: $completedOnboardingFlow) {
+        ManagedNavigationStack(didComplete: $completedOnboardingFlow) {
             Welcome()
             InterestingModules()
             
@@ -75,7 +76,6 @@ struct OnboardingFlow: View {
 #Preview {
     OnboardingFlow()
         .previewWith(standard: PAWSStandard()) {
-            OnboardingDataSource()
             HealthKit()
             AccountConfiguration(service: InMemoryAccountService())
             Scheduler()
