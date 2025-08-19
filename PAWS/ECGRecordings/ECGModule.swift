@@ -131,22 +131,29 @@ final class ECGModule: ServiceModule, DefaultInitializable, EnvironmentAccessibl
             return
         }
         
-        self.electrocardiograms = Set(
+        var electrocardiograms = Set(
             try await healthKit.query(
                 .electrocardiogram,
                 timeRange: .since(healthKitSamplesEndDateCutoff)
             )
         )
         
-        // Somehow HealthKit sometimes returns an empty query at random intervals; we at least give it two seconds try if it is empty.
-        if self.electrocardiograms.isEmpty {
-            try? await Task.sleep(for: .seconds(2))
-            self.electrocardiograms = Set(
+        // Somehow HealthKit sometimes returns an empty query at random intervals; we at least give it one second try if it is empty.
+        if electrocardiograms.isEmpty {
+            try? await Task.sleep(for: .seconds(1))
+            electrocardiograms = Set(
                 try await healthKit.query(
                     .electrocardiogram,
                     timeRange: .since(healthKitSamplesEndDateCutoff)
                 )
             )
+        } else {
+            // Delay some loading to jump for one SwiftUI update cycle & display the loading indicator.
+            try? await Task.sleep(for: .seconds(0.05))
+        }
+        
+        if !electrocardiograms.isEmpty {
+            self.electrocardiograms = electrocardiograms
         }
         
         guard account?.signedIn ?? false else {
