@@ -8,11 +8,12 @@
 
 @_spi(TestingSupport) import SpeziAccount
 import SpeziOnboarding
+import SpeziViews
 import SwiftUI
 
 
 struct AccountOnboarding: View {
-    @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    @Environment(ManagedNavigationStack.Path.self) private var managedNavigationStack
     // periphery:ignore - Uses @AppStorage
     @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
     
@@ -24,7 +25,7 @@ struct AccountOnboarding: View {
             Task {
                 // Placing the nextStep() call inside this task will ensure that the sheet dismiss animation is
                 // played till the end before we navigate to the next step.
-                onboardingNavigationPath.nextStep()
+                managedNavigationStack.nextStep()
             }
         } header: {
             AccountSetupHeader()
@@ -32,7 +33,7 @@ struct AccountOnboarding: View {
             OnboardingActionsView(
                 "ACCOUNT_NEXT",
                 action: {
-                    onboardingNavigationPath.nextStep()
+                    managedNavigationStack.nextStep()
                 }
             )
         }
@@ -42,7 +43,7 @@ struct AccountOnboarding: View {
 
 #if DEBUG
 #Preview("Account Onboarding SignIn") {
-    OnboardingStack {
+    ManagedNavigationStack {
         AccountOnboarding()
     }
         .previewWith {
@@ -55,7 +56,7 @@ struct AccountOnboarding: View {
     details.userId = "lelandstanford@stanford.edu"
     details.name = PersonNameComponents(givenName: "Leland", familyName: "Stanford")
 
-    return OnboardingStack {
+    return ManagedNavigationStack {
         AccountOnboarding()
     }
         .previewWith {

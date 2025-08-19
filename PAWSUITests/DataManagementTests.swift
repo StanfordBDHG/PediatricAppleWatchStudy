@@ -40,10 +40,14 @@ final class DataManagementTests: XCTestCase {
         try await Task.sleep(for: .seconds(2))
         let ecgTableView = app.scrollViews.firstMatch
         XCTAssertTrue(ecgTableView.waitForExistence(timeout: 2))
+        
+        // Allow some time for the refresh to complete.
+        try await Task.sleep(for: .seconds(5))
+        
         ecgTableView.press(forDuration: 0, thenDragTo: app.tabBars.firstMatch)
         
         // Allow some time for the refresh to complete.
-        try await Task.sleep(for: .seconds(2))
+        try await Task.sleep(for: .seconds(1))
         
         // Validate that the same ECG is still present after the refresh.
         let refreshedECGText = app.staticTexts["ECG Recording"]
@@ -57,8 +61,6 @@ final class DataManagementTests: XCTestCase {
         
         app.activate()
         
-        Task {
-            PAWSUITests.snapshot("2Home")
-        }
+        PAWSUITests.snapshot("2Home")
     }
 }

@@ -54,7 +54,6 @@ class PAWSDelegate: SpeziAppDelegate {
             }
             
             Scheduler()
-            OnboardingDataSource()
             EnrollmentGroup()
         }
     }

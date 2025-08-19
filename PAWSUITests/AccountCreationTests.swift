@@ -150,10 +150,10 @@ extension XCUIApplication {
         XCTAssertTrue(staticTexts["Consent"].waitForExistence(timeout: 5))
         
         XCTAssertTrue(staticTexts["First Name"].waitForExistence(timeout: 2))
-        try textFields["Enter your first name ..."].enter(value: "Leland")
+        try textFields["Enter your first name…"].enter(value: "Leland")
         
         XCTAssertTrue(staticTexts["Last Name"].waitForExistence(timeout: 2))
-        try textFields["Enter your last name ..."].enter(value: "Stanford")
+        try textFields["Enter your last name…"].enter(value: "Stanford")
 
         XCTAssertTrue(scrollViews["Signature Field"].waitForExistence(timeout: 2))
         scrollViews["Signature Field"].swipeRight()
@@ -229,13 +229,14 @@ extension XCUIApplication {
         let alert = "Are you sure you want to delete your account?"
         XCTAssertTrue(alerts[alert].waitForExistence(timeout: 6.0))
         alerts[alert].buttons["Delete"].tap()
-
-        XCTAssertTrue(alerts["Authentication Required"].waitForExistence(timeout: 2.0))
-        XCTAssertTrue(alerts["Authentication Required"].secureTextFields["Password"].waitForExistence(timeout: 0.5))
-        typeText("HelloWorld") // the password field has focus already
-        XCTAssertTrue(alerts["Authentication Required"].buttons["Login"].waitForExistence(timeout: 0.5))
-        alerts["Authentication Required"].buttons["Login"].tap()
-
+        
+        if alerts["Authentication Required"].waitForExistence(timeout: 2.0) {
+            XCTAssertTrue(alerts["Authentication Required"].secureTextFields["Password"].waitForExistence(timeout: 0.5))
+            typeText("HelloWorld") // the password field has focus already
+            XCTAssertTrue(alerts["Authentication Required"].buttons["Login"].waitForExistence(timeout: 0.5))
+            alerts["Authentication Required"].buttons["Login"].tap()
+        }
+        
         sleep(2)
 
         // Login

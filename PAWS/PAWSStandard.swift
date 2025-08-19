@@ -14,6 +14,7 @@ import OSLog
 import PDFKit
 import Spezi
 import SpeziAccount
+import SpeziConsent
 import SpeziFirebaseConfiguration
 import SpeziFirestore
 import SpeziHealthKit
@@ -21,7 +22,7 @@ import SpeziOnboarding
 import SwiftUI
 
 
-actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, ConsentConstraint, AccountNotifyConstraint {
+actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, AccountNotifyConstraint {
     // periphery:ignore - The ConfigureFirebaseApp injection is required to enforce an initialization within Spezi before this module.
     @Dependency(ConfigureFirebaseApp.self) private var firebaseConfiguration
     // periphery:ignore - Uses @AppStorage
@@ -95,7 +96,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Consen
     /// Stores the given consent form in the user's document directory with a unique timestamped filename.
     ///
     /// - Parameter consent: The consent form's data to be stored as a `PDFDocument`.
-    func store(consent: SpeziOnboarding.ConsentDocumentExport) async throws {
+    func store(consentDocument: ConsentDocument) async throws {
         guard !FeatureFlags.disableFirebase else {
             guard let basePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
                 logger.error("Could not create path for writing consent form to user document directory.")
@@ -103,12 +104,12 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Consen
             }
             
             let filePath = basePath.appending(path: "consent.pdf")
-            await consent.pdf.write(to: filePath)
+            try await consentDocument.export(using: .init()).pdf.write(to: filePath)
             
             return
         }
         
-        guard let consentData = await consent.pdf.dataRepresentation() else {
+        guard let consentData = try await consentDocument.export(using: .init()).pdf.dataRepresentation() else {
             logger.error("Could not store consent form.")
             return
         }

@@ -8,13 +8,14 @@
 
 import SpeziHealthKit
 import SpeziOnboarding
+import SpeziViews
 import SwiftUI
 
 
 struct HealthKitPermissions: View {
     @Environment(HealthKit.self) private var healthKitDataSource
     @Environment(ECGModule.self) private var ecgModule
-    @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    @Environment(ManagedNavigationStack.Path.self) private var managedNavigationStack
     
     // periphery:ignore - Uses @AppStorage
     @AppStorage(StorageKeys.healthKitStartDate) var healthKitStartDate: Date?
@@ -23,7 +24,7 @@ struct HealthKitPermissions: View {
     
     var body: some View {
         OnboardingView(
-            contentView: {
+            content: {
                 VStack {
                     OnboardingTitleView(
                         title: "HEALTHKIT_PERMISSIONS_TITLE",
@@ -39,7 +40,8 @@ struct HealthKitPermissions: View {
                         .padding(.vertical, 16)
                     Spacer()
                 }
-            }, actionView: {
+            },
+            footer: {
                 OnboardingActionsView(
                     "HEALTHKIT_PERMISSIONS_BUTTON",
                     action: {
@@ -59,7 +61,7 @@ struct HealthKitPermissions: View {
                         healthKitStartDate = .now
                         try? await ecgModule.reloadECGs()
                         
-                        onboardingNavigationPath.nextStep()
+                        managedNavigationStack.nextStep()
                     }
                 )
             }
@@ -73,7 +75,7 @@ struct HealthKitPermissions: View {
 
 #if DEBUG
 #Preview {
-    OnboardingStack {
+    ManagedNavigationStack {
         HealthKitPermissions()
     }
         .previewWith(standard: PAWSStandard()) {

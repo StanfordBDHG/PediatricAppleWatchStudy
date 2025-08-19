@@ -20,7 +20,7 @@ import UserNotifications
 
 
 @Observable
-class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
+final class ECGModule: ServiceModule, DefaultInitializable, EnvironmentAccessible {
     @ObservationIgnored @Dependency(Account.self) private var account: Account?
     @ObservationIgnored @Dependency(AccountNotifications.self) private var accountNotifications: AccountNotifications?
     @ObservationIgnored @Dependency(HealthKit.self) private var healthKit
@@ -30,7 +30,6 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     @MainActor private(set) var electrocardiograms: Set<HKElectrocardiogram> = []
     private let healthStore = HKHealthStore()
     private let logger = Logger(subsystem: "PAWS", category: "ECGModule")
-    private var notificationsTask: Task<Void, Never>?
     
     
     private var healthKitSamplesEndDateCutoff: Date {
@@ -63,23 +62,19 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
     nonisolated required init() { }
     
     
-    func configure() {
-        Task {
-            try await self.reloadECGs()
+    func run() async {
+        try? await self.reloadECGs()
+        
+        guard let accountNotifications else {
+            return
         }
         
-        if let accountNotifications {
-            notificationsTask = Task.detached { @MainActor [weak self] in
-                for await _ in accountNotifications.events {
-                    guard let self else {
-                        return
-                    }
-                    
-                    Task {
-                        try await self.reloadECGs()
-                    }
-                }
+        for await _ in accountNotifications.events {
+            guard !Task.isCancelled else {
+                return
             }
+            
+            try? await self.reloadECGs()
         }
     }
     
@@ -136,22 +131,29 @@ class ECGModule: Module, DefaultInitializable, EnvironmentAccessible {
             return
         }
         
-        self.electrocardiograms = Set(
+        var electrocardiograms = Set(
             try await healthKit.query(
                 .electrocardiogram,
                 timeRange: .since(healthKitSamplesEndDateCutoff)
             )
         )
         
-        // Somehow HealthKit sometimes returns an empty query at random intervals; we at least give it a second try if it is empty.
-        if self.electrocardiograms.isEmpty {
-            try? await Task.sleep(for: .seconds(0.5))
-            self.electrocardiograms = Set(
+        // Somehow HealthKit sometimes returns an empty query at random intervals; we at least give it one second try if it is empty.
+        if electrocardiograms.isEmpty {
+            try? await Task.sleep(for: .seconds(1))
+            electrocardiograms = Set(
                 try await healthKit.query(
                     .electrocardiogram,
                     timeRange: .since(healthKitSamplesEndDateCutoff)
                 )
             )
+        } else {
+            // Delay some loading to jump for one SwiftUI update cycle & display the loading indicator.
+            try? await Task.sleep(for: .seconds(0.05))
+        }
+        
+        if !electrocardiograms.isEmpty {
+            self.electrocardiograms = electrocardiograms
         }
         
         guard account?.signedIn ?? false else {

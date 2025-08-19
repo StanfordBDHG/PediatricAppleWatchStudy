@@ -1,5 +1,5 @@
 {
-  "originHash" : "6b3bc6a911d19827584cac47f26bc578e7c764644527a4af2a344f9caea16df7",
+  "originHash" : "1ffd58ca84512b71aa88eb576f22d429aeea3c1f9b29eae574366c96f50089b9",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "fdc352fabaf5916e7faa1f96ad02b1957e93e5a5",
-        "version" : "11.15.0"
+        "revision" : "b9bf3adac18e6e3059167194aeb632f15a5ba4b2",
+        "version" : "12.1.0"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk",
       "state" : {
-        "revision" : "973bd67929bfbe465f63c05cd5a4b113765fbc7f",
-        "version" : "2.2.1"
+        "revision" : "e15f979c3eaf477d24e5bfec9d87f1d76fbac297",
+        "version" : "2.2.0"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "45ce435e9406d3c674dd249a042b932bee006f60",
-        "version" : "11.15.0"
+        "revision" : "883305109ead4599e4ca59591754ee72e81e6b5e",
+        "version" : "12.1.0"
       }
     },
     {
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "c756a29784521063b6a1202907e2cc47f41b667c",
-        "version" : "4.5.0"
+        "revision" : "fb7f2740b1570d2f7599c6bb9531bf4fad6974b7",
+        "version" : "5.0.0"
       }
     },
     {
@@ -195,8 +195,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziAccount.git",
       "state" : {
-        "revision" : "b85bd877f7fedc9866981590e4ac715adb0ff81f",
-        "version" : "2.3.1"
+        "revision" : "e1eea32a1814d8527e4c43af0e5f347220a40c53",
+        "version" : "2.3.2"
+      }
+    },
+    {
+      "identity" : "speziconsent",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/StanfordSpezi/SpeziConsent.git",
+      "state" : {
+        "revision" : "7215f884abe4d0d22fa15f4d4811cb9103c846b1",
+        "version" : "0.1.1"
       }
     },
     {
@@ -213,8 +222,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziFirebase.git",
       "state" : {
-        "revision" : "633bc3acef854fd1570f8f3619e04e3aca81ea33",
-        "version" : "2.0.6"
+        "revision" : "b2a7b23dfeb66fa27230c4364e761cd49c9eeb41",
+        "version" : "2.0.7"
       }
     },
     {
@@ -222,8 +231,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziFoundation.git",
       "state" : {
-        "revision" : "759e28cd36338d83900eef3a0839fd9edecf616d",
-        "version" : "2.2.0"
+        "revision" : "89f3334e685ddad1bbf2e8b33fa0820620aec6c1",
+        "version" : "2.2.1"
       }
     },
     {
@@ -258,8 +267,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziOnboarding",
       "state" : {
-        "revision" : "a3d7bc15e6803b2205eb8dca010a48b1a40215be",
-        "version" : "1.2.2"
+        "revision" : "4ff1cd66b576de589f80497aed160b8d61e97e1f",
+        "version" : "2.0.2"
       }
     },
     {
@@ -267,8 +276,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziScheduler.git",
       "state" : {
-        "revision" : "af631078adbb0b18925256af406ccba4fe7f6745",
-        "version" : "1.2.13"
+        "revision" : "9ef998ccfc358cb35519157143fc77ddb233cdfa",
+        "version" : "1.2.14"
       }
     },
     {
@@ -285,8 +294,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziViews.git",
       "state" : {
-        "revision" : "dc9403578fea702525b462448a00cd917634a8a1",
-        "version" : "1.12.0"
+        "revision" : "9a7cd323ae6023a57bdf57af644538e723902f67",
+        "version" : "1.12.1"
+      }
+    },
+    {
+      "identity" : "sqlite.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/stephencelis/SQLite.swift.git",
+      "state" : {
+        "revision" : "392dd6058624d9f6c5b4c769d165ddd8c7293394",
+        "version" : "0.15.4"
       }
     },
     {
@@ -380,6 +398,15 @@
       }
     },
     {
+      "identity" : "swift-toolchain-sqlite",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-toolchain-sqlite",
+      "state" : {
+        "revision" : "b626d3002773b1a1304166643e7f118f724b2132",
+        "version" : "1.0.4"
+      }
+    },
+    {
       "identity" : "swiftlint",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/SwiftLint.git",
@@ -407,12 +434,21 @@
       }
     },
     {
+      "identity" : "tppdf",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/techprimate/TPPDF.git",
+      "state" : {
+        "revision" : "975049c0e1022922580b7927e030901604024925",
+        "version" : "2.6.1"
+      }
+    },
+    {
       "identity" : "xctestextensions",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions.git",
       "state" : {
-        "revision" : "3b44aad358897cf85139b46f32902cd60d9e5cb4",
-        "version" : "1.2.1"
+        "revision" : "5f4b9670acfac68ed55a2d6462d716a2bcdc2261",
+        "version" : "1.2.2"
       }
     },
     {

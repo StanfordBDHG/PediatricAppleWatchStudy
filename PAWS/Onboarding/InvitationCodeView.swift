@@ -17,7 +17,7 @@ import SwiftUI
 
 
 struct InvitationCodeView: View {
-    @Environment(OnboardingNavigationPath.self) private var onboardingNavigationPath
+    @Environment(ManagedNavigationStack.Path.self) private var managedNavigationStack
     @State private var invitationCode = ""
     @State private var viewState: ViewState = .idle
     @ValidationState private var validation
@@ -44,7 +44,7 @@ struct InvitationCodeView: View {
                     .disabled(invitationCode.isEmpty)
                 Button("I Already Have an Account") {
                     try? Auth.auth().signOut()
-                    onboardingNavigationPath.nextStep()
+                    managedNavigationStack.nextStep()
                 }
                     .padding(.top, -12)
             }
@@ -117,7 +117,7 @@ struct InvitationCodeView: View {
                 Logger().info("Inviation Code Verification Successful")
             }
             
-            onboardingNavigationPath.nextStep()
+            managedNavigationStack.nextStep()
         } catch let error as NSError {
             if let errorCode = FunctionsErrorCode(rawValue: error.code) {
                 // Handle Firebase-specific errors.
@@ -141,7 +141,7 @@ struct InvitationCodeView: View {
 #Preview {
     FirebaseApp.configure()
     
-    return OnboardingStack {
+    return ManagedNavigationStack {
         InvitationCodeView()
     }
 }
