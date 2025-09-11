@@ -183,17 +183,6 @@
     "Close" : {
 
     },
-    "CONSENT_LOADING_ERROR" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please include a markdown-based document named \"ConsentDocument\" in your module Bundle."
-          }
-        }
-      }
-    },
     "Contacts" : {
 
     },
@@ -378,17 +367,6 @@
     "License Information" : {
 
     },
-    "LICENSE_INFO_TITLE" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "License Information"
-          }
-        }
-      }
-    },
     "New ECG Recordings will be displayed here." : {
 
     },
@@ -427,17 +405,6 @@
     },
     "Please enter your invitation code to join the PAWS study." : {
 
-    },
-    "PROJECT_LICENSE_DESCRIPTION" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This project is licensed under the MIT License."
-          }
-        }
-      }
     },
     "QUESTION_1" : {
       "extractionState" : "manual",

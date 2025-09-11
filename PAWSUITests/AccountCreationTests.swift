@@ -22,7 +22,8 @@ final class AccountCreationTests: XCTestCase {
         await MainActor.run {
             app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
         }
-        await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
+        // await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
+        app.launch()
     }
     
     func testOnboardingFlow() throws {
@@ -124,7 +125,8 @@ extension XCUIApplication {
         try textFields["enter last name"].enter(value: "Stanford")
         let datePicker = datePickers.firstMatch
         XCTAssertTrue(datePicker.waitForExistence(timeout: 2))
-        datePicker.coordinate(withNormalizedOffset: .init(dx: 0.9, dy: 0.5)).tap()
+        datePicker.tap()
+        
         let dateButton = datePicker.buttons.firstMatch
         XCTAssertTrue(dateButton.waitForExistence(timeout: 2))
         dateButton.tap()
@@ -132,7 +134,7 @@ extension XCUIApplication {
         XCTAssertTrue(dateWheel.waitForExistence(timeout: 2))
         dateWheel.adjust(toPickerWheelValue: "1970")
         
-        datePicker.tap()
+        buttons["PopoverDismissRegion"].tap()
         swipeUp()
         
         collectionViews.buttons["Signup"].tap()
@@ -168,9 +170,7 @@ extension XCUIApplication {
         XCTAssertTrue(buttons["Health Data Access"].waitForExistence(timeout: 2))
         buttons["Health Data Access"].tap()
         
-        XCTAssertTrue(navigationBars["Health Access"].waitForExistence(timeout: 10))
-        tables.staticTexts["Turn On All"].tap()
-        navigationBars["Health Access"].buttons["Allow"].tap()
+        handleHealthKitAuthorization()
     }
     
     private func navigateOnboardingFlowNotification() throws {
