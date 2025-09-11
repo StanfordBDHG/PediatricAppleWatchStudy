@@ -22,8 +22,7 @@ final class AccountCreationTests: XCTestCase {
         await MainActor.run {
             app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
         }
-        // await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
-        app.launch()
+        await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
     func testOnboardingFlow() throws {
