@@ -175,7 +175,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F15E22E2C7C3F6A006584DD /* PBXTargetDependency */,
+				658E0F882E74A0770038C003 /* PBXTargetDependency */,
 				2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -304,9 +304,9 @@
 				97F466E62A76BBEE005DC9B4 /* XCRemoteSwiftPackageReference "SpeziOnboarding" */,
 				2FB099B42A875E2B00B20952 /* XCRemoteSwiftPackageReference "HealthKitOnFHIR" */,
 				5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */,
-				2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */,
 				65B012C52CEB030E000AA72D /* XCRemoteSwiftPackageReference "SpeziLicense" */,
 				65D4F5142E546CE10085DD6C /* XCRemoteSwiftPackageReference "SpeziConsent" */,
+				658E0F862E74A05C0038C003 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			productRefGroup = 653A254E283387FE005D4D48 /* Products */;
 			projectDirPath = "";
@@ -369,10 +369,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		2F15E22E2C7C3F6A006584DD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 2F15E22D2C7C3F6A006584DD /* SwiftLintPlugin */;
-		};
 		2FDF443B2C65DB4A0075AFC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 2FDF443A2C65DB4A0075AFC1 /* SwiftPackageListJSONPlugin */;
@@ -386,6 +382,10 @@
 			isa = PBXTargetDependency;
 			target = 653A254C283387FE005D4D48 /* PAWS */;
 			targetProxy = 653A256828338800005D4D48 /* PBXContainerItemProxy */;
+		};
+		658E0F882E74A0770038C003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 658E0F872E74A0770038C003 /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -714,14 +714,6 @@
 				minimumVersion = 1.1.2;
 			};
 		};
-		2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/SwiftLint.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.59.1;
-			};
-		};
 		2FE5DC6229EDD883004B9AB4 /* XCRemoteSwiftPackageReference "SpeziAccount" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordSpezi/SpeziAccount.git";
@@ -802,6 +794,14 @@
 				minimumVersion = 4.8.0;
 			};
 		};
+		658E0F862E74A05C0038C003 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.61.0;
+			};
+		};
 		65B012C52CEB030E000AA72D /* XCRemoteSwiftPackageReference "SpeziLicense" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordSpezi/SpeziLicense.git";
@@ -829,11 +829,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2F15E22D2C7C3F6A006584DD /* SwiftLintPlugin */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2FCC1DCE2B6A2CE000C686BE /* XCRemoteSwiftPackageReference "SwiftLint" */;
-			productName = "plugin:SwiftLintPlugin";
-		};
 		2F3D4ABB2A4E7C290068FB2F /* SpeziScheduler */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2F3D4ABA2A4E7C290068FB2F /* XCRemoteSwiftPackageReference "SpeziScheduler" */;
@@ -937,6 +932,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2FE5DC8829EDD972004B9AB4 /* XCRemoteSwiftPackageReference "SpeziStorage" */;
 			productName = SpeziKeychainStorage;
+		};
+		658E0F872E74A0770038C003 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 658E0F862E74A05C0038C003 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 		65D4F5152E546CE10085DD6C /* SpeziConsent */ = {
 			isa = XCSwiftPackageProductDependency;
