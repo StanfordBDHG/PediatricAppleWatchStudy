@@ -24,8 +24,8 @@ struct FAQ: View {
     private static var questions: [Question] = {
         (1...9).map { index in
             Question(
-                question: "QUESTION_\(index)".localized(),
-                answer: "ANSWER_\(index)".localized()
+                question: LocalizedStringResource("QUESTION_\(index)"),
+                answer: LocalizedStringResource("ANSWER_\(index)")
             )
         }
     }()
