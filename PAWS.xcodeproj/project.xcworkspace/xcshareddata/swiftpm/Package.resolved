@@ -1,5 +1,5 @@
 {
-  "originHash" : "1ffd58ca84512b71aa88eb576f22d429aeea3c1f9b29eae574366c96f50089b9",
+  "originHash" : "f8bb0aefae572460ca56b46e73d33b6b5b9af93b181c95f503b68420e2bf6c88",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -20,24 +20,6 @@
       }
     },
     {
-      "identity" : "collectionconcurrencykit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/JohnSundell/CollectionConcurrencyKit.git",
-      "state" : {
-        "revision" : "b4f23e24b5a1bff301efc5e70871083ca029ff95",
-        "version" : "0.2.0"
-      }
-    },
-    {
-      "identity" : "cryptoswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
-      "state" : {
-        "revision" : "e45a26384239e028ec87fbcc788f513b67e10d8f",
-        "version" : "1.9.0"
-      }
-    },
-    {
       "identity" : "fhirmodels",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/FHIRModels.git",
@@ -51,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "b9bf3adac18e6e3059167194aeb632f15a5ba4b2",
-        "version" : "12.1.0"
+        "revision" : "e2a3c3fbcaa1df3fd549b5b3f1175bc8a11912fd",
+        "version" : "12.2.0"
       }
     },
     {
@@ -60,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk",
       "state" : {
-        "revision" : "e15f979c3eaf477d24e5bfec9d87f1d76fbac297",
-        "version" : "2.2.0"
+        "revision" : "a2d0f1f1666de591eb1a811f40b1706f5c63a2ed",
+        "version" : "2.3.0"
       }
     },
     {
@@ -69,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "883305109ead4599e4ca59591754ee72e81e6b5e",
-        "version" : "12.1.0"
+        "revision" : "1c7edd5cc6e4ad22d2b81166bb9b208b9e63058a",
+        "version" : "12.2.0"
       }
     },
     {
@@ -96,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/grpc-binary.git",
       "state" : {
-        "revision" : "cc0001a0cf963aa40501d9c2b181e7fc9fd8ec71",
-        "version" : "1.69.0"
+        "revision" : "75b31c842f664a0f46a2e590a570e370249fd8f6",
+        "version" : "1.69.1"
       }
     },
     {
@@ -173,21 +155,12 @@
       }
     },
     {
-      "identity" : "sourcekitten",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/SourceKitten.git",
-      "state" : {
-        "revision" : "453f75b8a3bb2c3596c0d2dd422c289788233a22",
-        "version" : "0.37.1"
-      }
-    },
-    {
       "identity" : "spezi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/Spezi.git",
       "state" : {
-        "revision" : "6bed41a437cba200a8ce0182e6a30dc787bbc836",
-        "version" : "1.9.1"
+        "revision" : "aea262c1bba638494c3ce9a749e834aafd10ba63",
+        "version" : "1.9.2"
       }
     },
     {
@@ -195,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziAccount.git",
       "state" : {
-        "revision" : "e1eea32a1814d8527e4c43af0e5f347220a40c53",
-        "version" : "2.3.2"
+        "revision" : "6b1eb33f978282b360f9c72b64c0d949a71afa85",
+        "version" : "2.3.3"
       }
     },
     {
@@ -213,8 +186,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziContact.git",
       "state" : {
-        "revision" : "8dd7cb426e79f30ced23f37e438c0ca38bfe9a47",
-        "version" : "1.0.2"
+        "revision" : "f44b915dab50a862e7152cc77081ba9cb743fca4",
+        "version" : "1.0.3"
       }
     },
     {
@@ -231,8 +204,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziFoundation.git",
       "state" : {
-        "revision" : "89f3334e685ddad1bbf2e8b33fa0820620aec6c1",
-        "version" : "2.2.1"
+        "revision" : "eaf89f70c255f21cafabdca5c731fa15f618432b",
+        "version" : "2.4.1"
       }
     },
     {
@@ -240,8 +213,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziHealthKit.git",
       "state" : {
-        "revision" : "4fab93e2ba8b62ddc45f50a61043d7df376243ba",
-        "version" : "1.2.3"
+        "revision" : "164140d4fce0d0918f2c97fa027880f69d5c6e3e",
+        "version" : "1.2.6"
       }
     },
     {
@@ -258,8 +231,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziNotifications.git",
       "state" : {
-        "revision" : "5ea35ac06e245b5350b382647ec21d6a5a486d24",
-        "version" : "1.0.7"
+        "revision" : "827b7ecefe44eaac2412a3b7d669f16d0d1e906b",
+        "version" : "1.0.8"
       }
     },
     {
@@ -294,8 +267,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziViews.git",
       "state" : {
-        "revision" : "9a7cd323ae6023a57bdf57af644538e723902f67",
-        "version" : "1.12.1"
+        "revision" : "8c12a94fcd118128db87736b849e71dbca7d1a46",
+        "version" : "1.12.2"
       }
     },
     {
@@ -366,8 +339,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-numerics.git",
       "state" : {
-        "revision" : "e0ec0f5f3af6f3e4d5e7a19d2af26b481acb6ba8",
-        "version" : "1.0.3"
+        "revision" : "bbadd4b853a33fd78c4ae977d17bb2af15eb3f2a",
+        "version" : "1.1.0"
       }
     },
     {
@@ -384,8 +357,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "102a647b573f60f73afdce5613a51d71349fe507",
-        "version" : "1.30.0"
+        "revision" : "e3f69fd321d0c9fcdc16fb576a0cdd956675face",
+        "version" : "1.31.0"
       }
     },
     {
@@ -393,8 +366,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
-        "revision" : "1103c45ece4f7fe160b8f75b4ea1ee2e5fac1841",
-        "version" : "601.0.0"
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
       }
     },
     {
@@ -407,30 +380,12 @@
       }
     },
     {
-      "identity" : "swiftlint",
+      "identity" : "swiftlintplugins",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/realm/SwiftLint.git",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
       "state" : {
-        "revision" : "625792423014cc49b0a1e5a1a5c0d6b8b3de10f9",
-        "version" : "0.59.1"
-      }
-    },
-    {
-      "identity" : "swiftytexttable",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scottrhoyt/SwiftyTextTable.git",
-      "state" : {
-        "revision" : "c6df6cf533d120716bff38f8ff9885e1ce2a4ac3",
-        "version" : "0.9.0"
-      }
-    },
-    {
-      "identity" : "swxmlhash",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/drmohundro/SWXMLHash.git",
-      "state" : {
-        "revision" : "a853604c9e9a83ad9954c7e3d2a565273982471f",
-        "version" : "7.0.2"
+        "revision" : "6166499ede0efe43c3809f101d2c3cd409e2b77a",
+        "version" : "0.61.0"
       }
     },
     {
@@ -456,8 +411,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTHealthKit.git",
       "state" : {
-        "revision" : "44eb3d734741294ee6c4fbf734cc5cd6f51f02a5",
-        "version" : "1.1.4"
+        "revision" : "907d85095d2129e8ccb2cb2d1e5542df5f6ba0ad",
+        "version" : "1.1.5"
       }
     },
     {
@@ -465,17 +420,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git",
       "state" : {
-        "revision" : "d3394b8c432f4e3d30cdf14cb5892695e923b06d",
-        "version" : "2.1.0"
-      }
-    },
-    {
-      "identity" : "yams",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams.git",
-      "state" : {
-        "revision" : "3d6871d5b4a5cd519adf233fbb576e0a2af71c17",
-        "version" : "5.4.0"
+        "revision" : "ba5753f59905b80fd98d0da0f552f4e5d5c0488e",
+        "version" : "2.2.0"
       }
     }
   ],

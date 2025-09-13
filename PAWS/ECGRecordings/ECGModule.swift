@@ -20,7 +20,7 @@ import UserNotifications
 
 
 @Observable
-final class ECGModule: ServiceModule, DefaultInitializable, EnvironmentAccessible {
+final class ECGModule: ServiceModule, DefaultInitializable, EnvironmentAccessible, @unchecked Sendable {
     @ObservationIgnored @Dependency(Account.self) private var account: Account?
     @ObservationIgnored @Dependency(AccountNotifications.self) private var accountNotifications: AccountNotifications?
     @ObservationIgnored @Dependency(HealthKit.self) private var healthKit

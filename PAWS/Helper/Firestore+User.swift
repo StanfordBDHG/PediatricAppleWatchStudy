@@ -17,11 +17,11 @@ extension FirebaseFirestore.Firestore {
     }
     
     
-    var userCollectionReference: CollectionReference {
+    nonisolated var userCollectionReference: CollectionReference {
         self.collection("users")
     }
     
-    var userDocumentReference: DocumentReference {
+    nonisolated var userDocumentReference: DocumentReference {
         get async throws {
             guard let accountId = Auth.auth().currentUser?.uid else {
                 throw FirestoreError.userNotAuthenticatedYet
@@ -31,7 +31,7 @@ extension FirebaseFirestore.Firestore {
         }
     }
     
-    var healthKitCollectionReference: CollectionReference {
+    nonisolated var healthKitCollectionReference: CollectionReference {
         get async throws {
             try await self.userDocumentReference.collection("HealthKit")
         }

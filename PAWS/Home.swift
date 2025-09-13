@@ -65,15 +65,4 @@ struct HomeView: View {
             AccountConfiguration(service: InMemoryAccountService(), activeDetails: details)
         }
 }
-
-#Preview {
-    CommandLine.arguments.append("--disableFirebase")
-    
-    return HomeView()
-        .previewWith(standard: PAWSStandard()) {
-            EnrollmentGroup()
-            Scheduler()
-            AccountConfiguration(service: InMemoryAccountService())
-        }
-}
 #endif
