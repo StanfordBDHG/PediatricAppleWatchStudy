@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziAccount.git",
       "state" : {
-        "branch" : "datePickerAccessibility",
-        "revision" : "3adb363db74f651e2828c31303f0db4a1e6e9357"
+        "revision" : "6b1eb33f978282b360f9c72b64c0d949a71afa85",
+        "version" : "2.3.3"
       }
     },
     {
