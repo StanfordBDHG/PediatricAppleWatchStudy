@@ -20,8 +20,8 @@ APP_CONFIG = {
 
 platform :ios do
   before_all do
-    ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "5"
-    ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "6"
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+    ENV["FASTLANE_XCODEBUILD_SETTINGS_RETRIES"] = "4"
   end
 
   desc "Build and test"
@@ -30,7 +30,7 @@ platform :ios do
       skip_build: true,
       derived_data_path: ".derivedData",
       code_coverage: true,
-      devices: ["iPhone 16 Plus"],
+      devices: ["iPhone 17"],
       disable_slide_to_type: false,
       concurrent_workers: 1,
       max_concurrent_simulators: 1,
@@ -60,7 +60,7 @@ platform :ios do
       test_without_building: true,
       derived_data_path: ".derivedData",
       devices: [
-        "iPhone 16 Plus"
+        "iPhone 17 Pro Max"
       ],
       languages: [
          "en-US",
@@ -74,7 +74,7 @@ platform :ios do
     )
     
     # Workaround for https://github.com/fastlane/fastlane/issues/21759 and 
-    Dir.glob("./screenshots/**/iPhone 16 Plus-*.png").each do |file|
+    Dir.glob("./screenshots/**/iPhone 17 Pro Max-*.png").each do |file|
       sh("sips --resampleHeightWidth 2796 1290 '#{file}'")
     end
   end
