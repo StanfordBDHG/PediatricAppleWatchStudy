@@ -21,13 +21,21 @@ struct FAQ: View {
     }
     
     
+    private static var questionAnswerPairs: [(question: LocalizedStringResource, answer: LocalizedStringResource)] = [
+        (LocalizedStringResource.question1, LocalizedStringResource.answer1),
+        (LocalizedStringResource.question2, LocalizedStringResource.answer2),
+        (LocalizedStringResource.question3, LocalizedStringResource.answer3),
+        (LocalizedStringResource.question4, LocalizedStringResource.answer4),
+        (LocalizedStringResource.question5, LocalizedStringResource.answer5),
+        (LocalizedStringResource.question6, LocalizedStringResource.answer6),
+        (LocalizedStringResource.question7, LocalizedStringResource.answer7),
+        (LocalizedStringResource.question8, LocalizedStringResource.answer8),
+        (LocalizedStringResource.question9, LocalizedStringResource.answer9)
+    ]
+    
+    
     private static var questions: [Question] = {
-        (1...9).map { index in
-            Question(
-                question: LocalizedStringResource("QUESTION_\(index)"),
-                answer: LocalizedStringResource("ANSWER_\(index)")
-            )
-        }
+        questionAnswerPairs.map { Question(question: $0, answer: $1) }
     }()
     
     

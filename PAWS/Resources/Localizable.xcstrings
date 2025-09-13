@@ -57,9 +57,6 @@
     "An invitation code is at least 8 characters long." : {
 
     },
-    "ANSWER_%lld" : {
-
-    },
     "ANSWER_1" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -407,9 +404,6 @@
       }
     },
     "Please enter your invitation code to join the PAWS study." : {
-
-    },
-    "QUESTION_%lld" : {
 
     },
     "QUESTION_1" : {

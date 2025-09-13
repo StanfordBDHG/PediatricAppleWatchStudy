@@ -96,6 +96,7 @@ actor PAWSStandard: Standard, EnvironmentAccessible, HealthKitConstraint, Accoun
     /// Stores the given consent form in the user's document directory with a unique timestamped filename.
     ///
     /// - Parameter consent: The consent form's data to be stored as a `PDFDocument`.
+    @concurrent
     func store(consentDocument: ConsentDocument) async throws {
         guard !FeatureFlags.disableFirebase else {
             guard let basePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
