@@ -420,8 +420,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTHealthKit.git",
       "state" : {
-        "branch" : "feature/additionalNotificationsCheck",
-        "revision" : "19d4016fb737101baa5e092cc25bae7116861634"
+        "revision" : "7b048e2e9fdbbc3a656bade3036f037f70420ede"
       }
     },
     {
