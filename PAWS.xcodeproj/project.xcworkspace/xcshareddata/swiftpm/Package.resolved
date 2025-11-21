@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "793b67f4652e1a39d03fab6650033768afe6d15e",
-        "version" : "12.5.0"
+        "revision" : "087bb95235f676c1a37e928769a5b6645dcbd325",
+        "version" : "12.6.0"
       }
     },
     {
@@ -213,8 +213,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziHealthKit.git",
       "state" : {
-        "revision" : "bbd2418acbdcf4f6be502c9a865af79a0656053d",
-        "version" : "1.2.7"
+        "revision" : "3698e2cb823bd9ed81e082f671ee86b5affcafb5",
+        "version" : "1.3.0"
       }
     },
     {
@@ -249,8 +249,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziScheduler.git",
       "state" : {
-        "revision" : "ce9100b749775cfbb45c3f5108ca06d8d5efb352",
-        "version" : "1.2.16"
+        "revision" : "677deb813f9ebd699ac66acb465cde1ec1cadf8e",
+        "version" : "1.2.17"
       }
     },
     {
@@ -267,8 +267,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordSpezi/SpeziViews.git",
       "state" : {
-        "revision" : "59009e727de0125c505d8f924a09710f37b67aeb",
-        "version" : "1.12.6"
+        "revision" : "91be5dfe4dbedbe2b10bee491c98cbefc5ac95fd",
+        "version" : "1.12.8"
       }
     },
     {
@@ -357,8 +357,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/FelixHerrmann/swift-package-list.git",
       "state" : {
-        "revision" : "22ef2a2b1b51b453be02ce2bd780753718e8893a",
-        "version" : "4.8.0"
+        "revision" : "c428a73b41f2d41d68cc333a7b0d2f25c788530c",
+        "version" : "4.9.0"
       }
     },
     {
@@ -420,8 +420,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTHealthKit.git",
       "state" : {
-        "revision" : "27430e57277c9d5f3e589f4ebb36d7e24f664e07",
-        "version" : "1.2.3"
+        "branch" : "feature/additionalNotificationsCheck",
+        "revision" : "19d4016fb737101baa5e092cc25bae7116861634"
       }
     },
     {
