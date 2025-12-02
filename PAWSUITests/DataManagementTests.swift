@@ -15,13 +15,11 @@ final class DataManagementTests: XCTestCase {
         try await super.setUp()
         continueAfterFailure = false
         
-        let app = await XCUIApplication()
-        await setupSnapshot(app)
+        let app = XCUIApplication()
+        setupSnapshot(app)
         
-        await MainActor.run {
-            app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
-        }
-        await app.deleteAndLaunch(withSpringboardAppName: "PAWS")
+        app.launchArguments = ["--showOnboarding", "--useFirebaseEmulator"]
+        app.deleteAndLaunch(withSpringboardAppName: "PAWS")
     }
     
     @MainActor
