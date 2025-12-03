@@ -790,8 +790,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit.git";
 			requirement = {
-				kind = revision;
-				revision = ec5eef915beb28f8e52590352d0a89a6667bcc3a;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.4;
 			};
 		};
 		5661551B2AB8384200209B80 /* XCRemoteSwiftPackageReference "swift-package-list" */ = {
