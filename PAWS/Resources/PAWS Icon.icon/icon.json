@@ -1,0 +1,50 @@
+{
+  "fill" : "automatic",
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill" : {
+            "linear-gradient" : [
+              "extended-srgb:1.00000,0.21961,0.23529,1.00000",
+              "extended-srgb:1.00000,0.55294,0.15686,1.00000"
+            ],
+            "orientation" : {
+              "start" : {
+                "x" : 0.036982818544487324,
+                "y" : 0.5
+              },
+              "stop" : {
+                "x" : 0.959503823138298,
+                "y" : 0.5
+              }
+            }
+          },
+          "image-name" : "PAWS Center.png",
+          "name" : "PAWS Center",
+          "position" : {
+            "scale" : 1.1,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

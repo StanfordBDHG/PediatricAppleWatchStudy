@@ -64,8 +64,6 @@
 		656FF55D2DB9CC8D00D2D1A5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Resources/ConsentDocument.md.license,
-				Resources/Localizable.xcstrings.license,
 				"Supporting Files/GoogleService-Info.plist.license",
 				"Supporting Files/Info.plist",
 				"Supporting Files/Info.plist.license",
@@ -523,7 +521,7 @@
 		653A257228338800005D4D48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "PAWS Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "PAWS/Supporting Files/PAWS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -554,7 +552,7 @@
 		653A257328338800005D4D48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "PAWS Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "PAWS/Supporting Files/PAWS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";

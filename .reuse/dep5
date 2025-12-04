@@ -3,24 +3,24 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files: ecg_data_manager/Figures/*
 Copyright: 2024 Stanford University and the project authors (see CONTRIBUTORS.md)
 License: MIT
-Comment: All figures are part of the Stanford Spezi Data Pipeline Template open source project.
+Comment:All files are part of the PAWS application based on the Stanford Spezi Template Application project.
 
 Files: ecg_data_manager/sample_data/*
 Copyright: 2024 Stanford University and the project authors (see CONTRIBUTORS.md)
 License: MIT
-Comment: All files are part of the Stanford Spezi Data Pipeline Template open source project.
+Comment: All files are part of the PAWS application based on the Stanford Spezi Template Application project.
 
 Files: firebase/*
 Copyright: 2024 Stanford University and the project authors (see CONTRIBUTORS.md)
 License: MIT
 Comment: All files are part of the PAWS application based on the Stanford Spezi Template Application project.
 
-Files: PAWS/Resources/Assets.xcassets/*
+Files: PAWS/Resources/*
 Copyright: 2024 Stanford University and the project authors (see CONTRIBUTORS.md)
 License: MIT
-Comment: All files are part of the Stanford Spezi Data Pipeline Template open source project.
+Comment: All files are part of the PAWS application based on the Stanford Spezi Template Application project.
 
 Files: fastlane/metadata/*
 Copyright: 2024 Stanford University and the project authors (see CONTRIBUTORS.md)
 License: MIT
-Comment: All files are part of the Stanford Spezi Data Pipeline Template open source project.
+Comment: All files are part of the PAWS application based on the Stanford Spezi Template Application project.
