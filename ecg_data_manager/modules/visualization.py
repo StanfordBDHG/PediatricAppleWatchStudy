@@ -7,9 +7,11 @@
 #
 
 """
-This module provides classes and functions for viewing, filtering, and analyzing ECG data. The
-primary class, ECGDataViewer, allows users to interact with  ECG data through a graphical interface,
-enabling the review, diagnosis, and visualization of ECG recordings.
+This module provides classes and associated functions for viewing, filtering, and 
+analyzing ECG data. The primary class, ECGDataViewer, allows users to interact with 
+ECG data through a graphical interface, enabling the review, diagnosis, and visualization 
+of ECG recordings. The module also includes functions for plotting single lead ECGs and 
+configuring the appearance of the plots.
 """
 
 # Standard library imports
@@ -30,6 +32,7 @@ from google.cloud.firestore_v1.client import Client
 from google.cloud.exceptions import GoogleCloudError
 
 # Local application/library specific imports
+from spezi_data_pipeline.data_access.firebase_fhir_data_access import FirebaseFHIRAccess
 from spezi_data_pipeline.data_flattening.fhir_resources_flattener import ColumnNames
 
 USERS_COLLECTION = "users"
@@ -125,16 +128,23 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         db: Database connection instance.
     """
 
-    def __init__(self, df_ecg: pd.DataFrame, db: Client):
+    def __init__(
+        self,
+        df_ecg: pd.DataFrame,
+        db: Client,
+        timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
+    ):
         """
         Initialize the ECGDataViewer with the given ECG DataFrame and database connection.
 
         Args:
             df_ecg (pd.DataFrame): DataFrame containing the ECG data.
             db: Database connection instance.
+            timeout (float): Timeout in seconds for Firestore stream operations.
         """
         self.db = db
         self.df_ecg = df_ecg
+        self.timeout = timeout
         self.filtered_data = pd.DataFrame()
         self.plot_counter = 0
         self.ecg_output = widgets.Output()
@@ -268,7 +278,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 display(
                     widgets.HTML(
                         value="<b style='color: green; font-size: 22px;'>No more ECG data "
-                        "to review.✓</b>"
+                        "to review.âœ“</b>"
                     )
                 )
 
@@ -333,23 +343,9 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 ax=axs[i],
             )
 
-        user_id = (
-            row[ColumnNames.USER_ID.value]
-            if row[ColumnNames.USER_ID.value] is not None
-            else "Unknown"
-        )
-        heart_rate = (
-            int(row[ColumnNames.HEART_RATE.value])
-            if row[ColumnNames.HEART_RATE.value] is not None
-            else "Unknown"
-        )
-        ecg_interpretation = (
-            row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
-            if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None
-            else "Unknown"
-        )
-
-        symptoms = row.get("Symptoms", "No symptoms reported.")
+        user_id = row[ColumnNames.USER_ID.value] if row[ColumnNames.USER_ID.value] is not None else "Unknown"
+        heart_rate = int(row[ColumnNames.HEART_RATE.value]) if row[ColumnNames.HEART_RATE.value] is not None else "Unknown"
+        ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None else "Unknown"
 
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
@@ -360,15 +356,11 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         heart_rate_html = widgets.HTML(
             value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
         )
-
-        symptoms_html = widgets.HTML(
-            value=f"<b style='font-size: larger;'>Symptoms: {symptoms}</b>"
-        )
-
         interpretation_html = widgets.HTML(
             value="<b style='font-size: larger;'>Classification: "
         )
 
+        # Conditional color for non-sinusRhythm classifications
         if ecg_interpretation != SINUS_RHYTHM:
             interpretation_html.value += (
                 f"<span style='color: red;'>{ecg_interpretation}</span>"
@@ -378,7 +370,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         interpretation_html.value += "</b>"
 
-        display(user_id_html, heart_rate_html, symptoms_html, interpretation_html)
+        display(user_id_html, heart_rate_html, interpretation_html)
 
         # Add review status
         diagnosis_collection_ref = (
@@ -388,7 +380,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
             .document(row[ColumnNames.RESOURCE_ID.value])
             .collection(DIAGNOSIS_DATA_SUBCOLLECTION)
         )
-        diagnosis_docs = list(diagnosis_collection_ref.stream())
+        diagnosis_docs = list(diagnosis_collection_ref.stream(timeout=self.timeout))
         num_diagnosis_docs = len(diagnosis_docs)
 
         diagnosis_status_html = widgets.HTML(
@@ -478,6 +470,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 )
             )
 
+            # Hide the widgets if not all selections have been made
             initials = (
                 self.initials_dropdown.value
                 if self.initials_dropdown.value != WidgetStrings.OTHER.value
@@ -492,8 +485,10 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 tracing_quality_dropdown.layout.visibility = "hidden"
                 notes_textarea.layout.visibility = "hidden"
 
+        # Attach the hide_widgets function to the button's on_click event
         save_button.on_click(hide_widgets)
 
+        # Display the widgets
         widgets_box = widgets.VBox(
             [
                 diagnosis_dropdown,
@@ -507,7 +502,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         return widgets_box
 
-    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-arguments, too-many-positional-arguments
+    def save_diagnosis(  # pylint: disable=too-many-locals, too-many-arguments
         self,
         user_id,
         document_id,
@@ -554,7 +549,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 document_id
             )
             diagnosis_ref = recording_ref.collection(DIAGNOSIS_DATA_SUBCOLLECTION)
-            num_diagnosis_docs = len(list(diagnosis_ref.stream()))
+            num_diagnosis_docs = len(list(diagnosis_ref.stream(timeout=self.timeout)))
 
             new_diagnosis_data = {
                 DiagnosisKeyNames.PHYSICIAN_INITIALS.value: initials,
@@ -604,9 +599,10 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
                     data_saved_html = widgets.HTML(
                         value="<span style='color: green; font-size: 20px;'>Diagnosis "
-                        "saved successfully.✓</span>"
+                        "saved successfully.âœ“</span>"
                     )
                     display(data_saved_html)
+
                 else:
                     print(
                         "ECG has already been reviewed. No further review is required."
@@ -939,21 +935,9 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
                 ax=axs[i],
             )
 
-        user_id = (
-            row[ColumnNames.USER_ID.value]
-            if row[ColumnNames.USER_ID.value] is not None
-            else "Unknown"
-        )
-        heart_rate = (
-            int(row[ColumnNames.HEART_RATE.value])
-            if row[ColumnNames.HEART_RATE.value] is not None
-            else "Unknown"
-        )
-        ecg_interpretation = (
-            row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value]
-            if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None
-            else "Unknown"
-        )
+        user_id = row[ColumnNames.USER_ID.value] if row[ColumnNames.USER_ID.value] is not None else "Unknown"
+        heart_rate = int(row[ColumnNames.HEART_RATE.value]) if row[ColumnNames.HEART_RATE.value] is not None else "Unknown"
+        ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None else "Unknown"
 
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(

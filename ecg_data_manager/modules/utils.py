@@ -21,7 +21,10 @@ from google.cloud.firestore import Client
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 # Local application/library specific imports
-from spezi_data_pipeline.data_access.firebase_fhir_data_access import get_code_mappings
+from spezi_data_pipeline.data_access.firebase_fhir_data_access import (
+    FirebaseFHIRAccess,
+    get_code_mappings,
+)
 from spezi_data_pipeline.data_flattening.fhir_resources_flattener import ColumnNames
 
 USERS_COLLECTION = "users"
@@ -45,7 +48,11 @@ class ColumnMismatchError(Exception):
         super().__init__(self.message)
 
 
-def process_ecg_data(db: Client, data: pd.DataFrame) -> pd.DataFrame:
+def process_ecg_data(
+    db: Client,
+    data: pd.DataFrame,
+    timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
+) -> pd.DataFrame:
     """
     Prepare ECG data by fetching diagnosis data, creating a diagnosis dataframe,
     concatenating it with the provided dataframe, splitting the ECG recordings into
@@ -54,19 +61,20 @@ def process_ecg_data(db: Client, data: pd.DataFrame) -> pd.DataFrame:
     Args:
         db (Client): Firestore database client.
         flattened_df (pd.DataFrame): Flattened DataFrame with ECG data.
+        timeout (float): Timeout in seconds for Firestore stream operations.
 
     Returns:
         pd.DataFrame: Processed ECG data.
     """
 
     # Get diagnosis-related data from Firestore
-    data_diagnosis_enhanced = fetch_diagnosis_data(db, data)
+    data_diagnosis_enhanced = fetch_diagnosis_data(db, data, timeout=timeout)
 
     # Split the 30-sec ECG recording into 10-sec parts for better visualization
     data_after_splits = split_ecg_recording_in_10sec_parts(data_diagnosis_enhanced)
 
     # Get the user information data from Firestore and store it in pd.DataFrame format
-    users_data = fetch_users_list(db)
+    users_data = fetch_users_list(db, timeout=timeout)
 
     # Add the user information data to the processed data
     data_diagnosis_users_enhanced = merge_dataframes_on_userid(
@@ -83,72 +91,16 @@ def process_ecg_data(db: Client, data: pd.DataFrame) -> pd.DataFrame:
     return processed_data
 
 
-def fetch_symptoms_single(observation_data: dict) -> dict:
-    """
-    Extracts symptoms information from the components array of a single observation data
-    dictionary where HKElectrocardiogram.SymptomsStatus is 'present'. Returns 'UserId',
-    'ResourceId', and 'Symptoms'. This data is suitable for merging with a main DataFrame.
-
-    Args:
-        observation_data: A dictionary containing observation data.
-
-    Returns:
-        dict: A dictionary with 'UserId', 'ResourceId', and 'Symptoms' if symptoms are present.
-              Returns an empty dictionary if no symptoms are present or if SymptomsStatus is 
-              not 'present'.
-    """
-    components = observation_data.get("component", [])
-    user_id = observation_data.get(ColumnNames.USER_ID.value)
-    resource_id = observation_data.get(ColumnNames.RESOURCE_ID.value)
-
-    # Check for SymptomsStatus
-    symptoms_status = next(
-        (
-            comp.get("valueString")
-            for comp in components
-            if comp.get("code", {}).get("coding", [{}])[0].get("code")
-            == "HKElectrocardiogram.SymptomsStatus"
-        ),
-        None,
-    )
-
-    # If SymptomsStatus is "present", extract symptoms
-    if symptoms_status == "present":
-        symptoms = [
-            f"{comp.get('code', {}).get('coding', [{}])[0].get('display')}:"
-            f"{comp.get('valueString')}"
-            for comp in components
-            if "HKCategoryTypeIdentifier"
-            in comp.get("code", {}).get("coding", [{}])[0].get("code", "")
-        ]
-        if symptoms:  # Check if symptoms list is not empty
-            return {
-                ColumnNames.USER_ID.value: user_id,
-                ColumnNames.RESOURCE_ID.value: resource_id,
-                "Symptoms": ", ".join(symptoms),
-            }
-        return {
-            ColumnNames.USER_ID.value: user_id,
-            ColumnNames.RESOURCE_ID.value: resource_id,
-            "Symptoms": "No symptoms.",
-        }
-
-    return {
-        ColumnNames.USER_ID.value: user_id,
-        ColumnNames.RESOURCE_ID.value: resource_id,
-        "Symptoms": "No symptoms.",
-    }
-
-
 def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
     db: Client,
     input_df: pd.DataFrame,
     collection_name=USERS_COLLECTION,
     subcollection_name=ECG_DATA_SUBCOLLECTION,
+    timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
 ) -> pd.DataFrame:
     """
     Fetch diagnosis data from the Firestore database and extend the input DataFrame with new
-    columns, including a 'Symptoms' column.
+    columns.
 
     Args:
         db (Client): Firestore database client.
@@ -156,15 +108,16 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
         collection_name (str, optional): Name of the main collection. Defaults to USERS_COLLECTION.
         subcollection_name (str, optional): Name of the subcollection. Defaults to
             ECG_DATA_SUBCOLLECTION.
+        timeout (float): Timeout in seconds for Firestore stream operations.
 
     Returns:
-        pd.DataFrame: Extended DataFrame containing the fetched diagnosis data and symptoms.
+        pd.DataFrame: Extended DataFrame containing the fetched diagnosis data.
     """
     collection_ref = db.collection(collection_name)
     resources = []
     new_columns = set()
 
-    for user_doc in collection_ref.stream():  # pylint: disable=too-many-nested-blocks
+    for user_doc in collection_ref.stream(timeout=timeout):  # pylint: disable=too-many-nested-blocks
         try:
             user_id = user_doc.id
             query = (
@@ -181,83 +134,93 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
                     "array_contains",
                     {"display": display_str, "system": system_str, "code": code_str},
                 )
-            ).stream()
+            ).stream(timeout=timeout)
 
-            # Process the FHIR documents and store observation data
             for doc in fhir_docs:
                 observation_data = doc.to_dict()
-                observation_data[ColumnNames.USER_ID.value] = user_id
-                observation_data[ColumnNames.RESOURCE_ID.value] = doc.id
-
-                # Extract effective period start time
-                effective_start = observation_data.get("effectivePeriod", {}).get(
-                    "start", ""
-                )
-                if effective_start:
-                    observation_data["EffectiveDateTimeHHMM"] = effective_start
-
-                # Extract symptoms information HERE
-                symptoms_info = fetch_symptoms_single(observation_data)
-                if symptoms_info:
-                    observation_data.update(symptoms_info)
-
-                # Extract diagnosis information from diagnosis subcollection
+                observation_data["user_id"] = user_id
+                observation_data["ResourceId"] = doc.id
                 diagnosis_docs = list(
-                    doc.reference.collection(DIAGNOSIS_DATA_SUBCOLLECTION).stream()
+                    doc.reference.collection(DIAGNOSIS_DATA_SUBCOLLECTION).stream(
+                        timeout=timeout
+                    )
                 )
 
-                physician_initials_list = [
-                    diagnosis_doc.to_dict().get("physicianInitials", "")
-                    for diagnosis_doc in diagnosis_docs
-                ]
-                observation_data["NumberOfReviewers"] = len(physician_initials_list)
-                observation_data["Reviewers"] = physician_initials_list
+                if diagnosis_docs:
+                    physician_initials_list = [
+                        diagnosis_doc.to_dict().get("physicianInitials")
+                        for diagnosis_doc in diagnosis_docs
+                        if diagnosis_doc.to_dict().get("physicianInitials")
+                    ]
+                    observation_data["NumberOfReviewers"] = len(physician_initials_list)
+                    observation_data["Reviewers"] = physician_initials_list
+                else:
+                    observation_data["NumberOfReviewers"] = 0
+                    observation_data["Reviewers"] = []
+
                 observation_data["ReviewStatus"] = (
                     "Incomplete review"
                     if observation_data["NumberOfReviewers"] < 3
                     else "Complete review"
                 )
-
-                # Add new columns from diagnosis documents
-                for i, diagnosis_doc in enumerate(diagnosis_docs):
-                    doc_data = diagnosis_doc.to_dict()
-                    for key, value in doc_data.items():
-                        col_name = f"Diagnosis{i+1}_{key}"
-                        new_columns.add(col_name)
-                        observation_data[col_name] = value
-
                 resources.append(observation_data)
+
+                for i, diagnosis_doc in enumerate(diagnosis_docs):
+                    if diagnosis_doc:
+                        doc_data = diagnosis_doc.to_dict()
+                        for key, value in doc_data.items():
+                            col_name = f"Diagnosis{i+1}_{key}"
+                            new_columns.add(col_name)
+                            observation_data[col_name] = value
 
         except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"An error occurred while processing user {user_id}: {str(e)}")
 
-    fetched_df = pd.DataFrame(resources)
-
-    # Define columns for the final DataFrame
     columns = [
         ColumnNames.USER_ID.value,
-        ColumnNames.RESOURCE_ID.value,
+        "ResourceId",
         "EffectiveDateTimeHHMM",
         ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value,
         "NumberOfReviewers",
         "Reviewers",
         "ReviewStatus",
-        "Symptoms",
     ] + list(new_columns)
 
-    fetched_df = fetched_df.reindex(
-        columns=columns, fill_value=None
-    )  # Ensure columns are in order and filled
+    data = []
 
-    # Extend the input DataFrame with new columns
+    for resource in resources:
+        row_data = [
+            resource.get(ColumnNames.USER_ID.value, None),
+            resource.get("id", None),
+            (
+                resource.get("effectivePeriod", {}).get("start", None)
+                if resource.get("effectivePeriod")
+                else None
+            ),
+            (
+                resource.get("component", [{}])[2].get("valueString", None)
+                if len(resource.get("component", [])) > 2
+                else None
+            ),
+            resource.get("NumberOfReviewers", None),
+            resource.get("Reviewers", None),
+            resource.get("ReviewStatus", None),
+        ]
+        for col in new_columns:
+            row_data.append(resource.get(col, None))
+
+        data.append(row_data)
+
+    fetched_df = pd.DataFrame(data, columns=columns)
+
+    # Extend the input_df with new columns based on ResourceId
     extended_df = input_df.copy()
     additional_columns = [
-        ColumnNames.RESOURCE_ID.value,
+        "ResourceId",
         "NumberOfReviewers",
         "Reviewers",
         "ReviewStatus",
         "EffectiveDateTimeHHMM",
-        "Symptoms",
     ] + list(new_columns)
 
     for col in additional_columns:
@@ -265,10 +228,8 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
             extended_df[col] = None
 
     for index, row in extended_df.iterrows():
-        resource_id = row[ColumnNames.RESOURCE_ID.value]
-        fetched_row = fetched_df[
-            fetched_df[ColumnNames.RESOURCE_ID.value] == resource_id
-        ]
+        resource_id = row["ResourceId"]
+        fetched_row = fetched_df[fetched_df["ResourceId"] == resource_id]
         if not fetched_row.empty:
             for col in additional_columns:
                 if col in fetched_row.columns:
@@ -372,7 +333,9 @@ def prioritize_abnormal_recordings(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def fetch_users_list(
-    db: Client, collection_name: str = USERS_COLLECTION
+    db: Client,
+    collection_name: str = USERS_COLLECTION,
+    timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
 ) -> pd.DataFrame:
     """
     Fetches the list of users from the Firestore database and returns it as a DataFrame.
@@ -382,12 +345,14 @@ def fetch_users_list(
         The Firestore client object used to access the database.
     collection_name : str, optional
         The name of the Firestore collection containing user data (default is USERS_COLLECTION).
+    timeout : float, optional
+        Timeout in seconds for Firestore stream operations.
 
     Returns:
     pd.DataFrame
         DataFrame containing user data with user IDs as one of the columns.
     """
-    users = db.collection(collection_name).stream()
+    users = db.collection(collection_name).stream(timeout=timeout)
     users_data = []
     all_identifiers: set[str] = set()
 
