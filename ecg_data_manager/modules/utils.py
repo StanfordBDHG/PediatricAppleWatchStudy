@@ -30,6 +30,7 @@ from spezi_data_pipeline.data_flattening.fhir_resources_flattener import ColumnN
 USERS_COLLECTION = "users"
 ECG_DATA_SUBCOLLECTION = "HealthKit"
 DIAGNOSIS_DATA_SUBCOLLECTION = "Diagnosis"
+DEFAULT_TIMEOUT = getattr(FirebaseFHIRAccess, "DEFAULT_TIMEOUT", 60.0)
 
 
 class ColumnMismatchError(Exception):
@@ -51,7 +52,7 @@ class ColumnMismatchError(Exception):
 def process_ecg_data(
     db: Client,
     data: pd.DataFrame,
-    timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
+    timeout: float = DEFAULT_TIMEOUT,
 ) -> pd.DataFrame:
     """
     Prepare ECG data by fetching diagnosis data, creating a diagnosis dataframe,
@@ -133,12 +134,12 @@ def fetch_symptoms_single(observation_data: dict) -> dict:
     }
 
 
-def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
+def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches, too-many-nested-blocks
     db: Client,
     input_df: pd.DataFrame,
     collection_name=USERS_COLLECTION,
     subcollection_name=ECG_DATA_SUBCOLLECTION,
-    timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
+    timeout: float = DEFAULT_TIMEOUT,
 ) -> pd.DataFrame:
     """
     Fetch diagnosis data from the Firestore database and extend the input DataFrame with new
@@ -159,7 +160,9 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
     resources = []
     new_columns = set()
 
-    for user_doc in collection_ref.stream(timeout=timeout):  # pylint: disable=too-many-nested-blocks
+    for user_doc in collection_ref.stream(
+        timeout=timeout
+    ):  # pylint: disable=too-many-nested-blocks
         try:
             user_id = user_doc.id
             query = (
@@ -386,7 +389,7 @@ def prioritize_abnormal_recordings(df: pd.DataFrame) -> pd.DataFrame:
 def fetch_users_list(
     db: Client,
     collection_name: str = USERS_COLLECTION,
-    timeout: float = FirebaseFHIRAccess.DEFAULT_TIMEOUT,
+    timeout: float = DEFAULT_TIMEOUT,
 ) -> pd.DataFrame:
     """
     Fetches the list of users from the Firestore database and returns it as a DataFrame.

@@ -9,7 +9,7 @@
 """
 Module for generating and uploading random alphanumeric invitation codes to Firestore.
 
-This module includes functions to generate random alphanumeric codes, upload them to a 
+This module includes functions to generate random alphanumeric codes, upload them to a
 Firestore collection, and handle command-line arguments for configuring the process.
 
 Functions:
@@ -18,7 +18,7 @@ Functions:
     upload_invitation_codes(db: Client, code_count: int, code_length: int, simulate: bool = False)
                                                    -> List[str]:  Generates and uploads invitation
                                                                   codes to Firestore.
-    main(): Main function to parse command-line arguments and run the logic for generating 
+    main(): Main function to parse command-line arguments and run the logic for generating
             and uploading invitation codes.
 """
 

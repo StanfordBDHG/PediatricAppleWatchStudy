@@ -7,16 +7,16 @@
 #
 
 """
-Module for managing Firestore invitation codes by setting a 'used' field to False 
+Module for managing Firestore invitation codes by setting a 'used' field to False
 and deleting the 'usedBy' field in all documents within the 'invitationCodes' collection.
 
-This module connects to Firestore using FirebaseFHIRAccess and performs the required 
+This module connects to Firestore using FirebaseFHIRAccess and performs the required
 document updates.
 
 Functions:
-    set_unused(db: Client): Sets the 'used' field to False and deletes the 'usedBy' field 
+    set_unused(db: Client): Sets the 'used' field to False and deletes the 'usedBy' field
                             in all documents within the 'invitationCodes' collection.
-    main(): Connects to Firestore using FirebaseFHIRAccess and updates the documents in 
+    main(): Connects to Firestore using FirebaseFHIRAccess and updates the documents in
             the 'invitationCodes' collection.
 """
 
