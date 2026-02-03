@@ -91,6 +91,48 @@ def process_ecg_data(
     return processed_data
 
 
+def fetch_symptoms_single(observation_data: dict) -> dict:
+    """
+    Extracts symptoms information from a single observation data dictionary and
+    returns a dict with a normalized Symptoms field.
+
+    Args:
+        observation_data: A dictionary containing observation data.
+
+    Returns:
+        dict: A dictionary with 'UserId', 'ResourceId', and 'Symptoms'.
+    """
+    components = observation_data.get("component", [])
+    user_id = observation_data.get(ColumnNames.USER_ID.value)
+    resource_id = observation_data.get("ResourceId")
+
+    symptoms_status = None
+    for comp in components:
+        code = comp.get("code", {}).get("coding", [{}])[0].get("code")
+        if code == "HKElectrocardiogram.SymptomsStatus":
+            symptoms_status = comp.get("valueString")
+            break
+
+    symptoms_text = "No symptoms."
+    if symptoms_status == "present":
+        symptoms_list = []
+        for comp in components:
+            code = comp.get("code", {}).get("coding", [{}])[0].get("code", "")
+            if "HKCategoryTypeIdentifier" in code:
+                display = comp.get("code", {}).get("coding", [{}])[0].get("display")
+                value = comp.get("valueString")
+                if display and value is not None:
+                    symptoms_list.append(f"{display}:{value}")
+        if symptoms_list:
+            symptoms_text = ", ".join(symptoms_list)
+
+    return {
+        ColumnNames.USER_ID.value: user_id,
+        "ResourceId": resource_id,
+        "Symptoms": symptoms_text,
+    }
+
+
 def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
     db: Client,
     input_df: pd.DataFrame,
@@ -139,7 +181,9 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
             for doc in fhir_docs:
                 observation_data = doc.to_dict()
                 observation_data["user_id"] = user_id
+                observation_data[ColumnNames.USER_ID.value] = user_id
                 observation_data["ResourceId"] = doc.id
+                observation_data[ColumnNames.RESOURCE_ID.value] = doc.id
                 diagnosis_docs = list(
                     doc.reference.collection(DIAGNOSIS_DATA_SUBCOLLECTION).stream(
                         timeout=timeout
@@ -163,6 +207,10 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
                     if observation_data["NumberOfReviewers"] < 3
                     else "Complete review"
                 )
+
+                symptoms_info = fetch_symptoms_single(observation_data)
+                if symptoms_info:
+                    observation_data.update(symptoms_info)
                 resources.append(observation_data)
 
                 for i, diagnosis_doc in enumerate(diagnosis_docs):
@@ -184,6 +232,7 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
         "NumberOfReviewers",
         "Reviewers",
         "ReviewStatus",
+        "Symptoms",
     ] + list(new_columns)
 
     data = []
@@ -191,7 +240,7 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
     for resource in resources:
         row_data = [
             resource.get(ColumnNames.USER_ID.value, None),
-            resource.get("id", None),
+            resource.get("ResourceId", None),
             (
                 resource.get("effectivePeriod", {}).get("start", None)
                 if resource.get("effectivePeriod")
@@ -205,6 +254,7 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
             resource.get("NumberOfReviewers", None),
             resource.get("Reviewers", None),
             resource.get("ReviewStatus", None),
+            resource.get("Symptoms", None),
         ]
         for col in new_columns:
             row_data.append(resource.get(col, None))
@@ -221,6 +271,7 @@ def fetch_diagnosis_data(  # pylint: disable=too-many-locals, too-many-branches
         "Reviewers",
         "ReviewStatus",
         "EffectiveDateTimeHHMM",
+        "Symptoms",
     ] + list(new_columns)
 
     for col in additional_columns:

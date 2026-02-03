@@ -346,6 +346,16 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         user_id = row[ColumnNames.USER_ID.value] if row[ColumnNames.USER_ID.value] is not None else "Unknown"
         heart_rate = int(row[ColumnNames.HEART_RATE.value]) if row[ColumnNames.HEART_RATE.value] is not None else "Unknown"
         ecg_interpretation = row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] if row[ColumnNames.APPLE_ELECTROCARDIOGRAM_CLASSIFICATION.value] is not None else "Unknown"
+        symptoms = row.get("Symptoms")
+        if symptoms is None or (isinstance(symptoms, float) and pd.isna(symptoms)):
+            symptoms = "No symptoms reported."
+        elif isinstance(symptoms, str) and not symptoms.strip():
+            symptoms = "No symptoms reported."
+        symptoms = row.get("Symptoms")
+        if symptoms is None or (isinstance(symptoms, float) and pd.isna(symptoms)):
+            symptoms = "No symptoms reported."
+        elif isinstance(symptoms, str) and not symptoms.strip():
+            symptoms = "No symptoms reported."
 
         group_class = row[AGE_GROUP_STRING]
         user_id_html = widgets.HTML(
@@ -355,6 +365,9 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         heart_rate_html = widgets.HTML(
             value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
+        )
+        symptoms_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'>Symptoms: {symptoms}</b>"
         )
         interpretation_html = widgets.HTML(
             value="<b style='font-size: larger;'>Classification: "
@@ -370,7 +383,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
         interpretation_html.value += "</b>"
 
-        display(user_id_html, heart_rate_html, interpretation_html)
+        display(user_id_html, heart_rate_html, symptoms_html, interpretation_html)
 
         # Add review status
         diagnosis_collection_ref = (
@@ -948,6 +961,9 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
         heart_rate_html = widgets.HTML(
             value=f"<b style='font-size: larger;'>Average HR: {heart_rate} bpm</b>"
         )
+        symptoms_html = widgets.HTML(
+            value=f"<b style='font-size: larger;'>Symptoms: {symptoms}</b>"
+        )
         interpretation_html = widgets.HTML(
             value="<b style='font-size: larger;'>Classification: "
         )
@@ -961,7 +977,7 @@ class ECGDataExplorer:  # pylint: disable=too-many-instance-attributes
 
         interpretation_html.value += "</b>"
 
-        display(user_id_html, heart_rate_html, interpretation_html)
+        display(user_id_html, heart_rate_html, symptoms_html, interpretation_html)
 
         diagnosis_status_html = widgets.HTML(
             value=f"<b style='font-size: larger;'>This recording has been reviewed "
