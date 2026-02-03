@@ -211,7 +211,6 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
         else:
             self.initials_textarea.layout.visibility = "hidden"
             self.update_unreviewed_message()
-        timeout: float = (DEFAULT_TIMEOUT,)
 
     def display_widgets(self):
         """

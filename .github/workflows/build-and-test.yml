@@ -56,7 +56,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'microsoft'
-        java-version: '17'
+        java-version: '21'
     - name: Setup LaTex
       run: |
         sudo apt-get update -y
