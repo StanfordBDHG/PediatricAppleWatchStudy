@@ -18,6 +18,7 @@ from datetime import datetime
 import math
 import numpy as np
 import pandas as pd
+import csv
 from google.cloud.firestore import Client
 from google.cloud.firestore_v1.base_query import FieldFilter
 
@@ -487,7 +488,14 @@ def export_database_in_csv(
     # Single file (backward-compatible behavior)
     if chunk_size is None:
         out = f"{filename}_{datetime_str}.csv"
-        output_database.to_csv(out, index=False)
+        output_database.to_csv(
+            out,
+            index=False,
+            encoding="utf-8",
+            quoting=csv.QUOTE_MINIMAL,
+            escapechar="\\",
+            lineterminator="\n",
+        )
         return output_database
 
     # Chunked export
@@ -498,10 +506,25 @@ def export_database_in_csv(
     for i in range(num_chunks):
         start = i * chunk_size
         end = min(start + chunk_size, total_rows)
-        chunk_df = output_database.iloc[start:end]
+
+        chunk_df = output_database.iloc[start:end].copy()
+
+        text_cols = [c for c in chunk_df.columns if chunk_df[c].dtype == "object"]
+        for c in text_cols:
+            chunk_df[c] = chunk_df[c].apply(
+                lambda x: x.replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+                if isinstance(x, str) else x
+            )
 
         out = f"{filename}_part_{i+1:04d}_{datetime_str}.csv"
-        chunk_df.to_csv(out, index=False)
+        chunk_df.to_csv(
+            out,
+            index=False,
+            encoding="utf-8",
+            quoting=csv.QUOTE_MINIMAL,
+            escapechar="\\",
+            lineterminator="\n",
+        )
         written_files.append(out)
 
     return output_database, written_files
