@@ -281,7 +281,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 display(
                     widgets.HTML(
                         value="<b style='color: green; font-size: 22px;'>No more ECG data "
-                        "to review.âœ“</b>"
+                        "to review.“</b>"
                     )
                 )
 
@@ -383,7 +383,6 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
             value="<b style='font-size: larger;'>Classification: "
         )
 
-        # Conditional color for non-sinusRhythm classifications
         if ecg_interpretation != SINUS_RHYTHM:
             interpretation_html.value += (
                 f"<span style='color: red;'>{ecg_interpretation}</span>"
@@ -493,7 +492,6 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 )
             )
 
-            # Hide the widgets if not all selections have been made
             initials = (
                 self.initials_dropdown.value
                 if self.initials_dropdown.value != WidgetStrings.OTHER.value
@@ -508,10 +506,8 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
                 tracing_quality_dropdown.layout.visibility = "hidden"
                 notes_textarea.layout.visibility = "hidden"
 
-        # Attach the hide_widgets function to the button's on_click event
         save_button.on_click(hide_widgets)
 
-        # Display the widgets
         widgets_box = widgets.VBox(
             [
                 diagnosis_dropdown,
@@ -622,7 +618,7 @@ class ECGDataViewer:  # pylint: disable=too-many-instance-attributes
 
                     data_saved_html = widgets.HTML(
                         value="<span style='color: green; font-size: 20px;'>Diagnosis "
-                        "saved successfully.âœ“</span>"
+                        "saved successfully.“</span>"
                     )
                     display(data_saved_html)
 

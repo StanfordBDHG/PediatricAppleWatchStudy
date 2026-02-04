@@ -15,6 +15,8 @@ the PediatricAppleWatchStudy.
 from datetime import datetime
 
 # Related third-party imports
+import csv
+import math
 import numpy as np
 import pandas as pd
 from google.cloud.firestore import Client
@@ -459,31 +461,73 @@ def merge_dataframes_on_userid(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataF
 def export_database_in_csv(
     data: pd.DataFrame,
     filename: str = "database",
-) -> pd.DataFrame:
+    chunk_size: int | None = None,
+) -> tuple[pd.DataFrame, list[str]] | pd.DataFrame:
     """
-    Exports the processed data along with user and diagnosis details from the Firestore
-    database into a CSV file.
+    Export data to CSV. If chunk_size is provided, export multiple CSVs each with
+    up to chunk_size rows.
 
-    Parameters:
-    db : Firestore client object
-        The Firestore client object used to access the database.
-    processed_data : pd.DataFrame
-        The processed data DataFrame that needs to be merged with user and diagnosis details.
-    filename : str, optional
-        The base filename for the exported CSV (default is "database").
-
+    Args:
+        data: Input DataFrame.
+        filename: Base filename (without timestamp/extension).
+        chunk_size: If None, export a single CSV. If int, export chunked CSVs.
 
     Returns:
-    pd.DataFrame
-        The final merged DataFrame with user and diagnosis details.
+        - If chunk_size is None: output_database (pd.DataFrame)
+        - If chunk_size is set: (output_database, written_files)
     """
+    if chunk_size is not None and chunk_size <= 0:
+        raise ValueError("chunk_size must be a positive integer or None.")
 
-    current_datetime = datetime.now()
-    datetime_str = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"{filename}_{datetime_str}.csv"
+    datetime_str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    output_database = add_age_group_column(data)
-    output_database.to_csv(filename, index=False)
+    output_database = add_age_group_column(data.copy())
+    total_rows = len(output_database)
+    print(f"Total rows: {total_rows}")
+
+    # Single file (backward-compatible behavior)
+    if chunk_size is None:
+        out = f"{filename}_{datetime_str}.csv"
+        output_database.to_csv(
+            out,
+            index=False,
+            encoding="utf-8",
+            quoting=csv.QUOTE_MINIMAL,
+            escapechar="\\",
+            lineterminator="\n",
+        )
+        return output_database
+
+    # Chunked export
+    num_chunks = math.ceil(total_rows / chunk_size)
+    written_files: list[str] = []
+    print(f"Number of chunks: {num_chunks} (chunk_size={chunk_size})")
+
+    for i in range(num_chunks):
+        start = i * chunk_size
+        end = min(start + chunk_size, total_rows)
+
+        chunk_df = output_database.iloc[start:end].copy()
+
+        text_cols = [c for c in chunk_df.columns if chunk_df[c].dtype == "object"]
+        for c in text_cols:
+            chunk_df[c] = chunk_df[c].apply(
+                lambda x: x.replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+                if isinstance(x, str) else x
+            )
+
+        out = f"{filename}_part_{i+1:04d}_{datetime_str}.csv"
+        chunk_df.to_csv(
+            out,
+            index=False,
+            encoding="utf-8",
+            quoting=csv.QUOTE_MINIMAL,
+            escapechar="\\",
+            lineterminator="\n",
+        )
+        written_files.append(out)
+
+    return output_database, written_files
 
 
 def add_age_group_column(users_df: pd.DataFrame) -> pd.DataFrame:
