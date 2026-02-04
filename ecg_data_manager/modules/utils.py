@@ -15,10 +15,10 @@ the PediatricAppleWatchStudy.
 from datetime import datetime
 
 # Related third-party imports
+import csv
 import math
 import numpy as np
 import pandas as pd
-import csv
 from google.cloud.firestore import Client
 from google.cloud.firestore_v1.base_query import FieldFilter
 
